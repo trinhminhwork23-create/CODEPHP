@@ -466,6 +466,45 @@
         </div>
       </div>
 
+      @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <script>
+        // Lấy dữ liệu từ Controller truyền qua
+        var chartMonths = {!! json_encode($chartMonths) !!};
+        var chartDataValues = {!! json_encode($chartDataValues) !!};
+
+        // Cấu hình biểu đồ Doanh thu
+        var options = {
+            series: [{
+                name: 'Doanh thu (VNĐ)',
+                data: chartDataValues
+            }],
+            chart: {
+                type: 'bar', // Hoặc 'line' nếu bạn muốn biểu đồ đường
+                height: 350
+            },
+            xaxis: {
+                categories: chartMonths
+            },
+            colors: ['#0d6efd'] // Màu xanh theo theme Bootstrap
+        };
+
+        var chart = new ApexCharts(document.querySelector("#salesPurchaseChart"), options);
+        chart.render();
+
+        // Cấu hình biểu đồ khách hàng
+          var customerOptions = {
+              series: [{{ $newCustomers ?? 0 }}, {{ $returningCustomers ?? 0 }}],
+              chart: { type: 'donut', height: 250 },
+              labels: ['Khách mới', 'Khách quay lại'],
+              colors: ['#28a745', '#ffc107'] // Xanh và vàng theo giao diện của bạn
+          };
+          var customerChart = new ApexCharts(document.querySelector("#customerChart"), customerOptions);
+          customerChart.render();
+    </script>
+@endpush
+
     </div>
 
 @endsection

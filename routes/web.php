@@ -1,52 +1,34 @@
 <?php
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\Admin\AdminReviewController;
+use App\Http\Controllers\Admin\DashboardController;
 
-use Illuminate\Support\Facades\Route;
+// ── LUỒNG KHÁCH HÀNG KHÔNG CẦN ĐĂNG NHẬP (Để FE làm trang chủ/tìm kiếm)
+Route::get('/rooms/search', [BookingController::class, 'searchRooms'])->name('rooms.search');
 
-/*
-|--------------------------------------------------------------------------
-| Client-Side Routes (Sona Template)
-|--------------------------------------------------------------------------
-*/
+// ── LUỒNG KHÁCH HÀNG BẮT BUỘC ĐĂNG NHẬP (Xử lý thông qua Middleware)
+Route::middleware(['auth'])->group(function () {
+    // Đặt phòng nâng cao
+    Route::post('/booking/checkout-preview', [BookingController::class, 'checkoutPreview'])->name('booking.checkout.preview');
+    Route::post('/booking/confirm', [BookingController::class, 'confirmBooking'])->name('booking.confirm');
 
-Route::get('/', fn() => view('home'));
-Route::get('/about', fn() => view('about'));
-Route::get('/contact', fn() => view('contact'));
+    // Cổng VNPAY (Khách trả tiền)
+    Route::get('/payment/vnpay-redirect/{booking_id}', [PaymentController::class, 'createVnpayPayment'])->name('payment.vnpay.redirect');
+    Route::get('/payment/vnpay-return', [PaymentController::class, 'vnpayReturn'])->name('payment.vnpay.return');
 
-Route::get('/rooms', fn() => view('rooms.index'));
-Route::get('/rooms/1', fn() => view('rooms.show'));
+    // Lịch sử hành trình & Đánh giá cá nhân
+    Route::get('/profile/history', [ReviewController::class, 'bookingHistory'])->name('profile.history');
+    Route::post('/review/store', [ReviewController::class, 'storeReview'])->name('review.store');
+});
 
-Route::get('/blog', fn() => view('blog.index'));
-Route::get('/blog/1', fn() => view('blog.show'));
+// CỔNG NGẦM IPN VNPAY: Không chặn auth vì máy chủ VNPAY tự động gọi ngầm tới cổng này
+Route::get('/payment/vnpay-ipn', [PaymentController::class, 'vnpayIpn'])->name('payment.vnpay.ipn');
 
-Route::get('/bookings/checkout', fn() => view('bookings.checkout'));
-Route::get('/bookings/success', fn() => view('bookings.success'));
-
-Route::get('/profile/history', fn() => view('profile.history'));
-
-/*
-|--------------------------------------------------------------------------
-| Authentication Routes
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/login', fn() => view('auth.login'));
-Route::get('/register', fn() => view('auth.register'));
-
-/*
-|--------------------------------------------------------------------------
-| Admin Routes (InApp Template)
-|--------------------------------------------------------------------------
-*/
-
-Route::prefix('admin')->group(function () {
-    Route::get('/', fn() => view('admin.dashboard'));
-    Route::get('/dashboard', fn() => view('admin.dashboard'));
-
-    Route::get('/rooms', fn() => view('admin.rooms.index'));
-    Route::get('/rooms/create', fn() => view('admin.rooms.create'));
-
-    Route::get('/categories', fn() => view('admin.categories.index'));
-    Route::get('/bookings', fn() => view('admin.bookings.index'));
-    Route::get('/users', fn() => view('admin.users.index'));
-    Route::get('/reviews', fn() => view('admin.reviews.index'));
+// ── PHÂN HỆ QUẢN TRỊ ADMIN (Chặn bằng middleware check quyền của bạn A)
+Route::middleware(['auth', 'checkadmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
+    Route::post('/reviews/{id}/toggle', [AdminReviewController::class, 'toggleVisibility'])->name('reviews.toggle');
 });

@@ -25,6 +25,7 @@
 
     <!-- Bootstrap JS -->
     <script src="{{ asset('admin/assets/js/main.js') }}" type="module"></script>
+    @stack('scripts')
 
 </body>
 
