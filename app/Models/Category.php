@@ -11,7 +11,24 @@ class Category extends Model
     protected $fillable = [
         'name',
         'description',
+        'price',
+        'capacity',
+        'image',
+        'status',
     ];
+
+    // ── Boot ──────────────────────────────────────────────────────────────────
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($category) {
+            if ($category->rooms()->count() > 0) {
+                throw new \Exception('Không thể xóa loại phòng đang có phòng liên kết!');
+            }
+        });
+    }
 
     // ── Relationships ─────────────────────────────────────────────────────────
 

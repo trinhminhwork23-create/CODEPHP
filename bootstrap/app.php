@@ -14,6 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin'  => \App\Http\Middleware\CheckAdmin::class,
             'banned' => \App\Http\Middleware\CheckBanned::class,
         ]);
+
+        $middleware->appendToGroup('web', \App\Http\Middleware\CheckBanned::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
