@@ -8,10 +8,10 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <h2>About Us</h2>
+                        <h2>Giới thiệu</h2>
                         <div class="bt-option">
-                            <a href="./index.html">Home</a>
-                            <span>About Us</span>
+                            <a href="{{ route('home') }}">Trang chủ</a>
+                            <span>Giới thiệu</span>
                         </div>
                     </div>
                 </div>
@@ -27,19 +27,17 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="ap-title">
-                            <h2>Welcome To Sona.</h2>
-                            <p>Built in 1910 during the Belle Epoque period, this hotel is located in the center of
-                                Paris, with easy access to the city's tourist attractions. It offers tastefully
-                                decorated rooms.</p>
+                            <h2>Chào mừng đến với Sona.</h2>
+                            <p>Được xây dựng vào năm 1910 trong thời kỳ Belle Époque hoàng kim, khu nghỉ dưỡng của chúng tôi mang kiến trúc cổ điển quý phái, tọa lạc tại vị trí đắc địa giúp quý khách dễ dàng di chuyển và tận hưởng kỳ nghỉ trọn vẹn.</p>
                         </div>
                     </div>
                     <div class="col-lg-5 offset-lg-1">
                         <ul class="ap-services">
-                            <li><i class="icon_check"></i> 20% Off On Accommodation.</li>
-                            <li><i class="icon_check"></i> Complimentary Daily Breakfast</li>
-                            <li><i class="icon_check"></i> 3 Pcs Laundry Per Day</li>
-                            <li><i class="icon_check"></i> Free Wifi.</li>
-                            <li><i class="icon_check"></i> Discount 20% On F&B</li>
+                            <li><i class="icon_check"></i> Ưu đãi 20% giá phòng nghỉ.</li>
+                            <li><i class="icon_check"></i> Bữa sáng buffet hàng ngày miễn phí</li>
+                            <li><i class="icon_check"></i> Dịch vụ giặt là miễn phí 3 món mỗi ngày</li>
+                            <li><i class="icon_check"></i> Kết nối Wifi tốc độ cao miễn phí.</li>
+                            <li><i class="icon_check"></i> Giảm giá 20% cho dịch vụ Ẩm thực & Đồ uống</li>
                         </ul>
                     </div>
                 </div>
@@ -49,21 +47,21 @@
                     <div class="col-md-4">
                         <div class="ap-service-item set-bg" data-setbg="{{ asset('img/about/about-p1.jpg') }}">
                             <div class="api-text">
-                                <h3>Restaurants Services</h3>
+                                <h3>Dịch vụ nhà hàng ẩm thực</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="ap-service-item set-bg" data-setbg="{{ asset('img/about/about-p2.jpg') }}">
                             <div class="api-text">
-                                <h3>Travel & Camping</h3>
+                                <h3>Du lịch & Dã ngoại</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="ap-service-item set-bg" data-setbg="{{ asset('img/about/about-p3.jpg') }}">
                             <div class="api-text">
-                                <h3>Event & Party</h3>
+                                <h3>Tổ chức Sự kiện & Tiệc</h3>
                             </div>
                         </div>
                     </div>
@@ -79,8 +77,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="video-text">
-                        <h2>Discover Our Hotel & Services.</h2>
-                        <p>It S Hurricane Season But We Are Visiting Hilton Head Island</p>
+                        <h2>Khám phá không gian & dịch vụ của chúng tôi</h2>
+                        <p>Trải nghiệm những khoảnh khắc tuyệt diệu tại Sona</p>
                         <a href="https://www.youtube.com/watch?v=EzKkl64rRbM" class="play-btn video-popup"><img
                                 src="{{ asset('img/play.png') }}" alt=""></a>
                     </div>
@@ -96,8 +94,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <span>Our Gallery</span>
-                        <h2>Discover Our Work</h2>
+                        <span>Thư viện ảnh</span>
+                        <h2>Không gian nghệ thuật & Phong cảnh</h2>
                     </div>
                 </div>
             </div>
@@ -105,21 +103,21 @@
                 <div class="col-lg-6">
                     <div class="gallery-item set-bg" data-setbg="{{ asset('img/gallery/gallery-1.jpg') }}">
                         <div class="gi-text">
-                            <h3>Room Luxury</h3>
+                            <h3>Phòng nghỉ sang trọng</h3>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="gallery-item set-bg" data-setbg="{{ asset('img/gallery/gallery-3.jpg') }}">
                                 <div class="gi-text">
-                                    <h3>Room Luxury</h3>
+                                    <h3>Phòng nghỉ sang trọng</h3>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="gallery-item set-bg" data-setbg="{{ asset('img/gallery/gallery-4.jpg') }}">
                                 <div class="gi-text">
-                                    <h3>Room Luxury</h3>
+                                    <h3>Phòng nghỉ sang trọng</h3>
                                 </div>
                             </div>
                         </div>
@@ -128,7 +126,7 @@
                 <div class="col-lg-6">
                     <div class="gallery-item large-item set-bg" data-setbg="{{ asset('img/gallery/gallery-2.jpg') }}">
                         <div class="gi-text">
-                            <h3>Room Luxury</h3>
+                            <h3>Phòng nghỉ sang trọng</h3>
                         </div>
                     </div>
                 </div>

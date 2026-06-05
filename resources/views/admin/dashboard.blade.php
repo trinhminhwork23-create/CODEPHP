@@ -6,8 +6,8 @@
       <div class="row ">
         <div class="col-12">
           <div class="mb-6">
-            <h1 class="fs-3 mb-1">Dashboard</h1>
-            <p>Your main content goes here…</p>
+            <h1 class="fs-3 mb-1">Bảng điều khiển tổng quan</h1>
+            <p>Tổng quan hoạt động kinh doanh Sapa Jade Hill…</p>
           </div>
         </div>
       </div>
@@ -21,9 +21,9 @@
                 <i class="ti ti-report-analytics fs-4"></i>
               </div>
               <div>
-                <h2 class="mb-3 fs-6">Total Sales</h2>
-                <h3 class="fw-bold mb-0">$25,000</h3>
-                <p class="text-primary mb-0 small">+5% since last month</p>
+                <h2 class="mb-3 fs-6">Tổng doanh thu</h2>
+                <h3 class="fw-bold mb-0">{{ number_format($totalRevenue ?? 0, 0, ',', '.') }}₫</h3>
+                <p class="text-primary mb-0 small">Tổng thu từ đặt phòng</p>
               </div>
             </div>
           </div>
@@ -35,12 +35,12 @@
 
             <div class="d-flex gap-3 ">
               <div class="icon-shape icon-md bg-success text-white rounded-2">
-                <i class="ti ti-repeat fs-4"></i>
+                <i class="ti ti-calendar-event fs-4"></i>
               </div>
               <div>
-                <h2 class="mb-3 fs-6">Total Purchase</h2>
-                <h3 class="fw-bold mb-0">$18,000</h3>
-                <p class="text-success mb-0 small">+22% since last month</p>
+                <h2 class="mb-3 fs-6">Đơn đặt phòng thành công</h2>
+                <h3 class="fw-bold mb-0">{{ $totalBookings ?? 0 }}</h3>
+                <p class="text-success mb-0 small">Tổng lượt đặt phòng</p>
               </div>
             </div>
           </div>
@@ -52,12 +52,12 @@
 
             <div class="d-flex gap-3 ">
               <div class="icon-shape icon-md bg-info text-white rounded-2">
-                <i class="ti ti-currency-dollar fs-4"></i>
+                <i class="ti ti-bed fs-4"></i>
               </div>
               <div>
-                <h2 class="mb-3 fs-6">Total Expenses</h2>
-                <h3 class="fw-bold mb-0">$9,000</h3>
-                <p class="text-info mb-0 small">+10% since last month</p>
+                <h2 class="mb-3 fs-6">Phòng trống hiện tại</h2>
+                <h3 class="fw-bold mb-0">{{ $totalRooms ?? 0 }}</h3>
+                <p class="text-info mb-0 small">Phòng đang hoạt động</p>
               </div>
             </div>
           </div>
@@ -69,12 +69,12 @@
 
             <div class="d-flex gap-3 ">
               <div class="icon-shape icon-md bg-warning text-white rounded-2">
-                <i class="ti ti-notes fs-4"></i>
+                <i class="ti ti-users fs-4"></i>
               </div>
               <div>
-                <h2 class="mb-3 fs-6">Invoice Due</h2>
-                <h3 class="fw-bold mb-0">$25,000</h3>
-                <p class="text-warning mb-0 small">+35% since last month</p>
+                <h2 class="mb-3 fs-6">Tổng khách hàng</h2>
+                <h3 class="fw-bold mb-0">{{ $totalCustomers ?? 0 }}</h3>
+                <p class="text-warning mb-0 small">Tài khoản đã đăng ký</p>
               </div>
             </div>
           </div>
@@ -88,16 +88,16 @@
             <div class="card-body p-4">
               <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
                 <div>
-                  <h3 class="fw-bold h4">$25,458</h3>
-                  <span>Total Profit</span>
+                  <h3 class="fw-bold h4">{{ number_format($pendingBookings ?? 0) }}</h3>
+                  <span>Đơn chờ duyệt</span>
                 </div>
                 <div>
-                  <i class="ti ti-layers-subtract fs-1 text-primary"></i>
+                  <i class="ti ti-clock fs-1 text-primary"></i>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center small">
-                <div class="text-muted"><span class="text-success">+35%</span> vs Last Month</div>
-                <div><a href="#" class="link-primary text-decoration-underline">View</a></div>
+                <div class="text-muted">Cần xử lý ngay</div>
+                <div><a href="{{ route('admin.bookings.index') }}" class="link-primary text-decoration-underline">Xem</a></div>
               </div>
             </div>
           </div>
@@ -108,16 +108,16 @@
             <div class="card-body p-4">
               <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
                 <div>
-                  <h3 class="fw-bold h4">$45,458</h3>
-                  <span>Total Payment Returns</span>
+                  <h3 class="fw-bold h4">{{ number_format($cancelledBookings ?? 0) }}</h3>
+                  <span>Đơn đã hủy</span>
                 </div>
                 <div>
-                  <i class="ti ti-credit-card fs-1 text-danger"></i>
+                  <i class="ti ti-x fs-1 text-danger"></i>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center small">
-                <div class="text-muted"><span class="text-danger">-20%</span> vs Last Month</div>
-                <div><a href="#" class="link-primary text-decoration-underline">View</a></div>
+                <div class="text-muted">Tổng đơn bị hủy</div>
+                <div><a href="{{ route('admin.bookings.index') }}" class="link-primary text-decoration-underline">Xem</a></div>
               </div>
             </div>
           </div>
@@ -128,16 +128,16 @@
             <div class="card-body p-4">
               <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
                 <div>
-                  <h3 class="fw-bold h4">$34,458</h3>
-                  <span>Total Expenses</span>
+                  <h3 class="fw-bold h4">{{ $totalReviews ?? 0 }}</h3>
+                  <span>Tổng đánh giá</span>
                 </div>
                 <div>
-                  <i class="ti ti-cash-banknote fs-1 text-warning"></i>
+                  <i class="ti ti-star fs-1 text-warning"></i>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center small">
-                <div class="text-muted"><span class="text-warning">-20%</span> vs Last Month</div>
-                <div><a href="#" class="link-primary text-decoration-underline">View</a></div>
+                <div class="text-muted">Từ khách hàng</div>
+                <div><a href="{{ route('admin.reviews.index') }}" class="link-primary text-decoration-underline">Xem</a></div>
               </div>
             </div>
           </div>
@@ -149,12 +149,12 @@
         <div class="col-12 col-lg-6">
           <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center bg-transparent px-4 py-3">
-              <h3 class="h5 mb-0">Sales vs Purchase</h3>
+              <h3 class="h5 mb-0">Doanh thu theo tháng</h3>
               <div>
                 <select class="form-select form-select-sm">
-                  <option selected>This Year</option>
-                  <option>This Month</option>
-                  <option>This Week</option>
+                  <option selected>Năm nay</option>
+                  <option>Tháng này</option>
+                  <option>Tuần này</option>
                 </select>
               </div>
             </div>
@@ -167,17 +167,17 @@
         <div class="col-12 col-lg-6">
           <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center bg-transparent px-4 py-3">
-              <h3 class="h5 mb-0">Overall Information</h3>
+              <h3 class="h5 mb-0">Thông tin tổng quan</h3>
               <div>
                 <select class="form-select form-select-sm">
-                  <option selected>Last 6 Months</option>
-                  <option>This Month</option>
-                  <option>This Week</option>
+                  <option selected>6 tháng gần đây</option>
+                  <option>Tháng này</option>
+                  <option>Tuần này</option>
                 </select>
               </div>
             </div>
             <div class="card-body p-4">
-              <h3 class="h6">Customers Overview</h3>
+              <h3 class="h6">Tổng quan khách hàng</h3>
               <div class="row align-items-center">
                 <div class="col-sm-6">
                   <div id="customerChart">
@@ -187,17 +187,17 @@
                   <div class="row">
                     <div class="col-6 border-end">
                       <div class="text-center ">
-                        <h2 class="mb-1">5.5K</h2>
-                        <p class="text-success mb-2">First Time</p>
-                        <span class="badge bg-success"><i class="ti ti-arrow-up-left me-1"></i>25%</span>
+                        <h2 class="mb-1">{{ $newCustomers ?? 0 }}</h2>
+                        <p class="text-success mb-2">Khách mới</p>
+                        <span class="badge bg-success"><i class="ti ti-arrow-up-left me-1"></i>Tháng này</span>
                       </div>
                     </div>
                     <div class="col-6">
                       <div class="text-center">
-                        <h2 class="mb-1">3.5K</h2>
-                        <p class="text-warning mb-2">Return</p>
+                        <h2 class="mb-1">{{ $returningCustomers ?? 0 }}</h2>
+                        <p class="text-warning mb-2">Quay lại</p>
                         <span class="badge bg-success badge-xs d-inline-flex align-items-center"><i
-                            class="ti ti-arrow-up-left me-1"></i>21%</span>
+                            class="ti ti-arrow-up-left me-1"></i>Tháng này</span>
                       </div>
                     </div>
                   </div>
@@ -206,16 +206,16 @@
               </div>
               <div class="row text-center border-top mt-4 pt-4">
                 <div class="col-4 border-end">
-                  <h3 class="fw-bold mb-2">6987</h3>
-                  <small class="text-secondary">Suppliers</small>
+                  <h3 class="fw-bold mb-2">{{ $totalRooms ?? 0 }}</h3>
+                  <small class="text-secondary">Phòng</small>
                 </div>
                 <div class="col-4 border-end">
-                  <h3 class="fw-bold mb-2">4896</h3>
-                  <small class="text-secondary">Customers</small>
+                  <h3 class="fw-bold mb-2">{{ $totalCustomers ?? 0 }}</h3>
+                  <small class="text-secondary">Khách hàng</small>
                 </div>
                 <div class="col-4">
-                  <h3 class="fw-bold mb-2">487</h3>
-                  <small class="text-secondary">Orders</small>
+                  <h3 class="fw-bold mb-2">{{ $totalBookings ?? 0 }}</h3>
+                  <small class="text-secondary">Đơn đặt phòng</small>
                 </div>
               </div>
             </div>
@@ -224,235 +224,103 @@
       </div>
       <div class="row g-3">
 
-        <!-- CARD 1 — Top Selling Products -->
+        <!-- CARD 1 — Phòng nổi bật -->
         <div class="col-lg-4">
           <div class="card  h-100">
             <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
-              <h4 class="mb-0 h5">Top Selling Products</h4>
+              <h4 class="mb-0 h5">Phòng được đặt nhiều nhất</h4>
               <button class="btn btn-sm btn-outline-secondary">
-                <i class="ti ti-calendar"></i> Today
+                <i class="ti ti-calendar"></i> Hôm nay
               </button>
             </div>
 
             <ul class="list-group list-group-flush">
-
+              @forelse ($topRooms ?? [] as $room)
               <!-- item -->
               <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-2.png') }}" class="rounded" width="48">
+                <img src="{{ $room->image ? asset('storage/' . $room->image) : asset('admin/assets/images/product-2.png') }}" class="rounded" width="48">
                 <div class="flex-grow-1">
-                  <p class="mb-1">Wireless Earphones</p>
+                  <p class="mb-1">{{ $room->name }}</p>
                   <div class="d-flex align-items-center gap-2 text-muted">
-                    <small class="fw-semibold">$89 </small>
+                    <small class="fw-semibold">{{ number_format($room->price, 0, ',', '.') }}₫ </small>
                     <small>•</small>
-                    <small>1,250 Units</small>
+                    <small>{{ $room->bookings_count ?? 0 }} lượt đặt</small>
                   </div>
                 </div>
-                <span class="badge bg-danger-subtle text-danger border border-danger">18%</span>
+                <span class="badge bg-primary-subtle text-primary border border-primary">{{ $room->bookings_count ?? 0 }}</span>
               </li>
-
-              <!-- repeat -->
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-1.png') }}" class="rounded" width="48">
-                <div class="flex-grow-1">
-                  <p class="mb-1">Gaming Joy Stick</p>
-                  <div class="d-flex align-items-center gap-2 text-muted">
-                    <small class="fw-semibold">$49 </small>
-                    <small>•</small>
-                    <small>5,420 Units</small>
-                  </div>
-                </div>
-                <span class="badge bg-primary-subtle text-primary border border-primary">32%</span>
-              </li>
-
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-3.png') }}" class="rounded" width="48">
-                <div class="flex-grow-1">
-                  <p class="mb-1">Smart Watch Pro</p>
-                  <div class="d-flex align-items-center gap-2 text-muted">
-                    <small class="fw-semibold">$98 </small>
-                    <small>•</small>
-                    <small>862 Units</small>
-                  </div>
-                </div>
-                <span class="badge bg-info-subtle text-info border border-info">22%</span>
-              </li>
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-4.png') }}" class="rounded" width="48">
-                <div class="flex-grow-1">
-                  <p class="mb-1">USB-C Fast Charger</p>
-                  <div class="d-flex align-items-center gap-2 text-muted">
-                    <small class="fw-semibold">$35 </small>
-                    <small>•</small>
-                    <small>3,200 Units</small>
-                  </div>
-                </div>
-                <span class="badge bg-success-subtle text-success border border-success">28%</span>
-              </li>
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-5.png') }}" class="rounded" width="48">
-                <div class="flex-grow-1">
-                  <p class="mb-1">Portable Bluetooth Speaker</p>
-                  <div class="d-flex align-items-center gap-2 text-muted">
-                    <small class="fw-semibold">$65 </small>
-                    <small>•</small>
-                    <small>2,890 Units</small>
-                  </div>
-                </div>
-                <span class="badge bg-warning-subtle text-warning border border-warning">25%</span>
-              </li>
+              @empty
+              <li class="list-group-item text-center text-muted py-4">Chưa có dữ liệu</li>
+              @endforelse
             </ul>
           </div>
         </div>
 
-        <!-- CARD 2 — Low Stock Products -->
+        <!-- CARD 2 — Đánh giá gần đây -->
         <div class="col-lg-4">
           <div class="card  h-100">
             <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
               <div class="d-flex align-items-center">
-                <h4 class="mb-0 h5">Low Stock Products</h4>
+                <h4 class="mb-0 h5">Đánh giá gần đây</h4>
               </div>
-              <a href="#" class="small text-primary text-decoration-underline">View All</a>
+              <a href="{{ route('admin.reviews.index') }}" class="small text-primary text-decoration-underline">Xem tất cả</a>
             </div>
 
             <ul class="list-group list-group-flush">
-
+              @forelse ($latestReviews ?? [] as $review)
               <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-8.png') }}" class="rounded" width="48">
+                <img src="{{ asset('admin/assets/images/avatar/avatar-1.jpg') }}" class="rounded" width="48">
                 <div class="flex-grow-1">
-                  <p class="mb-1">Wireless Headphones</p>
-                  <small>ID: #554433</small>
+                  <p class="mb-1">{{ $review->user->name ?? 'Khách' }}</p>
+                  <small>{{ Str::limit($review->comment, 40) }}</small>
                 </div>
                 <div class="d-flex flex-column gap-0 align-items-center">
-                  <span class="fw-semibold text-primary">06</span>
-                  <small class="text-muted">In Stock</small>
+                  <span class="fw-semibold text-primary">{{ $review->rating }}<i class="ti ti-star-filled text-warning ms-1"></i></span>
+                  <small class="text-muted">{{ $review->room->name ?? '' }}</small>
                 </div>
               </li>
-
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-4.png') }}" class="rounded" width="48">
-                <div class="flex-grow-1">
-                  <p class="mb-1">USB-C Cable Pack</p>
-                  <small>ID: #887766</small>
-                </div>
-                <div class="d-flex flex-column gap-0 align-items-center">
-                  <span class="fw-semibold text-primary">09</span>
-                  <small class="text-muted">In Stock</small>
-                </div>
-              </li>
-
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-10.png') }}" class="rounded" width="48">
-                <div class="flex-grow-1">
-                  <p class="mb-1">Phone Screen Protector</p>
-                  <small>ID: #332211</small>
-                </div>
-                <div class="d-flex flex-column gap-0 align-items-center">
-                  <span class="fw-semibold text-primary">03</span>
-                  <small class="text-muted">In Stock</small>
-                </div>
-              </li>
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-4.png') }}" class="rounded" width="48">
-                <div class="flex-grow-1">
-                  <p class="mb-1">Portable Charger 20000mAh</p>
-                  <small>ID: #998877</small>
-                </div>
-                <div class="d-flex flex-column gap-0 align-items-center">
-                  <span class="fw-semibold text-primary">07</span>
-                  <small class="text-muted">In Stock</small>
-                </div>
-              </li>
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-6.png') }}" class="rounded" width="48">
-                <div class="flex-grow-1">
-                  <p class="mb-1">Mechanical Keyboard RGB</p>
-                  <small>ID: #665544</small>
-                </div>
-                <div class="d-flex flex-column gap-0 align-items-center">
-                  <span class="fw-semibold text-primary">02</span>
-                  <small class="text-muted">In Stock</small>
-                </div>
-              </li>
+              @empty
+              <li class="list-group-item text-center text-muted py-4">Chưa có đánh giá</li>
+              @endforelse
             </ul>
           </div>
         </div>
 
-        <!-- CARD 3 — Recent Sales -->
+        <!-- CARD 3 — Đơn đặt phòng gần đây -->
         <div class="col-lg-4">
           <div class="card  h-100">
             <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
-              <h4 class="mb-0 h5">Recent Sales</h4>
-              <button class="btn btn-sm btn-outline-secondary">
-                <i class="ti ti-calendar-event"></i> Weekly
-              </button>
+              <h4 class="mb-0 h5">Đơn đặt gần đây</h4>
+              <a href="{{ route('admin.bookings.index') }}" class="btn btn-sm btn-outline-secondary">
+                <i class="ti ti-calendar-event"></i> Xem tất cả
+              </a>
             </div>
 
             <ul class="list-group list-group-flush">
-
+              @forelse ($latestBookings ?? [] as $booking)
               <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-7.png') }}" class="rounded" width="48">
+                <img src="{{ asset('admin/assets/images/avatar/avatar-1.jpg') }}" class="rounded" width="48">
                 <div class="flex-grow-1">
-                  <p class="mb-1">MacBook Pro 16"</p>
+                  <p class="mb-1">{{ $booking->user->name ?? 'Khách' }}</p>
                   <div class="d-flex align-items-center gap-2 text-muted">
-                    <small class="fw-semibold">Computers </small>
+                    <small class="fw-semibold">{{ $booking->room->name ?? '' }} </small>
                     <small>•</small>
-                    <small>2,$2,499</small>
+                    <small>{{ number_format($booking->total_money, 0, ',', '.') }}₫</small>
                   </div>
                 </div>
-                <span class="badge bg-success-subtle text-success">Completed</span>
+                @if($booking->status == 0)
+                  <span class="badge bg-warning-subtle text-warning">Chờ duyệt</span>
+                @elseif($booking->status == 1)
+                  <span class="badge bg-primary-subtle text-primary">Đã duyệt</span>
+                @elseif($booking->status == 2)
+                  <span class="badge bg-success-subtle text-success">Đã thanh toán</span>
+                @else
+                  <span class="badge bg-danger-subtle text-danger">Đã hủy</span>
+                @endif
               </li>
-
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-9.png') }}" class="rounded" width="48">
-                <div class="flex-grow-1">
-                  <p class="mb-1">AirPods Pro Max</p>
-                  <div class="d-flex align-items-center gap-2 text-muted">
-                    <small class="fw-semibold">Audio </small>
-                    <small>•</small>
-                    <small>$549</small>
-                  </div>
-                </div>
-                <span class="badge bg-primary-subtle text-primary">Processing</span>
-              </li>
-
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-8.png') }}" class="rounded" width="48">
-                <div class="flex-grow-1">
-                  <p class="mb-1">iPad Air 11"</p>
-                  <div class="d-flex align-items-center gap-2 text-muted">
-                    <small class="fw-semibold">Tablets </small>
-                    <small>•</small>
-                    <small>$799</small>
-                  </div>
-                </div>
-                <span class="badge bg-success-subtle text-success">Completed</span>
-              </li>
-
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-3.png') }}" class="rounded" width="48">
-                <div class="flex-grow-1">
-                  <p class="mb-1">Apple Watch Ultra</p>
-                  <div class="d-flex align-items-center gap-2 text-muted">
-                    <small class="fw-semibold">Wearables </small>
-                    <small>•</small>
-                    <small>$799</small>
-                  </div>
-                </div>
-                <span class="badge bg-warning-subtle text-warning">Pending</span>
-              </li>
-
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="{{ asset('admin/assets/images/product-6.png') }}" class="rounded" width="48">
-                <div class="flex-grow-1">
-                  <p class="mb-1">Magic Keyboard</p>
-                  <div class="d-flex align-items-center gap-2 text-muted">
-                    <small class="fw-semibold">Accessories </small>
-                    <small>•</small>
-                    <small>$299</small>
-                  </div>
-                </div>
-                <span class="badge bg-danger-subtle text-danger">Cancelled</span>
-              </li>
+              @empty
+              <li class="list-group-item text-center text-muted py-4">Chưa có đơn đặt phòng</li>
+              @endforelse
             </ul>
           </div>
         </div>
@@ -461,7 +329,7 @@
       <div class="row">
         <div class="col-12">
           <footer class="text-center py-2 mt-6 text-secondary ">
-            <p class="mb-0">Copyright © 2026 InApp Inventory Dashboard. Developed by <a href="https://codescandy.com/" target="_blank" class="text-primary">CodesCandy</a> • Distributed by <a href="https://themewagon.com/" target="_blank" class="text-primary">ThemeWagon</a> </p>
+            <p class="mb-0">Bản quyền © 2026 Sapa Jade Hill Homestay. Phát triển bởi <a href="#" class="text-primary">SapaJadeHill Team</a></p>
           </footer>
         </div>
       </div>

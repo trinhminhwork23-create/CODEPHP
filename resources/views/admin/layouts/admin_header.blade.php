@@ -26,7 +26,7 @@
                     </svg>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
                         2
-                        <span class="visually-hidden">unread messages</span>
+                        <span class="visually-hidden">thông báo chưa đọc</span>
                     </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-md p-0">
@@ -35,9 +35,9 @@
                             <div class="d-flex gap-3">
                                 <img src="{{ asset('admin/assets/images/avatar/avatar-1.jpg') }}" alt="" class="avatar avatar-sm rounded-circle" />
                                 <div class="flex-grow-1 small">
-                                    <p class="mb-0">New order received</p>
-                                    <p class="mb-1">Order #12345 has been placed</p>
-                                    <div class="text-secondary">5 minutes ago</div>
+                                    <p class="mb-0">Đơn đặt phòng mới</p>
+                                    <p class="mb-1">Đơn #12345 vừa được tạo</p>
+                                    <div class="text-secondary">5 phút trước</div>
                                 </div>
                             </div>
                         </li>
@@ -45,9 +45,9 @@
                             <div class="d-flex gap-3">
                                 <img src="{{ asset('admin/assets/images/avatar/avatar-4.jpg') }}" alt="" class="avatar avatar-sm rounded-circle" />
                                 <div class="flex-grow-1 small">
-                                    <p class="mb-0">New user registered</p>
-                                    <p class="mb-1">User @john_doe has signed up</p>
-                                    <div class="text-secondary">30 minutes ago</div>
+                                    <p class="mb-0">Khách hàng mới đăng ký</p>
+                                    <p class="mb-1">Tài khoản mới vừa được tạo</p>
+                                    <div class="text-secondary">30 phút trước</div>
                                 </div>
                         </li>
 
@@ -55,14 +55,14 @@
                             <div class="d-flex gap-3">
                                 <img src="{{ asset('admin/assets/images/avatar/avatar-2.jpg') }}" alt="" class="avatar avatar-sm rounded-circle" />
                                 <div class="flex-grow-1 small">
-                                    <p class="mb-0">Payment confirmed</p>
-                                    <p class="mb-1">Payment of $299 has been received</p>
-                                    <div class="text-secondary">1 hour ago</div>
+                                    <p class="mb-0">Thanh toán thành công</p>
+                                    <p class="mb-1">Thanh toán VNPAY đã được xác nhận</p>
+                                    <div class="text-secondary">1 giờ trước</div>
                                 </div>
                             </div>
                         </li>
                         <li class="px-4 py-3 text-center">
-                            <a href="#" class="text-primary ">View all notifications</a>
+                            <a href="#" class="text-primary ">Xem tất cả thông báo</a>
                         </li>
                     </ul>
                 </div>
@@ -77,25 +77,25 @@
                         <div class="d-flex gap-3 align-items-center border-dashed border-bottom px-3 py-3">
                             <img src="{{ asset('admin/assets/images/avatar/avatar-1.jpg') }}" alt="" class="avatar avatar-md rounded-circle" />
                             <div>
-                                <h4 class="mb-0 small">Shrina Tesla</h4>
-                                <p class="mb-0  small">@imshrina</p>
+                                <h4 class="mb-0 small">{{ Auth::user()->name ?? 'Quản trị viên' }}</h4>
+                                <p class="mb-0  small">{{ Auth::user()->email ?? '' }}</p>
                             </div>
                         </div>
                         <div class="p-3 d-flex flex-column gap-1 small lh-lg">
-                            <a href="#!" class="">
-                                <span>Home</span>
+                            <a href="{{ route('admin.dashboard') }}" class="">
+                                <span>Bảng điều khiển</span>
                             </a>
-                            <a href="#!" class="">
-                                <span> Inbox</span>
+                            <a href="{{ route('admin.bookings.index') }}" class="">
+                                <span>Đơn đặt phòng</span>
                             </a>
-                            <a href="#!" class="">
-                                <span> Chat</span>
+                            <a href="{{ route('admin.rooms.index') }}" class="">
+                                <span>Quản lý phòng</span>
                             </a>
-                            <a href="#!" class="">
-                                <span> Activity</span>
+                            <a href="{{ route('admin.users.index') }}" class="">
+                                <span>Quản lý tài khoản</span>
                             </a>
-                            <a href="#!" class="">
-                                <span> Account Settings</span>
+                            <a href="{{ route('home') }}" class="">
+                                <span>Về trang chủ</span>
                             </a>
                         </div>
                     </div>

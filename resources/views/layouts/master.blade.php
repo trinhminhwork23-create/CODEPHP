@@ -47,31 +47,31 @@
         <div class="header-configure-area">
             <div class="language-option">
                 <img src="{{ asset('img/flag.jpg') }}" alt="">
-                <span>EN <i class="fa fa-angle-down"></i></span>
+                <span>VI <i class="fa fa-angle-down"></i></span>
                 <div class="flag-dropdown">
                     <ul>
-                        <li><a href="#">Zi</a></li>
+                        <li><a href="#">EN</a></li>
                         <li><a href="#">Fr</a></li>
                     </ul>
                 </div>
             </div>
-            <a href="#" class="bk-btn">Booking Now</a>
+            <a href="{{ route('rooms.index') }}" class="bk-btn">Đặt phòng ngay</a>
         </div>
         <nav class="mainmenu mobile-menu">
             <ul>
-                <li class="active"><a href="./index.html">Home</a></li>
-                <li><a href="./rooms.html">Rooms</a></li>
-                <li><a href="./about-us.html">About Us</a></li>
-                <li><a href="./pages.html">Pages</a>
+                <li class="{{ request()->routeIs('home') ? 'active' : '' }}"><a href="{{ route('home') }}">Trang chủ</a></li>
+                <li class="{{ request()->routeIs('rooms.*') ? 'active' : '' }}"><a href="{{ route('rooms.index') }}">Phòng nghỉ</a></li>
+                <li class="{{ request()->routeIs('about') ? 'active' : '' }}"><a href="{{ route('about') }}">Giới thiệu</a></li>
+                <li><a href="#">Trang</a>
                     <ul class="dropdown">
-                        <li><a href="./room-details.html">Room Details</a></li>
-                        <li><a href="#">Deluxe Room</a></li>
-                        <li><a href="#">Family Room</a></li>
-                        <li><a href="#">Premium Room</a></li>
+                        <li><a href="{{ route('rooms.show', 1) }}">Chi tiết phòng</a></li>
+                        <li><a href="{{ route('rooms.show', 2) }}">Phòng Deluxe</a></li>
+                        <li><a href="{{ route('rooms.show', 3) }}">Phòng Gia đình</a></li>
+                        <li><a href="{{ route('rooms.show', 4) }}">Phòng Cao cấp</a></li>
                     </ul>
                 </li>
-                <li><a href="./blog.html">News</a></li>
-                <li><a href="./contact.html">Contact</a></li>
+                <li class="{{ request()->routeIs('blog.*') ? 'active' : '' }}"><a href="{{ route('blog.index') }}">Tin tức</a></li>
+                <li class="{{ request()->routeIs('contact') ? 'active' : '' }}"><a href="{{ route('contact') }}">Liên hệ</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -99,7 +99,7 @@
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch"><i class="icon_close"></i></div>
             <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
+                <input type="text" id="search-input" placeholder="Tìm kiếm tại đây.....">
             </form>
         </div>
     </div>

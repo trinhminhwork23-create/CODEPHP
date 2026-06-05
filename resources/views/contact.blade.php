@@ -8,17 +8,16 @@
             <div class="row">
                 <div class="col-lg-4">
                     <div class="contact-text">
-                        <h2>Contact Info</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua.</p>
+                        <h2>Thông tin liên hệ</h2>
+                        <p>Vui lòng để lại thông tin hoặc liên hệ với chúng tôi qua các kênh dưới đây. Chúng tôi luôn sẵn lòng hỗ trợ bạn mọi lúc mọi nơi.</p>
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="c-o">Address:</td>
+                                    <td class="c-o">Địa chỉ:</td>
                                     <td>856 Cordia Extension Apt. 356, Lake, US</td>
                                 </tr>
                                 <tr>
-                                    <td class="c-o">Phone:</td>
+                                    <td class="c-o">Điện thoại:</td>
                                     <td>(12) 345 67890</td>
                                 </tr>
                                 <tr>
@@ -26,7 +25,7 @@
                                     <td>info.colorlib@gmail.com</td>
                                 </tr>
                                 <tr>
-                                    <td class="c-o">Fax:</td>
+                                    <td class="c-o">Số Fax:</td>
                                     <td>+(12) 345 67890</td>
                                 </tr>
                             </tbody>
@@ -34,17 +33,18 @@
                     </div>
                 </div>
                 <div class="col-lg-7 offset-lg-1">
-                    <form action="#" class="contact-form">
+                    <form action="#" method="POST" class="contact-form">
+                        @csrf
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Your Name">
+                                <input type="text" name="name" placeholder="Họ và tên">
                             </div>
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Your Email">
+                                <input type="text" name="email" placeholder="Địa chỉ Email">
                             </div>
                             <div class="col-lg-12">
-                                <textarea placeholder="Your Message"></textarea>
-                                <button type="submit">Submit Now</button>
+                                <textarea name="comment" placeholder="Lời nhắn của bạn"></textarea>
+                                <button type="submit">Gửi thông tin</button>
                             </div>
                         </div>
                     </form>

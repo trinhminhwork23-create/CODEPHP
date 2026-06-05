@@ -38,14 +38,14 @@ Route::delete('/rooms/{room}', [AdminRoomController::class, 'destroy'])->name('a
 // Bookings
 Route::get('/bookings', [AdminBookingController::class, 'index'])->name('admin.bookings.index');
 Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('admin.bookings.show');
-Route::post('/bookings/{booking}/approve', [AdminBookingController::class, 'approve'])->name('admin.bookings.approve');
-Route::post('/bookings/{booking}/cancel', [AdminBookingController::class, 'cancel'])->name('admin.bookings.cancel');
+Route::patch('/bookings/{booking}/approve', [AdminBookingController::class, 'approve'])->name('admin.bookings.approve');
+Route::patch('/bookings/{booking}/cancel', [AdminBookingController::class, 'cancel'])->name('admin.bookings.cancel');
 
 // Users
 Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');
-Route::post('/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('admin.users.toggleStatus');
+Route::patch('/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('admin.users.toggleStatus');
 
 // Reviews
 Route::get('/reviews', [AdminReviewController::class, 'index'])->name('admin.reviews.index');
-Route::post('/reviews/{review}/toggle-visibility', [AdminReviewController::class, 'toggleVisibility'])->name('admin.reviews.toggleVisibility');
+Route::patch('/reviews/{review}/toggle-visibility', [AdminReviewController::class, 'toggleVisibility'])->name('admin.reviews.toggleVisibility');
 Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy'])->name('admin.reviews.destroy');

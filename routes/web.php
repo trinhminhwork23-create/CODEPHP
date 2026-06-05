@@ -38,3 +38,14 @@ Route::prefix('admin')
     ->group(function () {
         require __DIR__ . '/admin_routes.php';
     });
+
+/*
+|--------------------------------------------------------------------------
+| Static View Routes (Customer)
+|--------------------------------------------------------------------------
+*/
+
+Route::view('/about', 'about')->name('about');
+Route::view('/contact', 'contact')->name('contact');
+Route::view('/blog', 'blog.index')->name('blog.index');
+Route::view('/blog/{id}', 'blog.show')->name('blog.show');

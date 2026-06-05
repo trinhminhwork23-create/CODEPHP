@@ -17,13 +17,22 @@
                             <a href="#"><i class="fa fa-tripadvisor"></i></a>
                             <a href="#"><i class="fa fa-instagram"></i></a>
                         </div>
-                        <a href="#" class="bk-btn">Booking Now</a>
+                            @auth
+                                <a href="{{ route('profile.history') }}" class="bk-btn" style="background: #19191a; border-color: #19191a; margin-right: 5px; color: #ffffff;">Lịch sử đặt phòng</a>
+                                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="bk-btn" style="background: #dc3545; border-color: #dc3545; color: #ffffff;">Đăng xuất</a>
+                                <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            @else
+                                <a href="{{ route('auth.login') }}" class="bk-btn" style="background: transparent; color: #19191a; border: 1px solid #dfa974; margin-right: 5px;">Đăng nhập</a>
+                                <a href="{{ route('auth.register') }}" class="bk-btn">Đăng ký</a>
+                            @endauth
                         <div class="language-option">
                             <img src="{{ asset('img/flag.jpg') }}" alt="">
-                            <span>EN <i class="fa fa-angle-down"></i></span>
+                            <span>VI <i class="fa fa-angle-down"></i></span>
                             <div class="flag-dropdown">
                                 <ul>
-                                    <li><a href="#">Zi</a></li>
+                                    <li><a href="#">EN</a></li>
                                     <li><a href="#">Fr</a></li>
                                 </ul>
                             </div>
@@ -47,19 +56,19 @@
                     <div class="nav-menu">
                         <nav class="mainmenu">
                             <ul>
-                                <li class="active"><a href="{{ url('/') }}">Home</a></li>
-                                <li><a href="{{ url('/rooms') }}">Rooms</a></li>
-                                <li><a href="{{ url('/about') }}">About Us</a></li>
-                                <li><a href="#">Pages</a>
+                                <li class="{{ request()->routeIs('home') ? 'active' : '' }}"><a href="{{ route('home') }}">Trang chủ</a></li>
+                                <li class="{{ request()->routeIs('rooms.*') ? 'active' : '' }}"><a href="{{ route('rooms.index') }}">Phòng nghỉ</a></li>
+                                <li class="{{ request()->routeIs('about') ? 'active' : '' }}"><a href="{{ route('about') }}">Giới thiệu</a></li>
+                                <li><a href="#">Trang</a>
                                     <ul class="dropdown">
-                                        <li><a href="{{ url('/rooms/1') }}">Room Details</a></li>
-                                        <li><a href="{{ url('/blog/1') }}">Blog Details</a></li>
-                                        <li><a href="#">Family Room</a></li>
-                                        <li><a href="#">Premium Room</a></li>
+                                        <li><a href="{{ route('rooms.show', 1) }}">Chi tiết phòng</a></li>
+                                        <li><a href="{{ route('blog.show', 1) }}">Chi tiết tin tức</a></li>
+                                        <li><a href="{{ route('rooms.show', 2) }}">Phòng Gia đình</a></li>
+                                        <li><a href="{{ route('rooms.show', 3) }}">Phòng Cao cấp</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="{{ url('/blog') }}">News</a></li>
-                                <li><a href="{{ url('/contact') }}">Contact</a></li>
+                                <li class="{{ request()->routeIs('blog.*') ? 'active' : '' }}"><a href="{{ route('blog.index') }}">Tin tức</a></li>
+                                <li class="{{ request()->routeIs('contact') ? 'active' : '' }}"><a href="{{ route('contact') }}">Liên hệ</a></li>
                             </ul>
                         </nav>
                         <div class="nav-right search-switch">

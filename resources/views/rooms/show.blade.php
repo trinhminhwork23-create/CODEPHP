@@ -8,10 +8,11 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <h2>Our Rooms</h2>
+                        <h2>Phòng nghỉ của chúng tôi</h2>
                         <div class="bt-option">
-                            <a href="{{ url('/') }}">Home</a>
-                            <a href="{{ url('/rooms') }}">Rooms</a>
+                            <a href="{{ route('home') }}">Trang chủ</a>
+                            <a href="{{ route('rooms.index') }}">Phòng nghỉ</a>
+                            <span>Phòng Premium King</span>
                         </div>
                     </div>
                 </div>
@@ -29,7 +30,7 @@
                         <img src="{{ asset('img/room/room-details.jpg') }}" alt="">
                         <div class="rd-text">
                             <div class="rd-title">
-                                <h3>Premium King Room</h3>
+                                <h3>Phòng Premium King</h3>
                                 <div class="rdt-right">
                                     <div class="rating">
                                         <i class="icon_star"></i>
@@ -38,52 +39,41 @@
                                         <i class="icon_star"></i>
                                         <i class="icon_star-half_alt"></i>
                                     </div>
-                                    <a href="#">Booking Now</a>
+                                    <a href="#">Đặt phòng ngay</a>
                                 </div>
                             </div>
-                            <h2>159$<span>/Pernight</span></h2>
+                            <h2>159$<span>/Đêm</span></h2>
                             <table>
                                 <tbody>
                                     <tr>
-                                        <td class="r-o">Size:</td>
-                                        <td>30 ft</td>
+                                        <td class="r-o">Diện tích:</td>
+                                        <td>30 m2</td>
                                     </tr>
                                     <tr>
-                                        <td class="r-o">Capacity:</td>
-                                        <td>Max persion 5</td>
+                                        <td class="r-o">Sức chứa:</td>
+                                        <td>Tối đa 3 người</td>
                                     </tr>
                                     <tr>
-                                        <td class="r-o">Bed:</td>
-                                        <td>King Beds</td>
+                                        <td class="r-o">Giường:</td>
+                                        <td>Giường King cỡ lớn</td>
                                     </tr>
                                     <tr>
-                                        <td class="r-o">Services:</td>
-                                        <td>Wifi, Television, Bathroom,...</td>
+                                        <td class="r-o">Dịch vụ:</td>
+                                        <td>Wifi, Tivi, Phòng tắm cao cấp,...</td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <p class="f-para">Motorhome or Trailer that is the question for you. Here are some of the
-                                advantages and disadvantages of both, so you will be confident when purchasing an RV.
-                                When comparing Rvs, a motorhome or a travel trailer, should you buy a motorhome or fifth
-                                wheeler? The advantages and disadvantages of both are studied so that you can make your
-                                choice wisely when purchasing an RV. Possessing a motorhome or fifth wheel is an
-                                achievement of a lifetime. It can be similar to sojourning with your residence as you
-                                search the various sites of our great land, America.</p>
-                            <p>The two commonly known recreational vehicle classes are the motorized and towable.
-                                Towable rvs are the travel trailers and the fifth wheel. The rv travel trailer or fifth
-                                wheel has the attraction of getting towed by a pickup or a car, thus giving the
-                                adaptability of possessing transportation for you when you are parked at your campsite.
                             </p>
                         </div>
                     </div>
-                    <div class="rd-reviews">
-                        <h4>Reviews</h4>
+                    <div class="rd-reviews" id="reviews">
+                        <h4>Đánh giá từ khách hàng</h4>
                         <div class="review-item">
                             <div class="ri-pic">
                                 <img src="{{ asset('img/room/avatar/avatar-1.jpg') }}" alt="">
                             </div>
                             <div class="ri-text">
-                                <span>27 Aug 2019</span>
+                                <span>27 Tháng 8, 2019</span>
                                 <div class="rating">
                                     <i class="icon_star"></i>
                                     <i class="icon_star"></i>
@@ -91,10 +81,8 @@
                                     <i class="icon_star"></i>
                                     <i class="icon_star-half_alt"></i>
                                 </div>
-                                <h5>Brandon Kelley</h5>
-                                <p>Neque porro qui squam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                    adipisci velit, sed quia non numquam eius modi tempora. incidunt ut labore et dolore
-                                    magnam.</p>
+                                <h5>Minh Anh</h5>
+                                <p>Phòng nghỉ vô cùng sạch sẽ và thoáng đãng, view ngắm hoàng hôn thung lũng đẹp xuất sắc. Các dịch vụ tiện ích như bồn tắm ngâm thảo dược rất thư giãn. Gia đình tôi sẽ quay lại Sapa Jade Hill vào kỳ nghỉ tới!</p>
                             </div>
                         </div>
                         <div class="review-item">
@@ -102,7 +90,7 @@
                                 <img src="{{ asset('img/room/avatar/avatar-2.jpg') }}" alt="">
                             </div>
                             <div class="ri-text">
-                                <span>27 Aug 2019</span>
+                                <span>15 Tháng 9, 2019</span>
                                 <div class="rating">
                                     <i class="icon_star"></i>
                                     <i class="icon_star"></i>
@@ -110,26 +98,26 @@
                                     <i class="icon_star"></i>
                                     <i class="icon_star-half_alt"></i>
                                 </div>
-                                <h5>Brandon Kelley</h5>
-                                <p>Neque porro qui squam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                    adipisci velit, sed quia non numquam eius modi tempora. incidunt ut labore et dolore
-                                    magnam.</p>
+                                <h5>Hoàng Lâm</h5>
+                                <p>Không gian yên bình và trong lành, thích hợp để trốn khỏi sự xô bồ của thành phố. Dịch vụ đưa đón tận nơi rất tiện lợi và nhân viên thân thiện, chu đáo. Rất đáng trải nghiệm!</p>
                             </div>
                         </div>
                     </div>
                     <div class="review-add">
-                        <h4>Add Review</h4>
-                        <form action="#" class="ra-form">
+                        <h4>Để lại đánh giá</h4>
+                        <form action="{{ route('reviews.store') }}" method="POST" class="ra-form">
+                            @csrf
+                            <input type="hidden" name="room_id" value="{{ $room->id ?? 1 }}">
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <input type="text" placeholder="Name*">
+                                    <input type="text" name="name" placeholder="Họ và tên">
                                 </div>
                                 <div class="col-lg-6">
-                                    <input type="text" placeholder="Email*">
+                                    <input type="text" name="email" placeholder="Địa chỉ Email">
                                 </div>
                                 <div class="col-lg-12">
                                     <div>
-                                        <h5>You Rating:</h5>
+                                        <h5>Đánh giá:</h5>
                                         <div class="rating">
                                             <i class="icon_star"></i>
                                             <i class="icon_star"></i>
@@ -137,9 +125,16 @@
                                             <i class="icon_star"></i>
                                             <i class="icon_star-half_alt"></i>
                                         </div>
+                                        <select name="rating" class="form-control mb-3" style="width: auto; display: inline-block;">
+                                            <option value="5">5 Sao</option>
+                                            <option value="4">4 Sao</option>
+                                            <option value="3">3 Sao</option>
+                                            <option value="2">2 Sao</option>
+                                            <option value="1">1 Sao</option>
+                                        </select>
                                     </div>
-                                    <textarea placeholder="Your Review"></textarea>
-                                    <button type="submit">Submit Now</button>
+                                    <textarea name="comment" placeholder="Nội dung đánh giá của bạn"></textarea>
+                                    <button type="submit">Gửi đánh giá</button>
                                 </div>
                             </div>
                         </form>
@@ -147,31 +142,36 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="room-booking">
-                        <h3>Your Reservation</h3>
-                        <form action="#">
+                        <h3>Đặt phòng ngay</h3>
+                        <form action="{{ route('bookings.checkout', $room->id ?? 1) }}" method="GET">
                             <div class="check-date">
-                                <label for="date-in">Check In:</label>
-                                <input type="text" class="date-input" id="date-in">
+                                <label for="date-in">Ngày nhận phòng:</label>
+                                <input type="text" class="date-input" id="date-in" name="check_in">
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="check-date">
-                                <label for="date-out">Check Out:</label>
-                                <input type="text" class="date-input" id="date-out">
+                                <label for="date-out">Ngày trả phòng:</label>
+                                <input type="text" class="date-input" id="date-out" name="check_out">
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="select-option">
-                                <label for="guest">Guests:</label>
-                                <select id="guest">
-                                    <option value="">3 Adults</option>
+                                <label for="guest">Người lớn:</label>
+                                <select id="guest" name="adults">
+                                    <option value="1">1 Người lớn</option>
+                                    <option value="2">2 Người lớn</option>
+                                    <option value="3">3 Người lớn</option>
+                                    <option value="4">4 Người lớn</option>
                                 </select>
                             </div>
                             <div class="select-option">
-                                <label for="room">Room:</label>
-                                <select id="room">
-                                    <option value="">1 Room</option>
+                                <label for="room">Trẻ em:</label>
+                                <select id="room" name="children">
+                                    <option value="0">0 Trẻ em</option>
+                                    <option value="1">1 Trẻ em</option>
+                                    <option value="2">2 Trẻ em</option>
                                 </select>
                             </div>
-                            <button type="submit">Check Availability</button>
+                            <button type="submit">Kiểm tra phòng trống</button>
                         </form>
                     </div>
                 </div>

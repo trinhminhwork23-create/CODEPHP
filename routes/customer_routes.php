@@ -19,8 +19,8 @@ use App\Http\Controllers\ReviewController;
 // Browse all rooms
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 
-// Search & filter available rooms (POST from search form with check-in, check-out, guests)
-Route::post('/rooms/search', [RoomController::class, 'search'])->name('rooms.search');
+// Search & filter available rooms (GET from search form with check-in, check-out, guests)
+Route::get('/rooms/search', [RoomController::class, 'search'])->name('rooms.search');
 
 // Room detail page
 Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
