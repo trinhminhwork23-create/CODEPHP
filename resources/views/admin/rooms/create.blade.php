@@ -11,7 +11,7 @@
               <p class="mb-0">Manage your inventory items</p>
             </div>
             <div>
-              <a href="inventory.html" class="btn btn-primary">Go to Inventory List</a>
+              <a href="{{ url('/admin/rooms') }}" class="btn btn-primary">Go to Inventory List</a>
             </div>
           </div>
         </div>

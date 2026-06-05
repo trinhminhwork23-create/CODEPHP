@@ -11,7 +11,7 @@
               <p class="mb-0">Manage your product inventory</p>
             </div>
             <div>
-              <a href="create-product.html" class="btn btn-primary">Add Product</a>
+              <a href="{{ url('/admin/rooms/create') }}" class="btn btn-primary">Add Product</a>
             </div>
           </div>
         </div>

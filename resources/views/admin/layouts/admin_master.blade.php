@@ -9,6 +9,12 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('admin/assets/images/favicon_io/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('admin/assets/images/favicon_io/favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('admin/assets/images/favicon_io/site.webmanifest') }}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }}">
 </head>
 
 <body>
@@ -24,6 +30,10 @@
     </main>
 
     <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- InApp JS -->
+    <script src="{{ asset('admin/assets/js/sidebar.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
     <script src="{{ asset('admin/assets/js/main.js') }}" type="module"></script>
 
 </body>

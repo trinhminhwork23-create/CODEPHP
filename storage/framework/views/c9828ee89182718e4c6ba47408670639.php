@@ -1,0 +1,1 @@
+<?php /**PATH C:\xampp\htdocs\CODEPHP\resources\views/auth/login.blade.php ENDPATH**/ ?>

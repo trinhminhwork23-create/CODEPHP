@@ -37,16 +37,15 @@ Route::get('/register', fn() => view('auth.register'));
 | Admin Routes (InApp Template)
 |--------------------------------------------------------------------------
 */
-
 Route::prefix('admin')->group(function () {
+
+    Route::get('', fn() => view('admin.dashboard'));
     Route::get('/', fn() => view('admin.dashboard'));
     Route::get('/dashboard', fn() => view('admin.dashboard'));
-
     Route::get('/rooms', fn() => view('admin.rooms.index'));
     Route::get('/rooms/create', fn() => view('admin.rooms.create'));
-
     Route::get('/categories', fn() => view('admin.categories.index'));
     Route::get('/bookings', fn() => view('admin.bookings.index'));
-    Route::get('/users', fn() => view('admin.users.index'));
     Route::get('/reviews', fn() => view('admin.reviews.index'));
+    Route::get('/users', fn() => view('admin.users.index'));
 });
