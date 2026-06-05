@@ -18,24 +18,25 @@
                             <a href="#"><i class="fa fa-instagram"></i></a>
                         </div>
 
-                        @auth
+                        <?php if(auth()->guard()->check()): ?>
                             <div style="display: inline-flex; align-items: center; gap: 8px;">
-                                {{-- Nút Trang Quản lý: chỉ hiện với admin và staff --}}
-                                @if(in_array(auth()->user()->role, ['admin', 'staff']))
-                                    <a href="{{ route('admin.categories.index') }}" class="bk-btn" style="background: #c9a227; border-color: #c9a227; color: #fff; font-weight: 700; letter-spacing: 1px; white-space: nowrap;">
+                                
+                                <?php if(in_array(auth()->user()->role, ['admin', 'staff'])): ?>
+                                    <a href="<?php echo e(route('admin.categories.index')); ?>" class="bk-btn" style="background: #c9a227; border-color: #c9a227; color: #fff; font-weight: 700; letter-spacing: 1px; white-space: nowrap;">
                                         <i class="fa fa-cog" style="margin-right: 4px;"></i> TRANG QUẢN LÝ
                                     </a>
-                                @endif
+                                <?php endif; ?>
 
-                                {{-- Dropdown Xin chào --}}
+                                
                                 <div class="user-dropdown" style="position: relative; display: inline-block;">
                                     <button class="bk-btn" style="background: #19191a; border-color: #19191a; color: #fff; cursor: pointer; white-space: nowrap;" onclick="this.nextElementSibling.classList.toggle('open')">
                                         <i class="fa fa-user-circle" style="margin-right: 5px;"></i>
-                                        Xin chào, {{ auth()->user()->name }}
+                                        Xin chào, <?php echo e(auth()->user()->name); ?>
+
                                         <i class="fa fa-angle-down" style="margin-left: 4px;"></i>
                                     </button>
                                     <div class="user-dropdown-menu" style="display: none; position: absolute; right: 0; top: 110%; background: #fff; min-width: 200px; border: 1px solid #ebebeb; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,.12); z-index: 9999;">
-                                        <a href="{{ route('profile.history') }}" style="display: block; padding: 10px 18px; color: #19191a; font-size: 14px; border-bottom: 1px solid #f0f0f0; text-decoration: none;">
+                                        <a href="<?php echo e(route('profile.history')); ?>" style="display: block; padding: 10px 18px; color: #19191a; font-size: 14px; border-bottom: 1px solid #f0f0f0; text-decoration: none;">
                                             <i class="fa fa-history" style="margin-right: 8px; color: #dfa974;"></i> Lịch sử đặt phòng
                                         </a>
                                         <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="display: block; padding: 10px 18px; color: #dc3545; font-size: 14px; text-decoration: none;">
@@ -44,21 +45,21 @@
                                     </div>
                                 </div>
                             </div>
-                            <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">
-                                @csrf
+                            <form id="logout-form" action="<?php echo e(route('auth.logout')); ?>" method="POST" style="display: none;">
+                                <?php echo csrf_field(); ?>
                             </form>
 
-                        @else
-                            <a href="{{ route('auth.login') }}" class="bk-btn" style="background: transparent; color: #19191a; border: 1px solid #dfa974; margin-right: 5px;">Đăng nhập</a>
-                            <a href="{{ route('auth.register') }}" class="bk-btn">Đăng ký</a>
-                        @endauth
+                        <?php else: ?>
+                            <a href="<?php echo e(route('auth.login')); ?>" class="bk-btn" style="background: transparent; color: #19191a; border: 1px solid #dfa974; margin-right: 5px;">Đăng nhập</a>
+                            <a href="<?php echo e(route('auth.register')); ?>" class="bk-btn">Đăng ký</a>
+                        <?php endif; ?>
 
                         <style>
                             .user-dropdown-menu.open { display: block !important; }
                             .user-dropdown-menu a:hover { background: #f8f4ee; }
                         </style>
                         <div class="language-option">
-                            <img src="{{ asset('img/flag.jpg') }}" alt="">
+                            <img src="<?php echo e(asset('img/flag.jpg')); ?>" alt="">
                             <span>VI <i class="fa fa-angle-down"></i></span>
                             <div class="flag-dropdown">
                                 <ul>
@@ -77,8 +78,8 @@
             <div class="row">
                 <div class="col-lg-2">
                     <div class="logo">
-                        <a href="{{ url('/') }}">
-                            <img src="{{ asset('img/logo.png') }}" alt="">
+                        <a href="<?php echo e(url('/')); ?>">
+                            <img src="<?php echo e(asset('img/logo.png')); ?>" alt="">
                         </a>
                     </div>
                 </div>
@@ -86,19 +87,19 @@
                     <div class="nav-menu">
                         <nav class="mainmenu">
                             <ul>
-                                <li class="{{ request()->routeIs('home') ? 'active' : '' }}"><a href="{{ route('home') }}">Trang chủ</a></li>
-                                <li class="{{ request()->routeIs('rooms.*') ? 'active' : '' }}"><a href="{{ route('rooms.index') }}">Phòng nghỉ</a></li>
-                                <li class="{{ request()->routeIs('about') ? 'active' : '' }}"><a href="{{ route('about') }}">Giới thiệu</a></li>
+                                <li class="<?php echo e(request()->routeIs('home') ? 'active' : ''); ?>"><a href="<?php echo e(route('home')); ?>">Trang chủ</a></li>
+                                <li class="<?php echo e(request()->routeIs('rooms.*') ? 'active' : ''); ?>"><a href="<?php echo e(route('rooms.index')); ?>">Phòng nghỉ</a></li>
+                                <li class="<?php echo e(request()->routeIs('about') ? 'active' : ''); ?>"><a href="<?php echo e(route('about')); ?>">Giới thiệu</a></li>
                                 <li><a href="#">Trang</a>
                                     <ul class="dropdown">
-                                        <li><a href="{{ route('rooms.show', 1) }}">Chi tiết phòng</a></li>
-                                        <li><a href="{{ route('blog.show', 1) }}">Chi tiết tin tức</a></li>
-                                        <li><a href="{{ route('rooms.show', 2) }}">Phòng Gia đình</a></li>
-                                        <li><a href="{{ route('rooms.show', 3) }}">Phòng Cao cấp</a></li>
+                                        <li><a href="<?php echo e(route('rooms.show', 1)); ?>">Chi tiết phòng</a></li>
+                                        <li><a href="<?php echo e(route('blog.show', 1)); ?>">Chi tiết tin tức</a></li>
+                                        <li><a href="<?php echo e(route('rooms.show', 2)); ?>">Phòng Gia đình</a></li>
+                                        <li><a href="<?php echo e(route('rooms.show', 3)); ?>">Phòng Cao cấp</a></li>
                                     </ul>
                                 </li>
-                                <li class="{{ request()->routeIs('blog.*') ? 'active' : '' }}"><a href="{{ route('blog.index') }}">Tin tức</a></li>
-                                <li class="{{ request()->routeIs('contact') ? 'active' : '' }}"><a href="{{ route('contact') }}">Liên hệ</a></li>
+                                <li class="<?php echo e(request()->routeIs('blog.*') ? 'active' : ''); ?>"><a href="<?php echo e(route('blog.index')); ?>">Tin tức</a></li>
+                                <li class="<?php echo e(request()->routeIs('contact') ? 'active' : ''); ?>"><a href="<?php echo e(route('contact')); ?>">Liên hệ</a></li>
                             </ul>
                         </nav>
                         <div class="nav-right search-switch">
@@ -111,3 +112,4 @@
     </div>
 </header>
 <!-- Header End -->
+<?php /**PATH C:\Php\htdocs\CODEPHP\resources\views/layouts/header.blade.php ENDPATH**/ ?>

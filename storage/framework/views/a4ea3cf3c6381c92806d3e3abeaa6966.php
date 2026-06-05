@@ -1,6 +1,6 @@
-@extends('layouts.master')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
     <!-- Breadcrumb Section Begin -->
     <div class="breadcrumb-section">
         <div class="container">
@@ -9,7 +9,7 @@
                     <div class="breadcrumb-text">
                         <h2>Đăng nhập thành viên</h2>
                         <div class="bt-option">
-                            <a href="{{ route('home') }}">Trang chủ</a>
+                            <a href="<?php echo e(route('home')); ?>">Trang chủ</a>
                             <span>Đăng nhập</span>
                         </div>
                     </div>
@@ -87,20 +87,20 @@
                 <div class="col-lg-6">
                     <div class="login-form">
                         <h3>Đăng Nhập</h3>
-                        @if($errors->any())
+                        <?php if($errors->any()): ?>
                             <div class="alert alert-danger mb-4">
                                 <ul style="margin: 0; padding-left: 20px;">
-                                    @foreach($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
+                                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <li><?php echo e($error); ?></li>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </ul>
                             </div>
-                        @endif
-                        <form action="{{ route('auth.login.submit') }}" method="POST">
-                            @csrf
+                        <?php endif; ?>
+                        <form action="<?php echo e(route('auth.login.submit')); ?>" method="POST">
+                            <?php echo csrf_field(); ?>
                             <div>
                                 <label for="login_field">Email hoặc Số điện thoại <span>*</span></label>
-                                <input type="text" id="login_field" name="login_field" placeholder="Nhập email hoặc số điện thoại" required value="{{ old('login_field') }}">
+                                <input type="text" id="login_field" name="login_field" placeholder="Nhập email hoặc số điện thoại" required value="<?php echo e(old('login_field')); ?>">
                             </div>
                             <div>
                                 <label for="password">Mật khẩu <span>*</span></label>
@@ -108,11 +108,13 @@
                             </div>
                             <button type="submit" class="login-btn">Đăng Nhập</button>
                         </form>
-                        <p>Chưa có tài khoản? <a href="{{ route('auth.register') }}">Đăng ký thành viên ngay</a></p>
+                        <p>Chưa có tài khoản? <a href="<?php echo e(route('auth.register')); ?>">Đăng ký thành viên ngay</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
     <!-- Login Section End -->
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Php\htdocs\CODEPHP\resources\views/auth/login.blade.php ENDPATH**/ ?>

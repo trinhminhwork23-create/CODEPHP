@@ -23,6 +23,8 @@ Route::middleware('guest')->group(function () {
 });
 
 // Logout (authenticated users only)
-Route::post('/logout', [LoginController::class, 'logout'])
+Route::any('/logout', [LoginController::class, 'logout'])
     ->middleware('auth')
     ->name('auth.logout');
+
+Route::get('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
