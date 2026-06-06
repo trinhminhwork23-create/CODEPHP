@@ -38,27 +38,38 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($bookings ?? [ (object)[ 'id' => 1, 'room_id' => 1, 'room' => (object)['name' => 'Phòng Premium King'], 'check_in' => date('Y-m-d'), 'check_out' => date('Y-m-d', strtotime('+1 day')), 'total_money' => 159.00, 'status' => 2 ] ] as $booking)
+                                @forelse($bookings as $booking)
                                     <tr>
-                                        <td class="align-middle" style="color: #19191a; font-weight: 500;">{{ $booking->id }}</td>
-                                        <td class="align-middle" style="color: #707079;">{{ $booking->room->name ?? 'Phòng Premium King' }}</td>
-                                        <td class="align-middle" style="color: #707079;">{{ isset($booking->check_in) ? \Carbon\Carbon::parse($booking->check_in)->format('d/m/Y') : '' }}</td>
-                                        <td class="align-middle" style="color: #707079;">{{ isset($booking->check_out) ? \Carbon\Carbon::parse($booking->check_out)->format('d/m/Y') : '' }}</td>
-                                        <td class="align-middle" style="color: #19191a; font-weight: 500;">${{ number_format($booking->total_money ?? 0, 2) }}</td>
-                                        <td class="align-middle">
-                                            @if(($booking->status ?? 0) == 0)
-                                                <span class="badge" style="background-color: #ffc107; color: #212529; padding: 8px 12px; font-weight: 500;">Chờ duyệt</span>
-                                            @elseif(($booking->status ?? 0) == 1)
-                                                <span class="badge" style="background-color: #17a2b8; color: #ffffff; padding: 8px 12px; font-weight: 500;">Đã xác nhận</span>
-                                            @elseif(($booking->status ?? 0) == 2)
-                                                <span class="badge" style="background-color: #28a745; color: #ffffff; padding: 8px 12px; font-weight: 500;">Đã hoàn thành</span>
-                                            @elseif(($booking->status ?? 0) == 3)
-                                                <span class="badge" style="background-color: #dc3545; color: #ffffff; padding: 8px 12px; font-weight: 500;">Đã hủy</span>
-                                            @endif
+                                        <td class="align-middle" style="color: #19191a; font-weight: 500;">
+                                            SJD-{{ str_pad($booking->id, 6, '0', STR_PAD_LEFT) }}
                                         </td>
+                                        
+                                        <td class="align-middle" style="color: #707079;">{{ $booking->room->name ?? 'N/A' }}</td>
+                                        
+                                        <td class="align-middle" style="color: #707079;">{{ $booking->check_in->format('d/m/Y') }}</td>
+                                        
+                                        <td class="align-middle" style="color: #707079;">{{ $booking->check_out->format('d/m/Y') }}</td>
+                                        
+                                        <td class="align-middle" style="color: #19191a; font-weight: 500;">
+                                            {{ number_format($booking->total_money, 0, ',', '.') }} VNĐ
+                                        </td>
+
                                         <td class="align-middle">
-                                            @if(($booking->status ?? 0) == 2)
-                                                <a href="{{ route('rooms.show', $booking->room_id ?? 1) }}#reviews" class="primary-btn" style="padding: 10px 20px; font-size: 13px;">Đánh giá & Bình luận</a>
+                                            @switch($booking->status)
+                                                @case(\App\Models\Booking::STATUS_PENDING)
+                                                    <span class="badge" style="background-color: #ffc107; color: #212529; padding: 8px 12px;">Chờ duyệt</span> @break
+                                                @case(\App\Models\Booking::STATUS_APPROVED)
+                                                    <span class="badge" style="background-color: #17a2b8; color: #ffffff; padding: 8px 12px;">Đã xác nhận</span> @break
+                                                @case(\App\Models\Booking::STATUS_PAID)
+                                                    <span class="badge" style="background-color: #28a745; color: #ffffff; padding: 8px 12px;">Đã hoàn thành</span> @break
+                                                @case(\App\Models\Booking::STATUS_CANCELLED)
+                                                    <span class="badge" style="background-color: #dc3545; color: #ffffff; padding: 8px 12px;">Đã hủy</span> @break
+                                            @endswitch
+                                        </td>
+
+                                        <td class="align-middle">
+                                            @if($booking->status == \App\Models\Booking::STATUS_PAID)
+                                                <a href="{{ route('rooms.show', $booking->room_id) }}#reviews" class="primary-btn" style="padding: 10px 20px; font-size: 13px;">Đánh giá</a>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
@@ -66,7 +77,9 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center" style="padding: 30px; color: #707079;">Quý khách chưa có lịch sử đặt phòng nào.</td>
+                                        <td colspan="7" class="text-center" style="padding: 30px; color: #707079;">
+                                            Hiện tại quý khách chưa có lịch sử đặt phòng nào.
+                                        </td>
                                     </tr>
                                 @endforelse
                             </tbody>

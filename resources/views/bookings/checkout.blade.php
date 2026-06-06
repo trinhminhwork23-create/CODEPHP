@@ -106,9 +106,11 @@
             }
         </style>
         <div class="container">
-            <form action="{{ route('bookings.store') }}" method="POST" class="checkout-form">
+            <form action="{{ route('booking.confirm') }}" method="POST" class="checkout-form">
                 @csrf
-                <input type="hidden" name="room_id" value="{{ $room->id ?? 1 }}">
+                <input type="hidden" name="room_id" value="{{ $room->id }}">
+                <input type="hidden" name="payment_option" value="deposit">
+
                 <div class="row">
                     <div class="col-lg-7">
                         <div class="checkout-content">
@@ -116,15 +118,15 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <label for="name">Họ và tên <span>*</span></label>
-                                    <input type="text" id="name" name="name" required>
+                                    <input type="text" id="name" name="name" value="{{ Auth::user()->name }}" readonly required>
                                 </div>
                                 <div class="col-lg-6">
                                     <label for="email">Địa chỉ Email <span>*</span></label>
-                                    <input type="email" id="email" name="email" required>
+                                    <input type="email" id="email" name="email" value="{{ Auth::user()->email }}" readonly required>
                                 </div>
                                 <div class="col-lg-6">
                                     <label for="phone">Số điện thoại <span>*</span></label>
-                                    <input type="text" id="phone" name="phone" required>
+                                    <input type="text" id="phone" name="phone" placeholder="Nhập số điện thoại..." required>
                                 </div>
                                 <div class="col-lg-12">
                                     <label for="note">Ghi chú thêm</label>
@@ -137,37 +139,37 @@
                         <div class="checkout-order">
                             <h4>Thông tin đặt phòng</h4>
                             <ul>
-                                <li>Phòng <span>{{ $room->name ?? 'Phòng Premium King' }}</span></li>
+                                <li>Phòng <span>{{ $room->name }}</span></li>
                                 <li>Ngày nhận phòng 
                                     <span>
-                                        <input type="date" name="check_in" value="{{ request('check_in', date('Y-m-d')) }}" style="border: none; text-align: right; background: transparent; width: 130px; padding: 0; height: auto;" readonly>
+                                        <input type="date" name="check_in" value="{{ $data['check_in'] }}" style="border: none; text-align: right; background: transparent; width: 130px; padding: 0; height: auto;" readonly>
                                     </span>
                                 </li>
                                 <li>Ngày trả phòng 
                                     <span>
-                                        <input type="date" name="check_out" value="{{ request('check_out', date('Y-m-d', strtotime('+1 day'))) }}" style="border: none; text-align: right; background: transparent; width: 130px; padding: 0; height: auto;" readonly>
+                                        <input type="date" name="check_out" value="{{ $data['check_out'] }}" style="border: none; text-align: right; background: transparent; width: 130px; padding: 0; height: auto;" readonly>
                                     </span>
                                 </li>
                                 <li>Người lớn 
                                     <span>
-                                        <input type="number" name="adults" value="{{ request('adults', 2) }}" style="border: none; text-align: right; background: transparent; width: 50px; padding: 0; height: auto;" readonly>
+                                        <input type="number" name="adults" value="{{ $data['adults'] ?? 1 }}" style="border: none; text-align: right; background: transparent; width: 50px; padding: 0; height: auto;" readonly>
                                     </span>
                                 </li>
                                 <li>Trẻ em 
                                     <span>
-                                        <input type="number" name="children" value="{{ request('children', 0) }}" style="border: none; text-align: right; background: transparent; width: 50px; padding: 0; height: auto;" readonly>
+                                        <input type="number" name="children" value="{{ $data['children'] ?? 0 }}" style="border: none; text-align: right; background: transparent; width: 50px; padding: 0; height: auto;" readonly>
                                     </span>
                                 </li>
                             </ul>
                             <div class="checkout-total">
                                 <ul>
-                                    <li>Tổng tiền <span>${{ $room->price ?? 159 }}.00</span></li>
-                                    <li>Tiền cọc (50%) <span>${{ ($room->price ?? 159) / 2 }}.00</span></li>
+                                    <li>Tổng tiền <span>{{ number_format($totalPrice, 0, ',', '.') }} VNĐ</span></li>
+                                    <li>Tiền cọc (50%) <span>{{ number_format($totalPrice / 2, 0, ',', '.') }} VNĐ</span></li>
                                 </ul>
                             </div>
                             <div class="payment-method">
                                 <p style="font-size: 14px; color: #707079; margin-bottom: 20px;">
-                                    * Yêu cầu thanh toán cọc 50% qua VNPAY để xác nhận đặt phòng. Số tiền còn lại sẽ được thanh toán khi nhận phòng.
+                                    * Yêu cầu thanh toán cọc **50%** qua VNPAY để xác nhận đặt phòng. Số tiền còn lại sẽ được thanh toán khi nhận phòng.
                                 </p>
                                 <button type="submit" class="vnpay-btn">Thanh toán tiền cọc 50% qua VNPAY</button>
                             </div>
