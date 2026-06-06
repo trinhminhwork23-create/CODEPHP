@@ -16,33 +16,54 @@
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
                         <h3>Đặt phòng nghỉ dưỡng</h3>
+                        @if($errors->any())
+                            <div class="alert alert-danger" style="border-radius: 4px; padding: 12px 16px; margin-bottom: 15px; background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24;">
+                                <ul class="mb-0" style="margin: 0; padding-left: 18px;">
+                                    @foreach($errors->all() as $error)
+                                        <li style="font-size: 13px;">{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <form action="{{ route('rooms.search') }}" method="GET">
                             <div class="check-date">
                                 <label for="date-in">Ngày nhận phòng:</label>
-                                <input type="text" class="date-input" id="date-in" name="check_in">
+                                <input type="text" class="date-input" id="date-in" name="check_in" value="{{ request('check_in') ?? old('check_in') }}">
                                 <i class="icon_calendar"></i>
+                                @error('check_in')
+                                    <span class="text-danger small" style="display: block; margin-top: 5px;">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Ngày trả phòng:</label>
-                                <input type="text" class="date-input" id="date-out" name="check_out">
+                                <input type="text" class="date-input" id="date-out" name="check_out" value="{{ request('check_out') ?? old('check_out') }}">
                                 <i class="icon_calendar"></i>
+                                @error('check_out')
+                                    <span class="text-danger small" style="display: block; margin-top: 5px;">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="select-option">
                                 <label for="guest">Người lớn:</label>
                                 <select id="guest" name="adults">
-                                    <option value="1">1 Người lớn</option>
-                                    <option value="2">2 Người lớn</option>
-                                    <option value="3">3 Người lớn</option>
-                                    <option value="4">4 Người lớn</option>
+                                    <option value="1" {{ (request('adults') ?? old('adults')) == 1 ? 'selected' : '' }}>1 Người lớn</option>
+                                    <option value="2" {{ (request('adults') ?? old('adults')) == 2 ? 'selected' : '' }}>2 Người lớn</option>
+                                    <option value="3" {{ (request('adults') ?? old('adults')) == 3 ? 'selected' : '' }}>3 Người lớn</option>
+                                    <option value="4" {{ (request('adults') ?? old('adults')) == 4 ? 'selected' : '' }}>4 Người lớn</option>
                                 </select>
+                                @error('adults')
+                                    <span class="text-danger small" style="display: block; margin-top: 5px;">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="select-option">
                                 <label for="room">Trẻ em:</label>
                                 <select id="room" name="children">
-                                    <option value="0">0 Trẻ em</option>
-                                    <option value="1">1 Trẻ em</option>
-                                    <option value="2">2 Trẻ em</option>
+                                    <option value="0" {{ (request('children') ?? old('children')) == 0 ? 'selected' : '' }}>0 Trẻ em</option>
+                                    <option value="1" {{ (request('children') ?? old('children')) == 1 ? 'selected' : '' }}>1 Trẻ em</option>
+                                    <option value="2" {{ (request('children') ?? old('children')) == 2 ? 'selected' : '' }}>2 Trẻ em</option>
                                 </select>
+                                @error('children')
+                                    <span class="text-danger small" style="display: block; margin-top: 5px;">{{ $message }}</span>
+                                @enderror
                             </div>
                             <button type="submit">Kiểm tra phòng trống</button>
                         </form>
@@ -90,7 +111,7 @@
     </section>
     <!-- About Us Section End -->
 
-    <!-- Services Section End -->
+    <!-- Services Section Begin -->
     <section class="services-section spad">
         <div class="container">
             <div class="row">
@@ -154,122 +175,52 @@
         <div class="container-fluid">
             <div class="hp-room-items">
                 <div class="row">
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="{{ asset('img/room/room-b1.jpg') }}">
-                            <div class="hr-text">
-                                <h3>Phòng đôi Sang trọng</h3>
-                                <h2>199$<span>/Đêm</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Diện tích:</td>
-                                            <td>30 m2</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Sức chứa:</td>
-                                            <td>Tối đa 5 người</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Giường:</td>
-                                            <td>Giường King cỡ lớn</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Dịch vụ:</td>
-                                            <td>Wifi, Tivi, Phòng tắm cao cấp,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="{{ route('rooms.show', 1) }}" class="primary-btn">Xem chi tiết</a>
+                    @forelse($featuredRooms as $room)
+                        @php
+                            $fallbackImages = [
+                                'https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&q=80',
+                                'https://images.unsplash.com/photo-1590490360182-c33d955c4644?w=800&q=80',
+                                'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
+                                'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80',
+                            ];
+                            $imgSrc = ($room->image && file_exists(public_path('storage/' . $room->image)))
+                                ? asset('storage/' . $room->image)
+                                : $fallbackImages[$loop->index % count($fallbackImages)];
+                        @endphp
+                        <div class="col-lg-3 col-md-6">
+                            <div class="hp-room-item set-bg" data-setbg="{{ $imgSrc }}">
+                                <div class="hr-text">
+                                    <h3>{{ $room->name }}</h3>
+                                    <h2>{{ number_format($room->price, 0, ',', '.') }}<span> đ/Đêm</span></h2>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td class="r-o">Diện tích:</td>
+                                                <td>{{ $room->size ? $room->size . ' m²' : 'N/A' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="r-o">Sức chứa:</td>
+                                                <td>Tối đa {{ $room->capacity }} người</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="r-o">Giường:</td>
+                                                <td>{{ $room->bed_type ?? 'Tiêu chuẩn' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="r-o">Loại phòng:</td>
+                                                <td>{{ $room->category->name ?? 'N/A' }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <a href="{{ route('rooms.show', $room->id) }}" class="primary-btn">Xem chi tiết</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="{{ asset('img/room/room-b2.jpg') }}">
-                            <div class="hr-text">
-                                <h3>Phòng Premium King</h3>
-                                <h2>159$<span>/Đêm</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Diện tích:</td>
-                                            <td>30 m2</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Sức chứa:</td>
-                                            <td>Tối đa 5 người</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Giường:</td>
-                                            <td>Giường King cỡ lớn</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Dịch vụ:</td>
-                                            <td>Wifi, Tivi, Phòng tắm cao cấp,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="{{ route('rooms.show', 2) }}" class="primary-btn">Xem chi tiết</a>
-                            </div>
+                    @empty
+                        <div class="col-lg-12 text-center">
+                            <p>Hiện chưa có phòng nào được cập nhật.</p>
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="{{ asset('img/room/room-b3.jpg') }}">
-                            <div class="hr-text">
-                                <h3>Phòng Deluxe</h3>
-                                <h2>198$<span>/Đêm</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Diện tích:</td>
-                                            <td>30 m2</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Sức chứa:</td>
-                                            <td>Tối đa 5 người</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Giường:</td>
-                                            <td>Giường King cỡ lớn</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Dịch vụ:</td>
-                                            <td>Wifi, Tivi, Phòng tắm cao cấp,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="{{ route('rooms.show', 3) }}" class="primary-btn">Xem chi tiết</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="{{ asset('img/room/room-b4.jpg') }}">
-                            <div class="hr-text">
-                                <h3>Phòng Gia đình</h3>
-                                <h2>299$<span>/Đêm</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Diện tích:</td>
-                                            <td>30 m2</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Sức chứa:</td>
-                                            <td>Tối đa 5 người</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Giường:</td>
-                                            <td>Giường King cỡ lớn</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Dịch vụ:</td>
-                                            <td>Wifi, Tivi, Phòng tắm cao cấp,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="{{ route('rooms.show', 4) }}" class="primary-btn">Xem chi tiết</a>
-                            </div>
-                        </div>
-                    </div>
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -294,11 +245,8 @@
                             <p>Sau khi công trình xây dựng nhà kéo dài hơn dự kiến, gia đình tôi cần một nơi để lưu trú vài ngày. Là một người bản địa, tôi biết rất nhiều về các lựa chọn chỗ ở trong thành phố, và chúng tôi hoàn toàn hài lòng với kỳ nghỉ tuyệt vời tại khách sạn Sona.</p>
                             <div class="ti-author">
                                 <div class="rating">
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star-half_alt"></i>
+                                    <i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i>
+                                    <i class="icon_star"></i><i class="icon_star-half_alt"></i>
                                 </div>
                                 <h5> - Alexander Vasquez</h5>
                             </div>
@@ -308,11 +256,8 @@
                             <p>Dịch vụ tuyệt vời và phòng ốc sang trọng. Chúng tôi đã có một kỳ nghỉ cuối tuần vô cùng thư giãn, nhân viên ở đây thực sự chu đáo và chuyên nghiệp. Chắc chắn tôi sẽ giới thiệu Sona cho bạn bè và người thân.</p>
                             <div class="ti-author">
                                 <div class="rating">
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star-half_alt"></i>
+                                    <i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i>
+                                    <i class="icon_star"></i><i class="icon_star-half_alt"></i>
                                 </div>
                                 <h5> - Alexander Vasquez</h5>
                             </div>

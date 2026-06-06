@@ -5,6 +5,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,8 +33,11 @@ Route::middleware(['auth', 'banned'])->group(function () {
     // Show checkout/confirmation form for a specific room
     Route::get('/bookings/checkout/{room}', [BookingController::class, 'checkout'])->name('bookings.checkout');
 
-    // Submit the booking form (creates Booking record, triggers DB trigger for total_money)
+    // Submit the booking form (creates Booking record, redirects to VNPay)
     Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
+
+    // Confirm booking from checkout form — canonical POST target
+    Route::post('/booking/confirm', [BookingController::class, 'confirmBooking'])->name('booking.confirm');
 
     // Cancel a booking (customer-side)
     Route::post('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
@@ -51,7 +55,13 @@ Route::middleware(['auth', 'banned'])->group(function () {
     Route::get('/bookings/success', [BookingController::class, 'success'])->name('bookings.success');
 
     // Booking history page (customer's own past & upcoming bookings)
-    Route::get('/profile/history', [BookingController::class, 'history'])->name('profile.history');
+    Route::get('/profile/history', [ProfileController::class, 'index'])->name('profile.history');
+
+    // Update profile details
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+    // Update security password
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
     // Submit a review for a room (only after a completed stay)
     Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');

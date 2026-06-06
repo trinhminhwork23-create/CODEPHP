@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Sona Template">
-    <meta name="keywords" content="Sona, unica, creative, html">
+    <meta name="description" content="Sona Resort – Khu nghỉ dưỡng cao cấp, đặt phòng trực tuyến nhanh chóng và tiện lợi.">
+    <meta name="keywords" content="Sona, khu nghỉ dưỡng, đặt phòng, khách sạn, resort, nghỉ dưỡng">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sona | Template</title>
+    <title>Sona Resort – Nghỉ dưỡng sang trọng</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Inter (Vietnamese subset) – must load FIRST to override fallback fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;700&family=Cabin:wght@400;500;600;700&subset=vietnamese&display=swap" rel="stylesheet">
+    <style>
+        /* Vietnamese font override – ensure diacritics render correctly */
+        body, h1, h2, h3, h4, h5, h6, p, a, span, button, input { font-family: 'Inter', sans-serif !important; }
+    </style>
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" type="text/css">

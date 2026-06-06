@@ -30,6 +30,7 @@
     26 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     27 => 'Termwind\\Laravel\\TermwindServiceProvider',
     28 => 'Spatie\\LaravelIgnition\\IgnitionServiceProvider',
+    29 => 'App\\Providers\\AppServiceProvider',
   ),
   'eager' => 
   array (
@@ -47,6 +48,7 @@
     11 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     12 => 'Termwind\\Laravel\\TermwindServiceProvider',
     13 => 'Spatie\\LaravelIgnition\\IgnitionServiceProvider',
+    14 => 'App\\Providers\\AppServiceProvider',
   ),
   'deferred' => 
   array (

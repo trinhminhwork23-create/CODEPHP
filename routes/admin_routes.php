@@ -17,35 +17,35 @@ use App\Http\Controllers\Admin\AdminReviewController;
 */
 
 // Dashboard
-Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // Categories
-Route::get('/categories', [AdminCategoryController::class, 'index'])->name('admin.categories.index');
-Route::get('/categories/create', [AdminCategoryController::class, 'create'])->name('admin.categories.create');
-Route::post('/categories', [AdminCategoryController::class, 'store'])->name('admin.categories.store');
-Route::get('/categories/{category}/edit', [AdminCategoryController::class, 'edit'])->name('admin.categories.edit');
-Route::put('/categories/{category}', [AdminCategoryController::class, 'update'])->name('admin.categories.update');
-Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy'])->name('admin.categories.destroy');
+Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
+Route::get('/categories/create', [AdminCategoryController::class, 'create'])->name('categories.create');
+Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
+Route::get('/categories/{category}/edit', [AdminCategoryController::class, 'edit'])->name('categories.edit');
+Route::put('/categories/{category}', [AdminCategoryController::class, 'update'])->name('categories.update');
+Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
 
 // Rooms
-Route::get('/rooms', [AdminRoomController::class, 'index'])->name('admin.rooms.index');
-Route::get('/rooms/create', [AdminRoomController::class, 'create'])->name('admin.rooms.create');
-Route::post('/rooms', [AdminRoomController::class, 'store'])->name('admin.rooms.store');
-Route::get('/rooms/{room}/edit', [AdminRoomController::class, 'edit'])->name('admin.rooms.edit');
-Route::put('/rooms/{room}', [AdminRoomController::class, 'update'])->name('admin.rooms.update');
-Route::delete('/rooms/{room}', [AdminRoomController::class, 'destroy'])->name('admin.rooms.destroy');
+Route::get('/rooms', [AdminRoomController::class, 'index'])->name('rooms.index');
+Route::get('/rooms/create', [AdminRoomController::class, 'create'])->name('rooms.create');
+Route::post('/rooms', [AdminRoomController::class, 'store'])->name('rooms.store');
+Route::get('/rooms/{room}/edit', [AdminRoomController::class, 'edit'])->name('rooms.edit');
+Route::put('/rooms/{room}', [AdminRoomController::class, 'update'])->name('rooms.update');
+Route::delete('/rooms/{room}', [AdminRoomController::class, 'destroy'])->name('rooms.destroy');
 
 // Bookings
-Route::get('/bookings', [AdminBookingController::class, 'index'])->name('admin.bookings.index');
-Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('admin.bookings.show');
-Route::patch('/bookings/{booking}/approve', [AdminBookingController::class, 'approve'])->name('admin.bookings.approve');
-Route::patch('/bookings/{booking}/cancel', [AdminBookingController::class, 'cancel'])->name('admin.bookings.cancel');
+Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
+Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
+Route::patch('/bookings/{booking}/approve', [AdminBookingController::class, 'approve'])->name('bookings.approve');
+Route::patch('/bookings/{booking}/cancel', [AdminBookingController::class, 'cancel'])->name('bookings.cancel');
 
 // Users
-Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');
-Route::patch('/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('admin.users.toggleStatus');
+Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+Route::patch('/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('users.toggleStatus');
 
 // Reviews
-Route::get('/reviews', [AdminReviewController::class, 'index'])->name('admin.reviews.index');
-Route::patch('/reviews/{review}/toggle-visibility', [AdminReviewController::class, 'toggleVisibility'])->name('admin.reviews.toggleVisibility');
-Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy'])->name('admin.reviews.destroy');
+Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
+Route::patch('/reviews/{review}/toggle-visibility', [AdminReviewController::class, 'toggleVisibility'])->name('reviews.toggleVisibility');
+Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');

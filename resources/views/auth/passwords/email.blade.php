@@ -7,10 +7,10 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <h2>Đăng nhập thành viên</h2>
+                        <h2>Khôi phục mật khẩu</h2>
                         <div class="bt-option">
                             <a href="{{ route('home') }}">Trang chủ</a>
-                            <span>Đăng nhập</span>
+                            <span>Quên mật khẩu</span>
                         </div>
                     </div>
                 </div>
@@ -19,7 +19,7 @@
     </div>
     <!-- Breadcrumb Section End -->
 
-    <!-- Login Section Begin -->
+    <!-- Password Recovery Section Begin -->
     <section class="login-section spad">
         <style>
             .login-form {
@@ -31,12 +31,10 @@
             .login-form h3 {
                 color: #19191a;
                 font-weight: 600;
-                margin-bottom: 30px;
+                margin-bottom: 20px;
                 text-align: center;
             }
-            .login-form input[type="text"],
-            .login-form input[type="email"],
-            .login-form input[type="password"] {
+            .login-form input[type="email"] {
                 width: 100%;
                 height: 50px;
                 border: 1px solid #ebebeb;
@@ -44,7 +42,7 @@
                 font-size: 16px;
                 color: #19191a;
                 padding-left: 20px;
-                margin-bottom: 25px;
+                margin-bottom: 5px;
             }
             .login-form label {
                 font-size: 16px;
@@ -66,6 +64,7 @@
                 border-radius: 2px;
                 cursor: pointer;
                 transition: all 0.3s;
+                margin-top: 15px;
             }
             .login-btn:hover {
                 background: #c69463;
@@ -86,42 +85,31 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6">
                     <div class="login-form">
-                        <h3>Đăng Nhập</h3>
-                        @if($errors->any())
-                            <div class="alert alert-danger mb-4">
-                                <ul style="margin: 0; padding-left: 20px;">
-                                    @foreach($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
+                        <h3>Quên mật khẩu?</h3>
+                        <p class="text-center mb-4" style="font-size: 14px;">Vui lòng điền địa chỉ email đăng ký tài khoản của bạn để nhận liên kết khôi phục mật khẩu.</p>
+                        
+                        @if (session('status'))
+                            <div class="alert alert-success mb-4 text-center">
+                                {{ session('status') }}
                             </div>
                         @endif
-                        <form action="{{ route('auth.login.submit') }}" method="POST">
+
+                        <form action="{{ route('password.email') }}" method="POST">
                             @csrf
                             <div>
-                                <label for="login_field">Email hoặc Số điện thoại <span>*</span></label>
-                                <input type="text" id="login_field" name="login_field" placeholder="Nhập email hoặc số điện thoại" required value="{{ old('login_field') }}">
-                                @error('login_field')
-                                    <span class="text-danger small" style="display: block; margin-top: -20px; margin-bottom: 15px;">{{ $message }}</span>
+                                <label for="email">Địa chỉ Email <span>*</span></label>
+                                <input type="email" id="email" name="email" placeholder="Nhập địa chỉ email đăng ký" required value="{{ old('email') }}">
+                                @error('email')
+                                    <span class="text-danger small" style="display: block; margin-top: 5px;">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div>
-                                <label for="password">Mật khẩu <span>*</span></label>
-                                <input type="password" id="password" name="password" placeholder="Nhập mật khẩu của bạn" required>
-                                @error('password')
-                                    <span class="text-danger small" style="display: block; margin-top: -20px; margin-bottom: 15px;">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mb-4" style="margin-top: -10px;">
-                                <a href="{{ route('password.request') }}" style="color: #dfa974; font-size: 15px; font-weight: 500;">Quên mật khẩu?</a>
-                            </div>
-                            <button type="submit" class="login-btn">Đăng Nhập</button>
+                            <button type="submit" class="login-btn">Gửi liên kết khôi phục</button>
                         </form>
-                        <p>Chưa có tài khoản? <a href="{{ route('register') }}">Đăng ký thành viên ngay</a></p>
+                        <p><a href="{{ route('login') }}">Quay lại trang Đăng nhập</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Login Section End -->
+    <!-- Password Recovery Section End -->
 @endsection

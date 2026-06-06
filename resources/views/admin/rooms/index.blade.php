@@ -59,10 +59,10 @@
                 @forelse ($rooms ?? [] as $room)
                 <tr class="align-middle">
                   <td>
-                    @if($room->image)
+                    @if($room->image && file_exists(public_path('storage/' . $room->image)))
                       <img src="{{ asset('storage/' . $room->image) }}" alt="{{ $room->name }}" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
                     @else
-                      <span class="text-muted small">No img</span>
+                      <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=120&q=60" alt="{{ $room->name }}" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover; opacity:.6;">
                     @endif
                   </td>
                   <td class="fw-semibold">{{ $room->room_code }}</td>
@@ -78,12 +78,10 @@
                   <td>{{ $room->size ? $room->size . ' m²' : '—' }}</td>
                   <td class="">
                     <a href="{{ route('admin.rooms.edit', $room->id) }}" class=""><i class="ti ti-edit "></i></a>
-                    <form id="delete-room-{{ $room->id }}" action="{{ route('admin.rooms.destroy', $room->id) }}" method="POST" class="d-inline">
+                    <form action="{{ route('admin.rooms.destroy', $room->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa phòng {{ $room->name }}?')">
                       @csrf
                       @method('DELETE')
-                      <button type="button" class="btn btn-link link-danger p-0 btn-delete-room"
-                          data-form-id="delete-room-{{ $room->id }}"
-                          data-name="{{ $room->name }}">
+                      <button type="submit" class="btn btn-link link-danger p-0" title="Xóa phòng">
                         <i class="ti ti-trash ms-2"></i>
                       </button>
                     </form>

@@ -22,6 +22,14 @@ class AdminCategoryController
     }
 
     // ─────────────────────────────────────────────────────────────────────────
+    // UC - Hiển thị form thêm loại phòng - Luồng chính
+    // ─────────────────────────────────────────────────────────────────────────
+    public function create()
+    {
+        return view('admin.categories.create');
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
     // UC14 - Thêm loại phòng mới - Luồng chính
     // Luồng phụ 1: Tên trùng lặp
     // Luồng phụ 2: Dữ liệu không hợp lệ

@@ -41,14 +41,14 @@ class LoginController
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return redirect()->route('auth.login')
+            return redirect()->route('login')
                 ->withErrors(['login_field' => 'Tài khoản của bạn đã bị khóa, vui lòng liên hệ quản trị viên']);
         }
 
         $request->session()->regenerate();
 
         if (in_array($user->role, ['admin', 'staff'])) {
-            return redirect()->route('admin.categories.index');
+            return redirect()->route('admin.dashboard');
         }
 
         return redirect()->route('home');

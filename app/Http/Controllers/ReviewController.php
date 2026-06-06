@@ -8,43 +8,32 @@ use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
-    // 1. Trả danh sách lịch sử nghỉ dưỡng cho FE làm trang cá nhân khách hàng
-    public function bookingHistory()
-    {
-        $myBookings = Booking::with('room')
-            ->where('user_id', Auth::id())
-            ->orderBy('created_at', 'DESC')
-            ->get();
-
-        return view('profile.history', compact('myBookings'));
-    }
-
-    // 2. Khách gửi đánh giá chấm sao lên hệ thống
-    public function storeReview(Request $request)
+    // Khách gửi đánh giá chấm sao lên hệ thống
+    public function store(Request $request)
     {
         $request->validate([
-            'room_id' => 'required',
+            'room_id' => 'required|exists:rooms,id',
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'required|string|max:1000'
         ]);
 
-        // [XỬ LÝ BẪY LOGIC CHẤT LƯỢNG CAO]: Chỉ cho phép đánh giá nếu đã ở căn phòng này thực tế!
+        // Chỉ cho phép đánh giá nếu đã thanh toán và ở phòng này thực tế
         $hasStayed = Booking::where('user_id', Auth::id())
             ->where('room_id', $request->room_id)
-            ->where('status', 'completed') // Trạng thái hoàn thành chuyến đi thực tế của người A
+            ->where('status', Booking::STATUS_PAID)
             ->exists();
 
         if (!$hasStayed) {
-            return redirect()->back()->with('error', 'Hệ thống bảo mật chặn: Bạn không thể đánh giá một căn phòng mà bạn chưa từng lưu trú trải nghiệm thực tế!');
+            return redirect()->back()->with('error', 'Bạn chỉ có thể đánh giá phòng mà bạn đã lưu trú và thanh toán!');
         }
 
-        // Lưu đánh giá ở trạng thái hiện mặc định, chờ admin kiểm tra lọc bình luận xấu sau
+        // Lưu đánh giá, mặc định hiển thị, admin có thể ẩn sau
         Review::create([
             'user_id' => Auth::id(),
             'room_id' => $request->room_id,
             'rating' => $request->rating,
             'comment' => $request->comment,
-            'status' => Review::STATUS_VISIBLE // Thay vì 'is_visible' => 1
+            'status' => Review::STATUS_VISIBLE
         ]);
 
         return redirect()->back()->with('success', 'Cảm ơn cảm nghĩ chân thực của bạn dành cho Sapa Jade Hill!');

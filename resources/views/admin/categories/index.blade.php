@@ -61,10 +61,10 @@
                     <button class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#editCategoryModal{{ $category->id }}">
                       <i class="ti ti-edit"></i>
                     </button>
-                    <form id="delete-form-{{ $category->id }}" action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="d-inline">
+                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa loại phòng {{ $category->name }}?')">
                       @csrf
                       @method('DELETE')
-                      <button type="button" class="btn btn-link link-danger p-0 btn-delete" data-form-id="delete-form-{{ $category->id }}" data-name="{{ $category->name }}">
+                      <button type="submit" class="btn btn-link link-danger p-0" title="Xóa loại phòng">
                         <i class="ti ti-trash ms-2"></i>
                       </button>
                     </form>

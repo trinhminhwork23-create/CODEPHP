@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Sona Template">
-    <meta name="keywords" content="Sona, unica, creative, html">
+    <meta name="description" content="Sona Resort – Khu nghỉ dưỡng cao cấp, đặt phòng trực tuyến nhanh chóng và tiện lợi.">
+    <meta name="keywords" content="Sona, khu nghỉ dưỡng, đặt phòng, khách sạn, resort, nghỉ dưỡng">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sona | Template</title>
+    <title>Sona Resort – Nghỉ dưỡng sang trọng</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Inter (Vietnamese subset) – must load FIRST to override fallback fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;700&family=Cabin:wght@400;500;600;700&subset=vietnamese&display=swap" rel="stylesheet">
+    <style>
+        /* Vietnamese font override – ensure diacritics render correctly */
+        body, h1, h2, h3, h4, h5, h6, p, a, span, button, input { font-family: 'Inter', sans-serif !important; }
+    </style>
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="<?php echo e(asset('css/bootstrap.min.css')); ?>" type="text/css">
@@ -47,31 +52,31 @@
         <div class="header-configure-area">
             <div class="language-option">
                 <img src="<?php echo e(asset('img/flag.jpg')); ?>" alt="">
-                <span>EN <i class="fa fa-angle-down"></i></span>
+                <span>VI <i class="fa fa-angle-down"></i></span>
                 <div class="flag-dropdown">
                     <ul>
-                        <li><a href="#">Zi</a></li>
+                        <li><a href="#">EN</a></li>
                         <li><a href="#">Fr</a></li>
                     </ul>
                 </div>
             </div>
-            <a href="#" class="bk-btn">Booking Now</a>
+            <a href="<?php echo e(route('rooms.index')); ?>" class="bk-btn">Đặt phòng ngay</a>
         </div>
         <nav class="mainmenu mobile-menu">
             <ul>
-                <li class="active"><a href="./index.html">Home</a></li>
-                <li><a href="./rooms.html">Rooms</a></li>
-                <li><a href="./about-us.html">About Us</a></li>
-                <li><a href="./pages.html">Pages</a>
+                <li class="<?php echo e(request()->routeIs('home') ? 'active' : ''); ?>"><a href="<?php echo e(route('home')); ?>">Trang chủ</a></li>
+                <li class="<?php echo e(request()->routeIs('rooms.*') ? 'active' : ''); ?>"><a href="<?php echo e(route('rooms.index')); ?>">Phòng nghỉ</a></li>
+                <li class="<?php echo e(request()->routeIs('about') ? 'active' : ''); ?>"><a href="<?php echo e(route('about')); ?>">Giới thiệu</a></li>
+                <li><a href="#">Trang</a>
                     <ul class="dropdown">
-                        <li><a href="./room-details.html">Room Details</a></li>
-                        <li><a href="#">Deluxe Room</a></li>
-                        <li><a href="#">Family Room</a></li>
-                        <li><a href="#">Premium Room</a></li>
+                        <li><a href="<?php echo e(route('rooms.show', 1)); ?>">Chi tiết phòng</a></li>
+                        <li><a href="<?php echo e(route('rooms.show', 2)); ?>">Phòng Deluxe</a></li>
+                        <li><a href="<?php echo e(route('rooms.show', 3)); ?>">Phòng Gia đình</a></li>
+                        <li><a href="<?php echo e(route('rooms.show', 4)); ?>">Phòng Cao cấp</a></li>
                     </ul>
                 </li>
-                <li><a href="./blog.html">News</a></li>
-                <li><a href="./contact.html">Contact</a></li>
+                <li class="<?php echo e(request()->routeIs('blog.*') ? 'active' : ''); ?>"><a href="<?php echo e(route('blog.index')); ?>">Tin tức</a></li>
+                <li class="<?php echo e(request()->routeIs('contact') ? 'active' : ''); ?>"><a href="<?php echo e(route('contact')); ?>">Liên hệ</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -99,7 +104,7 @@
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch"><i class="icon_close"></i></div>
             <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
+                <input type="text" id="search-input" placeholder="Tìm kiếm tại đây.....">
             </form>
         </div>
     </div>

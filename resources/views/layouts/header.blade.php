@@ -36,7 +36,7 @@
                                     </button>
                                     <div class="user-dropdown-menu" style="display: none; position: absolute; right: 0; top: 110%; background: #fff; min-width: 200px; border: 1px solid #ebebeb; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,.12); z-index: 9999;">
                                         <a href="{{ route('profile.history') }}" style="display: block; padding: 10px 18px; color: #19191a; font-size: 14px; border-bottom: 1px solid #f0f0f0; text-decoration: none;">
-                                            <i class="fa fa-history" style="margin-right: 8px; color: #dfa974;"></i> Lịch sử đặt phòng
+                                            <i class="fa fa-user" style="margin-right: 8px; color: #dfa974;"></i> Quản lý tài khoản
                                         </a>
                                         <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="display: block; padding: 10px 18px; color: #dc3545; font-size: 14px; text-decoration: none;">
                                             <i class="fa fa-sign-out" style="margin-right: 8px;"></i> Đăng xuất
@@ -49,8 +49,8 @@
                             </form>
 
                         @else
-                            <a href="{{ route('auth.login') }}" class="bk-btn" style="background: transparent; color: #19191a; border: 1px solid #dfa974; margin-right: 5px;">Đăng nhập</a>
-                            <a href="{{ route('auth.register') }}" class="bk-btn">Đăng ký</a>
+                            <a href="{{ route('login') }}" class="bk-btn" style="background: transparent; color: #19191a; border: 1px solid #dfa974; margin-right: 5px;">Đăng nhập</a>
+                            <a href="{{ route('register') }}" class="bk-btn">Đăng ký</a>
                         @endauth
 
                         <style>

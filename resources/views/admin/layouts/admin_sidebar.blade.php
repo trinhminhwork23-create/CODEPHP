@@ -22,9 +22,9 @@
         <li><a class="nav-link" href="{{ route('home') }}"><i class="ti ti-world"></i><span class="nav-text">Về trang chủ</span></a>
         </li>
         <li>
-            <form method="POST" action="{{ route('logout') }}" class="d-inline">
+            <form method="POST" action="{{ route('auth.logout') }}" class="d-inline">
                 @csrf
-                <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();"><i class="ti ti-logout"></i><span class="nav-text">Đăng xuất</span></a>
+                <a class="nav-link" href="{{ route('auth.logout') }}" onclick="event.preventDefault(); this.closest('form').submit();"><i class="ti ti-logout"></i><span class="nav-text">Đăng xuất</span></a>
             </form>
         </li>
     </ul>

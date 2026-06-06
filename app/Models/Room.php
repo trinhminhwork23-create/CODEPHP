@@ -34,8 +34,8 @@ class Room extends Model
         parent::boot();
 
         static::deleting(function ($room) {
-            if ($room->bookings()->whereIn('status', ['pending', 'confirmed'])->exists()) {
-                throw new \Exception('Kh\u00f4ng th\u1ec3 x\u00f3a ph\u00f2ng \u0111ang c\u00f3 \u0111\u1eb7t ph\u00f2ng \u0111ang x\u1eed l\u00fd!');
+            if ($room->bookings()->whereIn('status', [Booking::STATUS_PENDING, Booking::STATUS_APPROVED])->exists()) {
+                throw new \Exception('Không thể xóa phòng đang có đặt phòng đang xử lý!');
             }
         });
     }

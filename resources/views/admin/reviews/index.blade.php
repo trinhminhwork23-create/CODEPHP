@@ -30,7 +30,6 @@
             <table class="table mb-0 text-nowrap table-hover">
               <thead class="table-light border-light">
                 <tr>
-                <tr>
                   <th>Người bình luận</th>
                   <th>Phòng</th>
                   <th>Số sao</th>
@@ -76,7 +75,7 @@
                 </tr>
                 @empty
                 <tr>
-                  <td colspan="8" class="text-center py-4 text-muted">Chưa có đánh giá nào</td>
+                  <td colspan="6" class="text-center py-4 text-muted">Chưa có đánh giá nào</td>
                 </tr>
                 @endforelse
               </tbody>

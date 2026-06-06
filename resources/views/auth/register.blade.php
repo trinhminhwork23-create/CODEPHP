@@ -96,31 +96,46 @@
                                 </ul>
                             </div>
                         @endif
-                        <form action="{{ route('auth.register.submit') }}" method="POST">
+                        <form action="{{ route('register.submit') }}" method="POST">
                             @csrf
                             <div>
                                 <label for="name">Họ và tên <span>*</span></label>
                                 <input type="text" id="name" name="name" placeholder="Nhập họ và tên đầy đủ" required value="{{ old('name') }}">
+                                @error('name')
+                                    <span class="text-danger small" style="display: block; margin-top: -20px; margin-bottom: 15px;">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div>
                                 <label for="email">Địa chỉ Email <span>*</span></label>
                                 <input type="email" id="email" name="email" placeholder="Nhập địa chỉ email" required value="{{ old('email') }}">
+                                @error('email')
+                                    <span class="text-danger small" style="display: block; margin-top: -20px; margin-bottom: 15px;">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div>
                                 <label for="phone">Số điện thoại <span>*</span></label>
                                 <input type="text" id="phone" name="phone" placeholder="Nhập số điện thoại (VD: 0901234567)" required value="{{ old('phone') }}">
+                                @error('phone')
+                                    <span class="text-danger small" style="display: block; margin-top: -20px; margin-bottom: 15px;">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div>
                                 <label for="password">Mật khẩu <span>*</span></label>
                                 <input type="password" id="password" name="password" placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)" required>
+                                @error('password')
+                                    <span class="text-danger small" style="display: block; margin-top: -20px; margin-bottom: 15px;">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div>
                                 <label for="password_confirmation">Xác nhận mật khẩu <span>*</span></label>
                                 <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Nhập lại mật khẩu" required>
+                                @error('password_confirmation')
+                                    <span class="text-danger small" style="display: block; margin-top: -20px; margin-bottom: 15px;">{{ $message }}</span>
+                                @enderror
                             </div>
                             <button type="submit" class="register-btn">Đăng Ký</button>
                         </form>
-                        <p>Đã có tài khoản? <a href="{{ route('auth.login') }}">Đăng nhập ngay</a></p>
+                        <p>Đã có tài khoản? <a href="{{ route('login') }}">Đăng nhập ngay</a></p>
                     </div>
                 </div>
             </div>

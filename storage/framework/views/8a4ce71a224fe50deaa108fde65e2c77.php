@@ -1,6 +1,4 @@
-@extends('layouts.master')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <!-- Breadcrumb Section Begin -->
     <div class="breadcrumb-section">
         <div class="container">
@@ -9,7 +7,7 @@
                     <div class="breadcrumb-text">
                         <h2>Quản lý tài khoản</h2>
                         <div class="bt-option">
-                            <a href="{{ route('home') }}">Trang chủ</a>
+                            <a href="<?php echo e(route('home')); ?>">Trang chủ</a>
                             <span>Quản lý tài khoản</span>
                         </div>
                     </div>
@@ -84,16 +82,18 @@
             <div class="row">
                 <div class="col-lg-12">
                     <!-- Flash Message Block -->
-                    @if(session('success'))
+                    <?php if(session('success')): ?>
                         <div class="alert alert-success alert-dismissible fade show mb-4" role="alert" style="border-radius: 2px; font-weight: 500;">
-                            <i class="fa fa-check-circle mr-2"></i> {{ session('success') }}
+                            <i class="fa fa-check-circle mr-2"></i> <?php echo e(session('success')); ?>
+
                         </div>
-                    @endif
-                    @if(session('error'))
+                    <?php endif; ?>
+                    <?php if(session('error')): ?>
                         <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert" style="border-radius: 2px; font-weight: 500;">
-                            <i class="fa fa-exclamation-circle mr-2"></i> {{ session('error') }}
+                            <i class="fa fa-exclamation-circle mr-2"></i> <?php echo e(session('error')); ?>
+
                         </div>
-                    @endif
+                    <?php endif; ?>
 
                     <div class="profile-tabs mb-5">
                         <!-- Navigation Tabs -->
@@ -134,77 +134,78 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse($bookings as $booking)
-                                                @php
+                                            <?php $__empty_1 = true; $__currentLoopData = $bookings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $booking): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                                <?php
                                                     $checkInCarbon = \Carbon\Carbon::parse($booking->check_in);
                                                     $isUpcoming = in_array($booking->status, [\App\Models\Booking::STATUS_APPROVED, \App\Models\Booking::STATUS_PAID]) && $checkInCarbon->isFuture();
-                                                @endphp
+                                                ?>
                                                 <tr>
                                                     <td class="align-middle" style="color: #19191a; font-weight: 600; font-size: 14px;">
-                                                        SJD-{{ str_pad($booking->id, 6, '0', STR_PAD_LEFT) }}
+                                                        SJD-<?php echo e(str_pad($booking->id, 6, '0', STR_PAD_LEFT)); ?>
+
                                                     </td>
                                                     
-                                                    <td class="align-middle" style="color: #19191a; font-weight: 500;">{{ $booking->room->name ?? 'N/A' }}</td>
+                                                    <td class="align-middle" style="color: #19191a; font-weight: 500;"><?php echo e($booking->room->name ?? 'N/A'); ?></td>
                                                     
-                                                    <td class="align-middle" style="color: #707079;">{{ $checkInCarbon->format('d/m/Y') }}</td>
+                                                    <td class="align-middle" style="color: #707079;"><?php echo e($checkInCarbon->format('d/m/Y')); ?></td>
                                                     
-                                                    <td class="align-middle" style="color: #707079;">{{ \Carbon\Carbon::parse($booking->check_out)->format('d/m/Y') }}</td>
+                                                    <td class="align-middle" style="color: #707079;"><?php echo e(\Carbon\Carbon::parse($booking->check_out)->format('d/m/Y')); ?></td>
                                                     
                                                     <td class="align-middle" style="color: #dfa974; font-weight: 600;">
-                                                        {{ number_format($booking->total_money, 0, ',', '.') }}₫
+                                                        <?php echo e(number_format($booking->total_money, 0, ',', '.')); ?>₫
                                                     </td>
 
                                                     <td class="align-middle">
-                                                        @if($isUpcoming)
+                                                        <?php if($isUpcoming): ?>
                                                             <span class="badge" style="background-color: #28a745; color: #ffffff; padding: 8px 12px; font-weight: 600; border-radius: 2px;">
                                                                 <i class="fa fa-clock-o mr-1"></i> Chờ nhận phòng
                                                             </span>
-                                                        @else
-                                                            @switch($booking->status)
-                                                                @case(\App\Models\Booking::STATUS_PENDING)
+                                                        <?php else: ?>
+                                                            <?php switch($booking->status):
+                                                                case (\App\Models\Booking::STATUS_PENDING): ?>
                                                                     <span class="badge" style="background-color: #ffc107; color: #212529; padding: 8px 12px; font-weight: 600; border-radius: 2px;">Chờ duyệt</span> 
-                                                                    @break
-                                                                @case(\App\Models\Booking::STATUS_APPROVED)
+                                                                    <?php break; ?>
+                                                                <?php case (\App\Models\Booking::STATUS_APPROVED): ?>
                                                                     <span class="badge" style="background-color: #17a2b8; color: #ffffff; padding: 8px 12px; font-weight: 600; border-radius: 2px;">Đã cọc 50%</span> 
-                                                                    @break
-                                                                @case(\App\Models\Booking::STATUS_PAID)
+                                                                    <?php break; ?>
+                                                                <?php case (\App\Models\Booking::STATUS_PAID): ?>
                                                                     <span class="badge" style="background-color: #6c757d; color: #ffffff; padding: 8px 12px; font-weight: 600; border-radius: 2px;">Đã hoàn thành</span> 
-                                                                    @break
-                                                                @case(\App\Models\Booking::STATUS_CANCELLED)
+                                                                    <?php break; ?>
+                                                                <?php case (\App\Models\Booking::STATUS_CANCELLED): ?>
                                                                     <span class="badge" style="background-color: #dc3545; color: #ffffff; padding: 8px 12px; font-weight: 600; border-radius: 2px;">Đã hủy</span> 
-                                                                    @break
-                                                            @endswitch
-                                                        @endif
+                                                                    <?php break; ?>
+                                                            <?php endswitch; ?>
+                                                        <?php endif; ?>
                                                     </td>
 
                                                     <td class="align-middle">
-                                                        @if($booking->status == \App\Models\Booking::STATUS_PAID)
-                                                            <a href="{{ route('rooms.show', $booking->room_id) }}#reviews" class="primary-btn" style="padding: 8px 18px; font-size: 13px; border-radius: 2px;">Đánh giá</a>
-                                                        @elseif($booking->status == \App\Models\Booking::STATUS_APPROVED)
+                                                        <?php if($booking->status == \App\Models\Booking::STATUS_PAID): ?>
+                                                            <a href="<?php echo e(route('rooms.show', $booking->room_id)); ?>#reviews" class="primary-btn" style="padding: 8px 18px; font-size: 13px; border-radius: 2px;">Đánh giá</a>
+                                                        <?php elseif($booking->status == \App\Models\Booking::STATUS_APPROVED): ?>
                                                             <div class="d-flex flex-column gap-1 align-items-center">
-                                                                <a href="{{ route('payment.initiate', ['booking' => $booking->id, 'option' => 'deposit']) }}" class="btn btn-sm btn-primary text-white fw-semibold mb-1" style="padding: 8px 12px; font-size: 12px; border-radius: 2px; background-color: #005a9c; border-color: #005a9c;">Thanh toán 50% còn lại</a>
-                                                                <form action="{{ route('bookings.cancel', $booking->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn hủy đơn đặt phòng này?')">
-                                                                    @csrf
+                                                                <a href="<?php echo e(route('payment.initiate', ['booking' => $booking->id, 'option' => 'deposit'])); ?>" class="btn btn-sm btn-primary text-white fw-semibold mb-1" style="padding: 8px 12px; font-size: 12px; border-radius: 2px; background-color: #005a9c; border-color: #005a9c;">Thanh toán 50% còn lại</a>
+                                                                <form action="<?php echo e(route('bookings.cancel', $booking->id)); ?>" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn hủy đơn đặt phòng này?')">
+                                                                    <?php echo csrf_field(); ?>
                                                                     <button type="submit" class="btn btn-sm btn-outline-danger" style="padding: 6px 12px; font-size: 12px; border-radius: 2px;">Hủy đơn</button>
                                                                 </form>
                                                             </div>
-                                                        @elseif($booking->status == \App\Models\Booking::STATUS_PENDING)
-                                                            <form action="{{ route('bookings.cancel', $booking->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn hủy đơn đặt phòng này?')">
-                                                                @csrf
+                                                        <?php elseif($booking->status == \App\Models\Booking::STATUS_PENDING): ?>
+                                                            <form action="<?php echo e(route('bookings.cancel', $booking->id)); ?>" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn hủy đơn đặt phòng này?')">
+                                                                <?php echo csrf_field(); ?>
                                                                 <button type="submit" class="btn btn-sm btn-outline-danger" style="padding: 8px 15px; font-size: 12px; border-radius: 2px;">Hủy đơn</button>
                                                             </form>
-                                                        @else
+                                                        <?php else: ?>
                                                             <span class="text-muted">-</span>
-                                                        @endif
+                                                        <?php endif; ?>
                                                     </td>
                                                 </tr>
-                                            @empty
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                                 <tr>
                                                     <td colspan="7" class="text-center py-5" style="color: #707079; font-size: 15px;">
                                                         <i class="fa fa-info-circle mr-2" style="font-size: 18px;"></i> Hiện tại quý khách chưa thực hiện đơn đặt phòng nào.
                                                     </td>
                                                 </tr>
-                                            @endforelse
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -215,33 +216,61 @@
                                 <div class="profile-card p-4">
                                     <h4 class="mb-4" style="font-weight: 600; color: #19191a; border-left: 4px solid #dfa974; padding-left: 10px;">Thay đổi thông tin hồ sơ</h4>
                                     
-                                    <form action="{{ route('profile.update') }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
+                                    <form action="<?php echo e(route('profile.update')); ?>" method="POST">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('PUT'); ?>
 
                                         <div class="row">
                                             <div class="col-lg-6 mb-3">
                                                 <div class="form-group">
                                                     <label for="name">Họ và tên <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', auth()->user()->name) }}" placeholder="Nhập họ và tên..." required>
-                                                    @error('name')
-                                                        <span class="text-danger small mt-1 d-block">{{ $message }}</span>
-                                                    @enderror
+                                                    <input type="text" class="form-control <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" id="name" name="name" value="<?php echo e(old('name', auth()->user()->name)); ?>" placeholder="Nhập họ và tên..." required>
+                                                    <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                        <span class="text-danger small mt-1 d-block"><?php echo e($message); ?></span>
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 mb-3">
                                                 <div class="form-group">
                                                     <label for="email">Địa chỉ Email (Đăng nhập - Không thể thay đổi)</label>
-                                                    <input type="email" class="form-control" id="email" value="{{ auth()->user()->email }}" disabled readonly>
+                                                    <input type="email" class="form-control" id="email" value="<?php echo e(auth()->user()->email); ?>" disabled readonly>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 mb-3">
                                                 <div class="form-group">
                                                     <label for="phone">Số điện thoại <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone', auth()->user()->phone ?? '') }}" placeholder="Nhập số điện thoại..." required>
-                                                    @error('phone')
-                                                        <span class="text-danger small mt-1 d-block">{{ $message }}</span>
-                                                    @enderror
+                                                    <input type="text" class="form-control <?php $__errorArgs = ['phone'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" id="phone" name="phone" value="<?php echo e(old('phone', auth()->user()->phone ?? '')); ?>" placeholder="Nhập số điện thoại..." required>
+                                                    <?php $__errorArgs = ['phone'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                        <span class="text-danger small mt-1 d-block"><?php echo e($message); ?></span>
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -258,24 +287,52 @@
                                 <div class="profile-card p-4" style="max-width: 650px; margin: 0 auto;">
                                     <h4 class="mb-4" style="font-weight: 600; color: #19191a; border-left: 4px solid #dfa974; padding-left: 10px;">Thiết lập mật khẩu mới</h4>
                                     
-                                    <form action="{{ route('profile.password.update') }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
+                                    <form action="<?php echo e(route('profile.password.update')); ?>" method="POST">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('PUT'); ?>
 
                                         <div class="form-group mb-3">
                                             <label for="current_password">Mật khẩu hiện tại <span class="text-danger">*</span></label>
-                                            <input type="password" class="form-control @error('current_password') is-invalid @enderror" id="current_password" name="current_password" placeholder="Nhập mật khẩu hiện tại..." required>
-                                            @error('current_password')
-                                                <span class="text-danger small mt-1 d-block">{{ $message }}</span>
-                                            @enderror
+                                            <input type="password" class="form-control <?php $__errorArgs = ['current_password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" id="current_password" name="current_password" placeholder="Nhập mật khẩu hiện tại..." required>
+                                            <?php $__errorArgs = ['current_password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                <span class="text-danger small mt-1 d-block"><?php echo e($message); ?></span>
+                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                         </div>
 
                                         <div class="form-group mb-3">
                                             <label for="password">Mật khẩu mới <span class="text-danger">*</span></label>
-                                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Mật khẩu mới ít nhất 6 ký tự..." required>
-                                            @error('password')
-                                                <span class="text-danger small mt-1 d-block">{{ $message }}</span>
-                                            @enderror
+                                            <input type="password" class="form-control <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" id="password" name="password" placeholder="Mật khẩu mới ít nhất 6 ký tự..." required>
+                                            <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                <span class="text-danger small mt-1 d-block"><?php echo e($message); ?></span>
+                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                         </div>
 
                                         <div class="form-group mb-4">
@@ -296,12 +353,12 @@
         </div>
     </section>
     <!-- Profile Section End -->
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     window.addEventListener('load', function() {
-        @if($errors->has('current_password') || $errors->has('password') || $errors->has('password_confirmation'))
+        <?php if($errors->has('current_password') || $errors->has('password') || $errors->has('password_confirmation')): ?>
             var securityTab = document.querySelector('#security-tab');
             if (securityTab) {
                 if (window.bootstrap && bootstrap.Tab) {
@@ -310,7 +367,7 @@
                     jQuery(securityTab).tab('show');
                 }
             }
-        @elseif($errors->has('name') || $errors->has('phone'))
+        <?php elseif($errors->has('name') || $errors->has('phone')): ?>
             var profileTab = document.querySelector('#profile-tab');
             if (profileTab) {
                 if (window.bootstrap && bootstrap.Tab) {
@@ -319,7 +376,9 @@
                     jQuery(profileTab).tab('show');
                 }
             }
-        @endif
+        <?php endif; ?>
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\CODEPHP\resources\views/profile/history.blade.php ENDPATH**/ ?>
