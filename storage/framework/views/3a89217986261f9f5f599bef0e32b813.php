@@ -1,23 +1,20 @@
 <?php $__env->startSection('content'); ?>
-    <!-- Breadcrumb Section Begin -->
     <div class="breadcrumb-section">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <h2>Khôi phục mật khẩu</h2>
+                        <h2>Đặt lại mật khẩu</h2>
                         <div class="bt-option">
                             <a href="<?php echo e(route('home')); ?>">Trang chủ</a>
-                            <span>Quên mật khẩu</span>
+                            <span>Đặt lại mật khẩu</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Breadcrumb Section End -->
 
-    <!-- Password Recovery Section Begin -->
     <section class="login-section spad">
         <style>
             .login-form {
@@ -32,7 +29,7 @@
                 margin-bottom: 20px;
                 text-align: center;
             }
-            .login-form input[type="email"] {
+            .login-form input[type="password"] {
                 width: 100%;
                 height: 50px;
                 border: 1px solid #ebebeb;
@@ -64,9 +61,7 @@
                 transition: all 0.3s;
                 margin-top: 15px;
             }
-            .login-btn:hover {
-                background: #c69463;
-            }
+            .login-btn:hover { background: #c69463; }
             .login-form p {
                 text-align: center;
                 margin-top: 25px;
@@ -74,50 +69,54 @@
                 color: #707079;
                 margin-bottom: 0;
             }
-            .login-form p a {
-                color: #dfa974;
-                font-weight: 500;
-            }
+            .login-form p a { color: #dfa974; font-weight: 500; }
         </style>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-6">
                     <div class="login-form">
-                        <h3>Quên mật khẩu?</h3>
-                        <p class="text-center mb-4" style="font-size: 14px;">Vui lòng điền địa chỉ email đăng ký tài khoản của bạn để nhận liên kết khôi phục mật khẩu.</p>
-                        
-                        <?php if(session('status')): ?>
-                            <div class="alert alert-success mb-4 text-center">
-                                <?php echo e(session('status')); ?>
+                        <h3>Đặt mật khẩu mới</h3>
 
+                        <?php if($errors->any()): ?>
+                            <div class="alert alert-danger mb-4">
+                                <ul style="margin:0;padding-left:20px;">
+                                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <li><?php echo e($error); ?></li>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </ul>
                             </div>
                         <?php endif; ?>
 
-                        <form action="<?php echo e(route('password.email')); ?>" method="POST">
+                        <form method="POST" action="<?php echo e(route('password.update')); ?>">
                             <?php echo csrf_field(); ?>
                             <div>
-                                <label for="email">Địa chỉ Email <span>*</span></label>
-                                <input type="email" id="email" name="email" placeholder="Nhập địa chỉ email đăng ký" required value="<?php echo e(old('email')); ?>">
-                                <?php $__errorArgs = ['email'];
+                                <label for="password">Mật khẩu mới <span>*</span></label>
+                                <input type="password" id="password" name="password"
+                                    placeholder="Tối thiểu 8 ký tự" required>
+                                <?php $__errorArgs = ['password'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                                    <span class="text-danger small" style="display: block; margin-top: 5px;"><?php echo e($message); ?></span>
+                                    <span class="text-danger small" style="display:block;margin-top:5px;"><?php echo e($message); ?></span>
                                 <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                             </div>
-                            <button type="submit" class="login-btn">Gửi liên kết khôi phục</button>
+                            <div style="margin-top:20px;">
+                                <label for="password_confirmation">Xác nhận mật khẩu <span>*</span></label>
+                                <input type="password" id="password_confirmation" name="password_confirmation"
+                                    placeholder="Nhập lại mật khẩu mới" required>
+                            </div>
+                            <button type="submit" class="login-btn">Đổi mật khẩu</button>
                         </form>
-                        <p><a href="<?php echo e(route('login')); ?>">Quay lại trang Đăng nhập</a></p>
+                        <p><a href="<?php echo e(route('login')); ?>">Quay lại Đăng nhập</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Password Recovery Section End -->
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\CODEPHP\resources\views/auth/passwords/email.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Php\htdocs\CODEPHP(merge)\resources\views/auth/passwords/reset.blade.php ENDPATH**/ ?>

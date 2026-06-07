@@ -112,4 +112,4 @@
     </div>
 </header>
 <!-- Header End -->
-<?php /**PATH C:\xampp\htdocs\CODEPHP\resources\views/layouts/header.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Php\htdocs\CODEPHP(merge)\resources\views/layouts/header.blade.php ENDPATH**/ ?>

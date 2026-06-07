@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,9 +25,14 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register'])->name('register.submit');
 
-    // Password Recovery Mock routes
-    Route::get('/password/reset', fn() => view('auth.passwords.email'))->name('password.request');
-    Route::post('/password/email', fn() => back()->with('status', 'Chúng tôi đã gửi link đặt lại mật khẩu vào địa chỉ email của bạn!'))->name('password.email');
+    // Password Recovery (OTP)
+    Route::get('/password/reset',          [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('/password/email',         [ForgotPasswordController::class, 'sendOtp'])->name('password.email');
+    Route::get('/password/verify',         [ForgotPasswordController::class, 'showVerifyForm'])->name('password.verify.form');
+    Route::post('/password/verify',        [ForgotPasswordController::class, 'verifyOtp'])->name('password.verify');
+    Route::post('/password/resend',        [ForgotPasswordController::class, 'resendOtp'])->name('password.resend');
+    Route::get('/password/reset/new',      [ForgotPasswordController::class, 'showResetForm'])->name('password.reset.form');
+    Route::post('/password/update',        [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 });
 
 // Logout (authenticated users only)
