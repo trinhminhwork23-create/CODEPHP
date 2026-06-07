@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminBookingController extends Controller
 {
@@ -63,6 +65,16 @@ class AdminBookingController extends Controller
         $booking->status = Booking::STATUS_CANCELLED;
         $booking->cancel_reason = $request->input('cancel_reason');
         $booking->save();
+
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'user_name' => Auth::user()->name,
+            'role' => Auth::user()->role === 'admin' ? 'Admin' : 'Staff',
+            'action' => 'Delete',
+            'target_model' => 'Booking',
+            'target_id' => $booking->id,
+            'description' => Auth::user()->name . ' đã hủy cưỡng chế đơn đặt phòng ID #' . $booking->id
+        ]);
 
         return redirect()->back()->with('success', 'Hủy đơn cưỡng chế thành công! [MÔ PHỎNG HOÀN TIỀN]: Hệ thống đã tự động kích hoạt lệnh hoàn trả số tiền ' . number_format($booking->total_money, 0, ',', '.') . ' VNĐ về tài khoản thẻ/VNPAY của khách hàng. [MÔ PHỎNG GỬI EMAIL TỰ ĐỘNG]: Đã gửi thông báo hủy đơn kèm lý do "' . $request->cancel_reason . '" tự động đến email của khách hàng (' . $booking->user->email . ') thành công.');
     }

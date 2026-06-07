@@ -46,6 +46,7 @@
     <script src="{{ asset('admin/assets/js/sidebar.js') }}"></script>
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
     <script src="{{ asset('admin/assets/js/main.js') }}" type="module"></script>
+    <script src="{{ asset('admin/assets/js/notifications-frontend.js') }}"></script>
     @stack('scripts')
 
 </body>

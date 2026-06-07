@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Room;
 use App\Models\Category;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class AdminRoomController
 {
@@ -87,7 +89,17 @@ class AdminRoomController
                 $data['image'] = $request->file('image')->store('rooms', 'public');
             }
 
-            Room::create($data);
+            $room = Room::create($data);
+
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'user_name' => Auth::user()->name,
+                'role' => Auth::user()->role === 'admin' ? 'Admin' : 'Staff',
+                'action' => 'Create',
+                'target_model' => 'Room',
+                'target_id' => $room->id,
+                'description' => Auth::user()->name . ' đã thêm phòng ' . $room->name . ' (ID #' . $room->id . ')'
+            ]);
 
             return redirect()->route('admin.rooms.index')->with('success', 'Thêm phòng mới thành công!');
         } catch (\Exception $e) {
@@ -149,6 +161,16 @@ class AdminRoomController
 
             $room->update($data);
 
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'user_name' => Auth::user()->name,
+                'role' => Auth::user()->role === 'admin' ? 'Admin' : 'Staff',
+                'action' => 'Update',
+                'target_model' => 'Room',
+                'target_id' => $room->id,
+                'description' => Auth::user()->name . ' đã cập nhật thông tin phòng ' . $room->name . ' (ID #' . $room->id . ')'
+            ]);
+
             return redirect()->route('admin.rooms.index')->with('success', 'Cập nhật phòng thành công!');
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Đã xảy ra lỗi khi cập nhật phòng. Vui lòng thử lại.');
@@ -162,12 +184,24 @@ class AdminRoomController
     public function destroy(Room $room)
     {
         try {
+            $roomName = $room->name;
+            $roomId = $room->id;
             $imagePath = $room->image;
             $room->delete();
 
             if ($imagePath && Storage::disk('public')->exists($imagePath)) {
                 Storage::disk('public')->delete($imagePath);
             }
+
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'user_name' => Auth::user()->name,
+                'role' => Auth::user()->role === 'admin' ? 'Admin' : 'Staff',
+                'action' => 'Delete',
+                'target_model' => 'Room',
+                'target_id' => $roomId,
+                'description' => Auth::user()->name . ' đã xóa phòng ' . $roomName . ' (ID #' . $roomId . ')'
+            ]);
 
             return back()->with('success', 'Xóa phòng thành công!');
         } catch (\Exception $e) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Review;
+use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
@@ -28,12 +29,22 @@ class ReviewController extends Controller
         }
 
         // Lưu đánh giá, mặc định hiển thị, admin có thể ẩn sau
-        Review::create([
+        $review = Review::create([
             'user_id' => Auth::id(),
             'room_id' => $request->room_id,
             'rating' => $request->rating,
             'comment' => $request->comment,
             'status' => Review::STATUS_VISIBLE
+        ]);
+
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'user_name' => Auth::user()->name,
+            'role' => 'Guest',
+            'action' => 'Create',
+            'target_model' => 'Review',
+            'target_id' => $review->id,
+            'description' => 'Khách ' . Auth::user()->name . ' đã gửi đánh giá ' . $request->rating . ' sao cho phòng (ID #' . $request->room_id . ')'
         ]);
 
         return redirect()->back()->with('success', 'Cảm ơn cảm nghĩ chân thực của bạn dành cho Sapa Jade Hill!');

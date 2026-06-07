@@ -62,7 +62,7 @@
                             </div>
                         </li>
                         <li class="px-4 py-3 text-center">
-                            <a href="#" class="text-primary ">Xem tất cả thông báo</a>
+                            <a href="<?php echo e(route('admin.notifications.index')); ?>" class="text-primary ">Xem tất cả thông báo</a>
                         </li>
                     </ul>
                 </div>

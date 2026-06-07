@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Review;
+use App\Models\ActivityLog;
+use Illuminate\Support\Facades\Auth;
 
 class AdminReviewController extends Controller
 {
@@ -24,6 +26,16 @@ class AdminReviewController extends Controller
                           : Review::STATUS_VISIBLE;
         $review->save();
 
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'user_name' => Auth::user()->name,
+            'role' => Auth::user()->role === 'admin' ? 'Admin' : 'Staff',
+            'action' => 'Update',
+            'target_model' => 'Review',
+            'target_id' => $review->id,
+            'description' => Auth::user()->name . ' đã ' . ($review->status == Review::STATUS_VISIBLE ? 'hiển thị' : 'ẩn') . ' đánh giá ID #' . $review->id
+        ]);
+
         return redirect()->back()->with('success', 'Cập nhật trạng thái hiển thị bình luận thành công!');
     }
 
@@ -31,7 +43,18 @@ class AdminReviewController extends Controller
     public function destroy($id)
     {
         $review = Review::findOrFail($id);
+        $reviewId = $review->id;
         $review->delete();
+
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'user_name' => Auth::user()->name,
+            'role' => Auth::user()->role === 'admin' ? 'Admin' : 'Staff',
+            'action' => 'Delete',
+            'target_model' => 'Review',
+            'target_id' => $reviewId,
+            'description' => Auth::user()->name . ' đã xóa đánh giá ID #' . $reviewId
+        ]);
 
         return redirect()->route('admin.reviews.index')->with('success', 'Đã xóa đánh giá vĩnh viễn khỏi hệ thống!');
     }

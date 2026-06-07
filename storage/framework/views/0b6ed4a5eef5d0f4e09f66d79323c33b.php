@@ -1,6 +1,6 @@
-@extends('layouts.master')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 
     <!-- Breadcrumb Section Begin -->
     <div class="breadcrumb-section">
@@ -10,7 +10,7 @@
                     <div class="breadcrumb-text">
                         <h2>Giới thiệu</h2>
                         <div class="bt-option">
-                            <a href="{{ route('home') }}">Trang chủ</a>
+                            <a href="<?php echo e(route('home')); ?>">Trang chủ</a>
                             <span>Giới thiệu</span>
                         </div>
                     </div>
@@ -45,21 +45,21 @@
             <div class="about-page-services">
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="ap-service-item set-bg" data-setbg="{{ asset('img/about/about-p1.jpg') }}">
+                        <div class="ap-service-item set-bg" data-setbg="<?php echo e(asset('img/about/about-p1.jpg')); ?>">
                             <div class="api-text">
                                 <h3>Dịch vụ ẩm thực Tây Bắc</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="ap-service-item set-bg" data-setbg="{{ asset('img/about/about-p2.jpg') }}">
+                        <div class="ap-service-item set-bg" data-setbg="<?php echo e(asset('img/about/about-p2.jpg')); ?>">
                             <div class="api-text">
                                 <h3>Trekking & Khám phá bản làng</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="ap-service-item set-bg" data-setbg="{{ asset('img/about/about-p3.jpg') }}">
+                        <div class="ap-service-item set-bg" data-setbg="<?php echo e(asset('img/about/about-p3.jpg')); ?>">
                             <div class="api-text">
                                 <h3>Spa trị liệu thảo mộc bản địa</h3>
                             </div>
@@ -72,7 +72,7 @@
     <!-- About Us Page Section End -->
 
     <!-- Video Section Begin -->
-    <section class="video-section set-bg" data-setbg="{{ asset('img/video-bg.jpg') }}">
+    <section class="video-section set-bg" data-setbg="<?php echo e(asset('img/video-bg.jpg')); ?>">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -80,7 +80,7 @@
                         <h2>Khám phá không gian & dịch vụ sinh thái của chúng tôi</h2>
                         <p>Trải nghiệm những khoảnh khắc tuyệt diệu tại Sapa Jade Hill Resort & Spa</p>
                         <a href="https://www.youtube.com/watch?v=47EGY__xknE" class="play-btn video-popup"><img
-                                src="{{ asset('img/play.png') }}" alt="Play Video"></a>
+                                src="<?php echo e(asset('img/play.png')); ?>" alt="Play Video"></a>
                     </div>
                 </div>
             </div>
@@ -101,21 +101,21 @@
             </div>
             <div class="row">
                 <div class="col-lg-6">
-                    <div class="gallery-item set-bg" data-setbg="{{ asset('img/gallery/gallery-1.jpg') }}">
+                    <div class="gallery-item set-bg" data-setbg="<?php echo e(asset('img/gallery/gallery-1.jpg')); ?>">
                         <div class="gi-text">
                             <h3>Biệt thự sinh thái Eco-Luxury</h3>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="gallery-item set-bg" data-setbg="{{ asset('img/gallery/gallery-3.jpg') }}">
+                            <div class="gallery-item set-bg" data-setbg="<?php echo e(asset('img/gallery/gallery-3.jpg')); ?>">
                                 <div class="gi-text">
                                     <h3>Nội thất gỗ Pơ-mu mộc mạc</h3>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="gallery-item set-bg" data-setbg="{{ asset('img/gallery/gallery-4.jpg') }}">
+                            <div class="gallery-item set-bg" data-setbg="<?php echo e(asset('img/gallery/gallery-4.jpg')); ?>">
                                 <div class="gi-text">
                                     <h3>Lò sưởi củi đá truyền thống</h3>
                                 </div>
@@ -124,7 +124,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="gallery-item large-item set-bg" data-setbg="{{ asset('img/gallery/gallery-2.jpg') }}">
+                    <div class="gallery-item large-item set-bg" data-setbg="<?php echo e(asset('img/gallery/gallery-2.jpg')); ?>">
                         <div class="gi-text">
                             <h3>Bình minh bên thung lũng Mường Hoa</h3>
                         </div>
@@ -135,4 +135,6 @@
     </section>
     <!-- Gallery Section End -->
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\CODEPHP\resources\views/about.blade.php ENDPATH**/ ?>

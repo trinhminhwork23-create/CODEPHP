@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminBookingController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminReviewController;
+use App\Http\Controllers\Admin\ActivityLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,3 +52,11 @@ Route::patch('/users/{user}/toggle-status', [AdminUserController::class, 'toggle
 Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
 Route::patch('/reviews/{review}/toggle-visibility', [AdminReviewController::class, 'toggleVisibility'])->name('reviews.toggleVisibility');
 Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
+
+// Activity Logs
+Route::get('/logs', [ActivityLogController::class, 'index'])->name('logs.index');
+
+// Notifications
+Route::get('/notifications', [App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('notifications.index');
+Route::get('/notifications/dropdown', [App\Http\Controllers\Admin\NotificationController::class, 'dropdown']);
+Route::get('/logs/latest', [App\Http\Controllers\Admin\NotificationController::class, 'latest']);

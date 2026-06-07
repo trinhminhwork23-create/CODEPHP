@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Booking;
+use App\Models\ActivityLog;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -207,6 +209,16 @@ class PaymentController extends Controller
             // Update booking status in database
             $booking->update(['status' => $newStatus]);
 
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'user_name' => Auth::user()->name,
+                'role' => 'Guest',
+                'action' => 'Update',
+                'target_model' => 'Booking',
+                'target_id' => $booking->id,
+                'description' => 'Khách ' . Auth::user()->name . ' đã thanh toán ' . ($newStatus === Booking::STATUS_PAID ? '100%' : '50% đặt cọc') . ' cho đơn #' . $booking->id
+            ]);
+
             // ── STEP 3: ENHANCED AUDIT TRAIL LOGGING ──────────────────────────
             Log::info('VNPAY Payment Success Processed', [
                 'booking_id' => $booking->id,
@@ -308,6 +320,6 @@ class PaymentController extends Controller
         ]);
 
         return redirect()->back()
-            ->with('error', '⚠️ [MÔ PHỌNG] Đơn đặt phòng đã hết hạn giữ phòng (1 phút). Phòng đã được thả ra tự động.');
+            ->with('error', '⚠️ [MÔ PHỎNG] Đơn đặt phòng đã hết hạn giữ phòng (1 phút). Phòng đã được thả ra tự động.');
     }
 }

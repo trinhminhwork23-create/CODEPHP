@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Models\Room;
 use App\Models\Booking;
+use App\Models\ActivityLog;
 use Carbon\Carbon;
 
 class BookingController extends Controller
@@ -266,6 +267,16 @@ class BookingController extends Controller
                 'total_money' => $room->price * $nights,
                 'status'      => Booking::STATUS_PENDING,
             ]);
+
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'user_name' => Auth::user()->name,
+                'role' => 'Guest',
+                'action' => 'Create',
+                'target_model' => 'Booking',
+                'target_id' => $booking->id,
+                'description' => 'Khách ' . Auth::user()->name . ' đã tạo đơn đặt phòng ' . $room->name . ' (ID #' . $booking->id . ')'
+            ]);
         } catch (\Exception $e) {
             return redirect()->back()->withInput()
                 ->with('error', 'Không thể tạo đơn đặt phòng. Vui lòng thử lại.');
@@ -345,7 +356,18 @@ class BookingController extends Controller
         }
 
         // ── Cancellation allowed: Update status ─────────────────────
+        $roomName = $booking->room->name;
         $booking->update(['status' => Booking::STATUS_CANCELLED]);
+
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'user_name' => Auth::user()->name,
+            'role' => 'Guest',
+            'action' => 'Delete',
+            'target_model' => 'Booking',
+            'target_id' => $booking->id,
+            'description' => 'Khách ' . Auth::user()->name . ' đã hủy đơn đặt phòng ' . $roomName . ' (ID #' . $booking->id . ')'
+        ]);
 
         return redirect()->back()->with('success', 'Đơn đặt phòng đã được hủy thành công.');
     }

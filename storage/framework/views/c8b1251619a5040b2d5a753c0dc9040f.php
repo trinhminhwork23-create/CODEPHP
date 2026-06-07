@@ -8,6 +8,7 @@
         <li><a class="nav-link <?php echo e(request()->routeIs('admin.bookings.*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.bookings.index')); ?>"><i class="ti ti-calendar-event"></i><span class="nav-text">Đơn đặt phòng</span></a></li>
         <li><a class="nav-link <?php echo e(request()->routeIs('admin.users.*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.users.index')); ?>"><i class="ti ti-users"></i><span class="nav-text">Tài khoản</span></a></li>
         <li><a class="nav-link <?php echo e(request()->routeIs('admin.reviews.*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.reviews.index')); ?>"><i class="ti ti-star"></i><span class="nav-text">Đánh giá</span></a></li>
+        <li><a class="nav-link <?php echo e(request()->routeIs('admin.logs.*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.logs.index')); ?>"><i class="ti ti-history"></i><span class="nav-text">Nhật ký hệ thống</span></a></li>
         <li class="px-4 pt-4 pb-2"><small class="nav-text">Tài khoản</small></li>
         <li><a class="nav-link" href="<?php echo e(route('home')); ?>"><i class="ti ti-world"></i><span class="nav-text">Về trang chủ</span></a></li>
         <li>

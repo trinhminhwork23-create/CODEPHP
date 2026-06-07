@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -46,6 +47,16 @@ class RegisterController
             'password' => Hash::make($request->password),
             'role'     => 'customer',
             'status'   => 1,
+        ]);
+
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'user_name' => $user->name,
+            'role' => 'Guest',
+            'action' => 'Create',
+            'target_model' => 'User',
+            'target_id' => $user->id,
+            'description' => 'Khách hàng ' . $user->name . ' đã đăng ký tài khoản mới'
         ]);
 
         Auth::login($user);
