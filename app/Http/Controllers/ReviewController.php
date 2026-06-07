@@ -17,14 +17,14 @@ class ReviewController extends Controller
             'comment' => 'required|string|max:1000'
         ]);
 
-        // Chỉ cho phép đánh giá nếu đã thanh toán và ở phòng này thực tế
+        // Chỉ cho phép đánh giá nếu đã hoàn thành lưu trú (trả phòng)
         $hasStayed = Booking::where('user_id', Auth::id())
             ->where('room_id', $request->room_id)
-            ->where('status', Booking::STATUS_PAID)
+            ->where('status', Booking::STATUS_COMPLETED)
             ->exists();
 
         if (!$hasStayed) {
-            return redirect()->back()->with('error', 'Bạn chỉ có thể đánh giá phòng mà bạn đã lưu trú và thanh toán!');
+            return redirect()->back()->with('error', 'Bạn chỉ có thể đánh giá phòng sau khi đã hoàn thành lưu trú và trả phòng!');
         }
 
         // Lưu đánh giá, mặc định hiển thị, admin có thể ẩn sau

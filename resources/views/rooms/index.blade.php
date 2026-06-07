@@ -20,6 +20,38 @@
     </div>
     <!-- Breadcrumb Section End -->
 
+    {{-- 🔍 ACTIVE FILTERS DISPLAY --}}
+    @if(request('adults') || request('children') || request('check_in') || request('check_out'))
+        <section class="py-3" style="background-color: #f9f9f9; border-bottom: 1px solid #ebebeb;">
+            <div class="container">
+                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <span style="font-weight: 600; color: #19191a; font-size: 14px;">
+                        <i class="fa fa-filter" style="margin-right: 6px; color: #dfa974;"></i> Bộ lọc đang áp dụng:
+                    </span>
+                    @if(request('adults'))
+                        <span class="badge" style="background-color: #dfa974; color: #ffffff; padding: 6px 12px; font-weight: 500; border-radius: 3px; font-size: 13px;">
+                            <i class="fa fa-user" style="margin-right: 4px;"></i> {{ request('adults') }} Người lớn
+                        </span>
+                    @endif
+                    @if(request('children'))
+                        <span class="badge" style="background-color: #dfa974; color: #ffffff; padding: 6px 12px; font-weight: 500; border-radius: 3px; font-size: 13px;">
+                            <i class="fa fa-child" style="margin-right: 4px;"></i> {{ request('children') }} Trẻ em
+                        </span>
+                    @endif
+                    @if(request('check_in') && request('check_out'))
+                        <span class="badge" style="background-color: #28a745; color: #ffffff; padding: 6px 12px; font-weight: 500; border-radius: 3px; font-size: 13px;">
+                            <i class="fa fa-calendar" style="margin-right: 4px;"></i> 
+                            {{ \Carbon\Carbon::parse(request('check_in'))->format('d/m/Y') }} → {{ \Carbon\Carbon::parse(request('check_out'))->format('d/m/Y') }}
+                        </span>
+                    @endif
+                    <a href="{{ route('rooms.index') }}" style="margin-left: auto; color: #dc3545; font-weight: 600; font-size: 13px; text-decoration: none; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+                        <i class="fa fa-times-circle" style="margin-right: 4px;"></i> Xóa bộ lọc
+                    </a>
+                </div>
+            </div>
+        </section>
+    @endif
+
     <!-- Rooms Section Begin -->
     <section class="rooms-section spad">
         <div class="container">
@@ -73,7 +105,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a href="{{ route('rooms.show', $room->id) }}" class="primary-btn">Xem chi tiết</a>
+                                <a href="{{ route('rooms.show', [$room->id] + request()->query()) }}" class="primary-btn">Xem chi tiết</a>
                             </div>
                         </div>
                     </div>
@@ -83,7 +115,18 @@
                             <i class="icon_error-circle_alt" style="font-size: 60px; color: #dfa974;"></i>
                         </div>
                         <h4 class="fw-bold text-dark">Không tìm thấy phòng phù hợp</h4>
-                        <p class="text-secondary mt-2">Hiện tại không có phòng nào phù hợp với yêu cầu tìm kiếm của quý khách.<br>Vui lòng thay đổi ngày nhận/trả phòng hoặc số lượng người để thử lại.</p>
+                        @if(request('adults') || request('children'))
+                            <p class="text-secondary mt-2">
+                                Hiện tại không có phòng nào phù hợp với yêu cầu:
+                                <strong>{{ (int)request('adults') + (int)request('children') }} người</strong>
+                                <br>Vui lòng thử lại với số lượng khách ít hơn hoặc chọn ngày khác.
+                            </p>
+                        @else
+                            <p class="text-secondary mt-2">
+                                Hiện tại không có phòng nào phù hợp với yêu cầu tìm kiếm của quý khách.<br>
+                                Vui lòng thay đổi ngày nhận/trả phòng hoặc số lượng người để thử lại.
+                            </p>
+                        @endif
                         <a href="{{ route('home') }}" class="primary-btn mt-3" style="display: inline-block; padding: 12px 30px;">Tìm kiếm lại</a>
                     </div>
                 @endforelse

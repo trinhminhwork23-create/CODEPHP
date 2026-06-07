@@ -40,6 +40,8 @@ Route::get('/bookings', [AdminBookingController::class, 'index'])->name('booking
 Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
 Route::patch('/bookings/{booking}/approve', [AdminBookingController::class, 'approve'])->name('bookings.approve');
 Route::patch('/bookings/{booking}/cancel', [AdminBookingController::class, 'cancel'])->name('bookings.cancel');
+Route::patch('/bookings/{booking}/checkin', [AdminBookingController::class, 'checkin'])->name('bookings.checkin');
+Route::patch('/bookings/{booking}/checkout', [AdminBookingController::class, 'checkout'])->name('bookings.checkout');
 
 // Users
 Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');

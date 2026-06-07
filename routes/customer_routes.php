@@ -17,13 +17,9 @@ use App\Http\Controllers\ProfileController;
 
 // ── Public: Rooms ────────────────────────────────────────────────────────────
 
-// Browse all rooms
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
-
-// Search & filter available rooms (GET from search form with check-in, check-out, guests)
+Route::get('/rooms/suggestions', [RoomController::class, 'getSuggestions'])->name('rooms.suggestions');
 Route::get('/rooms/search', [RoomController::class, 'search'])->name('rooms.search');
-
-// Room detail page
 Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
 
 // ── Protected: Booking & Payment ─────────────────────────────────────────────
@@ -32,6 +28,9 @@ Route::middleware(['auth', 'banned'])->group(function () {
 
     // Show checkout/confirmation form for a specific room
     Route::get('/bookings/checkout/{room}', [BookingController::class, 'checkout'])->name('bookings.checkout');
+
+    // Show booking detail page (invoice/receipt view)
+    Route::get('/bookings/{booking}', [BookingController::class, 'show'])->name('bookings.show');
 
     // Submit the booking form (creates Booking record, redirects to VNPay)
     Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
@@ -65,4 +64,8 @@ Route::middleware(['auth', 'banned'])->group(function () {
 
     // Submit a review for a room (only after a completed stay)
     Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+
+    // ── DEBUG ONLY: Simulate booking timeout for testing room retention ─────
+    Route::post('/bookings/{booking}/simulate-timeout', [PaymentController::class, 'simulateTimeout'])
+        ->name('bookings.simulateTimeout');
 });

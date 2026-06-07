@@ -27,6 +27,11 @@
                                     </a>
                                 @endif
 
+                                {{-- Nút Đơn hàng của tôi --}}
+                                <a href="{{ route('profile.history') }}" class="bk-btn" style="background: #dfa974; border-color: #dfa974; color: #fff; font-weight: 600; letter-spacing: 0.8px; white-space: nowrap;">
+                                    <i class="fa fa-shopping-bag" style="margin-right: 5px;"></i> ĐƠN HÀNG CỦA TÔI
+                                </a>
+
                                 {{-- Dropdown Xin chào --}}
                                 <div class="user-dropdown" style="position: relative; display: inline-block;">
                                     <button class="bk-btn" style="background: #19191a; border-color: #19191a; color: #fff; cursor: pointer; white-space: nowrap;" onclick="this.nextElementSibling.classList.toggle('open')">
@@ -57,16 +62,6 @@
                             .user-dropdown-menu.open { display: block !important; }
                             .user-dropdown-menu a:hover { background: #f8f4ee; }
                         </style>
-                        <div class="language-option">
-                            <img src="{{ asset('img/flag.jpg') }}" alt="">
-                            <span>VI <i class="fa fa-angle-down"></i></span>
-                            <div class="flag-dropdown">
-                                <ul>
-                                    <li><a href="#">EN</a></li>
-                                    <li><a href="#">Fr</a></li>
-                                </ul>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -101,8 +96,23 @@
                                 <li class="{{ request()->routeIs('contact') ? 'active' : '' }}"><a href="{{ route('contact') }}">Liên hệ</a></li>
                             </ul>
                         </nav>
-                        <div class="nav-right search-switch">
-                            <i class="icon_search"></i>
+                        <div class="nav-right">
+                            <div class="nav-search-container" style="position: relative; display: inline-block;">
+                                <form action="{{ route('rooms.index') }}" method="GET" class="nav-search-form">
+                                    <input 
+                                        type="text" 
+                                        id="navbar-search-input" 
+                                        name="search"
+                                        placeholder="Tìm phòng..."
+                                        autocomplete="off"
+                                        style="width: 220px; height: 40px; padding: 0 40px 0 15px; border: 1px solid #ebebeb; border-radius: 20px; font-size: 14px; color: #19191a; transition: all 0.3s;"
+                                    >
+                                    <button type="submit" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #dfa974; cursor: pointer; padding: 8px;">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </form>
+                                <div id="search-suggestion-wrapper"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

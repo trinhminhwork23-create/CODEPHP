@@ -1,6 +1,4 @@
-@extends('admin.layouts.admin_master')
-
-@section('admin_content')
+<?php $__env->startSection('admin_content'); ?>
 
     <div class="container-fluid">
       <div class="row">
@@ -12,17 +10,18 @@
         </div>
       </div>
 
-      {{-- Thông báo --}}
-      @if(session('success'))
+      
+      <?php if(session('success')): ?>
       <div class="row">
         <div class="col-12">
           <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
+            <?php echo e(session('success')); ?>
+
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
           </div>
         </div>
       </div>
-      @endif
+      <?php endif; ?>
 
       <div class="row">
         <div class="col-12">
@@ -41,91 +40,92 @@
                 </tr>
               </thead>
               <tbody>
-                @forelse ($bookings ?? [] as $booking)
+                <?php $__empty_1 = true; $__currentLoopData = $bookings ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $booking): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr class="align-middle">
-                  <td class="fw-semibold">#{{ $booking->id }}</td>
-                  <td>{{ $booking->user->name ?? 'Khách' }}</td>
-                  <td>{{ $booking->room->name ?? '—' }}</td>
-                  <td>{{ \Carbon\Carbon::parse($booking->check_in)->format('d/m/Y') }}</td>
-                  <td>{{ \Carbon\Carbon::parse($booking->check_out)->format('d/m/Y') }}</td>
-                  <td class="fw-semibold">{{ number_format($booking->total_money, 0, ',', '.') }}₫</td>
+                  <td class="fw-semibold">#<?php echo e($booking->id); ?></td>
+                  <td><?php echo e($booking->user->name ?? 'Khách'); ?></td>
+                  <td><?php echo e($booking->room->name ?? '—'); ?></td>
+                  <td><?php echo e(\Carbon\Carbon::parse($booking->check_in)->format('d/m/Y')); ?></td>
+                  <td><?php echo e(\Carbon\Carbon::parse($booking->check_out)->format('d/m/Y')); ?></td>
+                  <td class="fw-semibold"><?php echo e(number_format($booking->total_money, 0, ',', '.')); ?>₫</td>
                   <td>
-                    @if($booking->status == 0)
+                    <?php if($booking->status == 0): ?>
                       <span class="badge bg-warning-subtle text-warning">Chờ duyệt</span>
-                    @elseif($booking->status == 1)
+                    <?php elseif($booking->status == 1): ?>
                       <span class="badge bg-primary-subtle text-primary">Đã đặt cọc 50%</span>
-                    @elseif($booking->status == 2)
+                    <?php elseif($booking->status == 2): ?>
                       <span class="badge bg-success-subtle text-success">Đã thanh toán</span>
-                    @elseif($booking->status == 3)
+                    <?php elseif($booking->status == 3): ?>
                       <span class="badge bg-danger-subtle text-danger">Đã hủy</span>
-                    @elseif($booking->status == 4)
+                    <?php elseif($booking->status == 4): ?>
                       <span class="badge bg-info-subtle text-info">Đã nhận phòng</span>
-                    @elseif($booking->status == 5)
+                    <?php elseif($booking->status == 5): ?>
                       <span class="badge bg-secondary-subtle text-secondary">Hoàn thành</span>
-                    @endif
+                    <?php endif; ?>
                   </td>
                   <td>
-                    @if($booking->status == 0)
-                      <form action="{{ route('admin.bookings.approve', $booking->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Duyệt đơn đặt phòng này?')">
-                        @csrf
-                        @method('PATCH')
+                    <?php if($booking->status == 0): ?>
+                      <form action="<?php echo e(route('admin.bookings.approve', $booking->id)); ?>" method="POST" class="d-inline" onsubmit="return confirm('Duyệt đơn đặt phòng này?')">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('PATCH'); ?>
                         <button type="submit" class="btn btn-sm btn-outline-success" title="Duyệt đơn"><i class="ti ti-check"></i> Duyệt Booking</button>
                       </form>
                       <button type="button" class="btn btn-sm btn-outline-danger" 
                               data-bs-toggle="modal" 
-                              data-bs-target="#cancelModal{{ $booking->id }}" 
+                              data-bs-target="#cancelModal<?php echo e($booking->id); ?>" 
                               title="Hủy đơn">
                         <i class="ti ti-x"></i> Hủy Booking
                       </button>
-                    @elseif($booking->status == 1 || $booking->status == 2)
-                      <form action="{{ route('admin.bookings.checkin', $booking->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Xác nhận khách đã nhận phòng?')">
-                        @csrf
-                        @method('PATCH')
+                    <?php elseif($booking->status == 1 || $booking->status == 2): ?>
+                      <form action="<?php echo e(route('admin.bookings.checkin', $booking->id)); ?>" method="POST" class="d-inline" onsubmit="return confirm('Xác nhận khách đã nhận phòng?')">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('PATCH'); ?>
                         <button type="submit" class="btn btn-sm btn-primary" title="Nhận phòng">
                           <i class="ti ti-door-enter"></i> Xác nhận Nhận phòng
                         </button>
                       </form>
                       <button type="button" class="btn btn-sm btn-outline-danger" 
                               data-bs-toggle="modal" 
-                              data-bs-target="#cancelModal{{ $booking->id }}" 
+                              data-bs-target="#cancelModal<?php echo e($booking->id); ?>" 
                               title="Hủy đơn cưỡng chế">
                         <i class="ti ti-x"></i> Hủy đơn cưỡng chế
                       </button>
-                    @elseif($booking->status == 4)
-                      <form action="{{ route('admin.bookings.checkout', $booking->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Xác nhận khách đã trả phòng?')">
-                        @csrf
-                        @method('PATCH')
+                    <?php elseif($booking->status == 4): ?>
+                      <form action="<?php echo e(route('admin.bookings.checkout', $booking->id)); ?>" method="POST" class="d-inline" onsubmit="return confirm('Xác nhận khách đã trả phòng?')">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('PATCH'); ?>
                         <button type="submit" class="btn btn-sm btn-info" title="Trả phòng">
                           <i class="ti ti-door-exit"></i> Xác nhận Trả phòng
                         </button>
                       </form>
-                    @else
+                    <?php else: ?>
                       <span class="text-muted small">—</span>
-                    @endif
+                    <?php endif; ?>
                   </td>
                 </tr>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                   <td colspan="9" class="text-center py-4 text-muted">Chưa có đơn đặt phòng nào</td>
                 </tr>
-                @endforelse
+                <?php endif; ?>
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      {{-- Cancel Booking Modal - Loop through all bookings --}}
-      @foreach ($bookings ?? [] as $booking)
-      <div class="modal fade" id="cancelModal{{ $booking->id }}" tabindex="-1" aria-labelledby="cancelModalLabel{{ $booking->id }}" aria-hidden="true">
+      
+      <?php $__currentLoopData = $bookings ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $booking): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+      <div class="modal fade" id="cancelModal<?php echo e($booking->id); ?>" tabindex="-1" aria-labelledby="cancelModalLabel<?php echo e($booking->id); ?>" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
-            <form action="{{ route('admin.bookings.cancel', $booking->id) }}" method="POST">
-              @csrf
-              @method('PATCH')
+            <form action="<?php echo e(route('admin.bookings.cancel', $booking->id)); ?>" method="POST">
+              <?php echo csrf_field(); ?>
+              <?php echo method_field('PATCH'); ?>
               <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="cancelModalLabel{{ $booking->id }}">
-                  <i class="ti ti-alert-triangle me-2"></i>Hủy đơn cưỡng chế #{{ $booking->id }}
+                <h5 class="modal-title" id="cancelModalLabel<?php echo e($booking->id); ?>">
+                  <i class="ti ti-alert-triangle me-2"></i>Hủy đơn cưỡng chế #<?php echo e($booking->id); ?>
+
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
               </div>
@@ -137,10 +137,10 @@
                   </div>
                 </div>
                 <div class="mb-3">
-                  <label for="cancel_reason{{ $booking->id }}" class="form-label fw-semibold">Lý do hủy đơn cưỡng chế <span class="text-danger">*</span></label>
+                  <label for="cancel_reason<?php echo e($booking->id); ?>" class="form-label fw-semibold">Lý do hủy đơn cưỡng chế <span class="text-danger">*</span></label>
                   <textarea 
                     class="form-control" 
-                    id="cancel_reason{{ $booking->id }}" 
+                    id="cancel_reason<?php echo e($booking->id); ?>" 
                     name="cancel_reason" 
                     rows="4" 
                     placeholder="Nhập lý do hủy đơn cưỡng chế..." 
@@ -163,7 +163,7 @@
           </div>
         </div>
       </div>
-      @endforeach
+      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
       <div class="row">
         <div class="col-12">
@@ -174,4 +174,6 @@
       </div>
     </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.layouts.admin_master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\CODEPHP\resources\views/admin/bookings/index.blade.php ENDPATH**/ ?>

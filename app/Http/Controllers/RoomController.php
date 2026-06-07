@@ -28,11 +28,38 @@ class RoomController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $rooms = Room::with('category')
-            ->orderBy('created_at', 'desc')
-            ->paginate(6);
+        // 🎯 UNIFIED QUERY: Handle both direct access AND homepage search redirect
+        $query = Room::with('category');
+
+        // ── Capacity-Based Filtering ──────────────────────────────
+        $adults = (int) $request->get('adults', 0);
+        $children = (int) $request->get('children', 0);
+        $totalGuests = $adults + $children;
+
+        if ($totalGuests > 0) {
+            // Filter rooms by capacity (your database column: 'capacity')
+            $query->where('capacity', '>=', $totalGuests);
+        }
+
+        // ── Date-Based Availability Filtering (Optional) ──────────────────
+        if ($request->filled('check_in') && $request->filled('check_out')) {
+            $checkIn = $this->parseDate($request->check_in);
+            $checkOut = $this->parseDate($request->check_out);
+
+            if ($checkIn && $checkOut) {
+                $query->whereDoesntHave('bookings', function ($q) use ($checkIn, $checkOut) {
+                    $q->whereNotIn('status', [\App\Models\Booking::STATUS_CANCELLED])
+                      ->where('check_in', '<', $checkOut)
+                      ->where('check_out', '>', $checkIn);
+                });
+            }
+        }
+
+        $rooms = $query->orderBy('created_at', 'desc')
+            ->paginate(6)
+            ->appends($request->only(['adults', 'children', 'check_in', 'check_out']));
 
         $categories = Category::where('status', 1)->orderBy('name')->get();
 
@@ -41,6 +68,7 @@ class RoomController extends Controller
 
     public function search(Request $request)
     {
+        // ── Normalize Date Formats ────────────────────────────────
         if ($request->has('check_in')) {
             $request->merge(['check_in' => $this->parseDate($request->check_in)]);
         }
@@ -48,6 +76,7 @@ class RoomController extends Controller
             $request->merge(['check_out' => $this->parseDate($request->check_out)]);
         }
 
+        // ── Validate Date Inputs ─────────────────────────────────
         $request->validate([
             'check_in'  => 'required|date|after_or_equal:today',
             'check_out' => 'required|date|after:check_in',
@@ -60,22 +89,9 @@ class RoomController extends Controller
             'check_out.after'            => 'Ngày trả phòng phải sau ngày nhận phòng.',
         ]);
 
-        $rooms = Room::with('category')
-            ->whereDoesntHave('bookings', function ($q) use ($request) {
-                $q->whereNotIn('status', [\App\Models\Booking::STATUS_CANCELLED])
-                  ->where('check_in', '<', $request->check_out)
-                  ->where('check_out', '>', $request->check_in);
-            })
-            ->when($request->filled('adults'), function ($q) use ($request) {
-                $q->where('capacity', '>=', $request->adults);
-            })
-            ->orderBy('price')
-            ->paginate(6)
-            ->appends($request->only(['check_in', 'check_out', 'adults', 'children']));
-
-        $categories = Category::where('status', 1)->orderBy('name')->get();
-
-        return view('rooms.index', compact('rooms', 'categories'));
+        // ── REDIRECT TO INDEX WITH QUERY PARAMS ───────────────────────
+        // Leverage the unified index() method instead of duplicating logic
+        return redirect()->route('rooms.index', $request->only(['check_in', 'check_out', 'adults', 'children']));
     }
 
     public function show($room)
@@ -91,6 +107,30 @@ class RoomController extends Controller
 
         $avgRating = $room->reviews->avg('rating');
 
-        return view('rooms.show', compact('room', 'avgRating'));
+        // Check if current user has completed stay at this room
+        $hasCompletedStay = false;
+        if (\Auth::check()) {
+            $hasCompletedStay = \App\Models\Booking::where('user_id', \Auth::id())
+                ->where('room_id', $room->id)
+                ->where('status', \App\Models\Booking::STATUS_COMPLETED)
+                ->exists();
+        }
+
+        return view('rooms.show', compact('room', 'avgRating', 'hasCompletedStay'));
+    }
+
+    public function getSuggestions(Request $request)
+    {
+        $query = $request->get('query', '');
+        
+        if (strlen($query) < 1) {
+            return response()->json([]);
+        }
+
+        $rooms = Room::where('name', 'LIKE', '%' . $query . '%')
+            ->limit(5)
+            ->get(['id', 'name']);
+
+        return response()->json($rooms);
     }
 }

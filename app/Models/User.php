@@ -18,6 +18,8 @@ class User extends Authenticatable
         'password',
         'role',
         'status',
+        'is_locked',
+        'lock_reason',
     ];
 
     protected $hidden = [
@@ -27,6 +29,7 @@ class User extends Authenticatable
 
     protected $casts = [
         'status' => 'integer',
+        'is_locked' => 'boolean',
     ];
 
     // ── Helpers ──────────────────────────────────────────────────────────────

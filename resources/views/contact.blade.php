@@ -33,17 +33,31 @@
                     </div>
                 </div>
                 <div class="col-lg-7 offset-lg-1">
-                    <form action="#" method="POST" class="contact-form">
+                    @if(session('success'))
+                        <div class="alert alert-success" style="padding: 15px; margin-bottom: 20px; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px; color: #155724;">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                    @if($errors->any())
+                        <div class="alert alert-danger" style="padding: 15px; margin-bottom: 20px; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; color: #721c24;">
+                            <ul style="margin: 0; padding-left: 20px;">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <form action="{{ route('contact.store') }}" method="POST" class="contact-form">
                         @csrf
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="text" name="name" placeholder="Họ và tên">
+                                <input type="text" name="name" placeholder="Họ và tên" value="{{ old('name') }}" required>
                             </div>
                             <div class="col-lg-6">
-                                <input type="text" name="email" placeholder="Địa chỉ Email">
+                                <input type="email" name="email" placeholder="Địa chỉ Email" value="{{ old('email') }}" required>
                             </div>
                             <div class="col-lg-12">
-                                <textarea name="comment" placeholder="Lời nhắn của bạn"></textarea>
+                                <textarea name="message" placeholder="Lời nhắn của bạn" required>{{ old('message') }}</textarea>
                                 <button type="submit">Gửi thông tin</button>
                             </div>
                         </div>

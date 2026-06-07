@@ -1,6 +1,6 @@
-@extends('admin.layouts.admin_master')
 
-@section('admin_content')
+
+<?php $__env->startSection('admin_content'); ?>
 
     <div class="container-fluid">
       <div class="row">
@@ -12,7 +12,7 @@
         </div>
       </div>
 
-      {{-- Thông báo session được xử lý bằng SweetAlert2 ở script bên dưới --}}
+      
 
       <div class="row">
         <div class="col-12">
@@ -30,75 +30,75 @@
                 </tr>
               </thead>
               <tbody>
-                @forelse ($users ?? [] as $index => $user)
+                <?php $__empty_1 = true; $__currentLoopData = $users ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr class="align-middle">
-                  <td class="fw-semibold">{{ $user->name }}</td>
-                  <td>{{ $user->email }}</td>
-                  <td>{{ $user->phone ?? 'Chưa cập nhật' }}</td>
+                  <td class="fw-semibold"><?php echo e($user->name); ?></td>
+                  <td><?php echo e($user->email); ?></td>
+                  <td><?php echo e($user->phone ?? 'Chưa cập nhật'); ?></td>
                   <td>
-                    @if($user->role === 'admin')
+                    <?php if($user->role === 'admin'): ?>
                       <span class="badge bg-danger-subtle text-danger">Quản trị viên</span>
-                    @elseif($user->role === 'staff')
+                    <?php elseif($user->role === 'staff'): ?>
                       <span class="badge bg-info-subtle text-info">Nhân viên</span>
-                    @else
+                    <?php else: ?>
                       <span class="badge bg-primary-subtle text-primary">Khách hàng</span>
-                    @endif
+                    <?php endif; ?>
                   </td>
-                  <td>{{ $user->created_at->format('d/m/Y') }}</td>
+                  <td><?php echo e($user->created_at->format('d/m/Y')); ?></td>
                   <td>
-                    @if($user->is_locked)
+                    <?php if($user->is_locked): ?>
                       <span class="badge bg-danger-subtle text-danger"><i class="ti ti-lock"></i> Đã khóa</span>
-                    @else
+                    <?php else: ?>
                       <span class="badge bg-success-subtle text-success"><i class="ti ti-lock-open"></i> Hoạt động</span>
-                    @endif
+                    <?php endif; ?>
                   </td>
                   <td>
-                    @if($user->role !== 'admin')
-                      @if(!$user->is_locked)
+                    <?php if($user->role !== 'admin'): ?>
+                      <?php if(!$user->is_locked): ?>
                         <button type="button" class="btn btn-sm btn-outline-danger"
                             data-bs-toggle="modal"
-                            data-bs-target="#lockModal{{ $user->id }}"
-                            data-name="{{ $user->name }}"
+                            data-bs-target="#lockModal<?php echo e($user->id); ?>"
+                            data-name="<?php echo e($user->name); ?>"
                             data-action="lock">
                           <i class="ti ti-lock me-1"></i>Khóa tài khoản
                         </button>
-                      @else
+                      <?php else: ?>
                         <button type="button" class="btn btn-sm btn-outline-success"
                             data-bs-toggle="modal"
-                            data-bs-target="#lockModal{{ $user->id }}"
-                            data-name="{{ $user->name }}"
+                            data-bs-target="#lockModal<?php echo e($user->id); ?>"
+                            data-name="<?php echo e($user->name); ?>"
                             data-action="unlock">
                           <i class="ti ti-lock-open me-1"></i>Mở khóa tài khoản
                         </button>
-                      @endif
-                    @else
+                      <?php endif; ?>
+                    <?php else: ?>
                     <span class="text-muted small">—</span>
-                    @endif
+                    <?php endif; ?>
                   </td>
                 </tr>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                   <td colspan="7" class="text-center py-4 text-muted">Chưa có tài khoản nào</td>
                 </tr>
-                @endforelse
+                <?php endif; ?>
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      {{-- Lock/Unlock User Modal - Loop through all users --}}
-      @foreach ($users ?? [] as $user)
-      @if($user->role !== 'admin')
-      <div class="modal fade" id="lockModal{{ $user->id }}" tabindex="-1" aria-labelledby="lockModalLabel{{ $user->id }}" aria-hidden="true">
+      
+      <?php $__currentLoopData = $users ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+      <?php if($user->role !== 'admin'): ?>
+      <div class="modal fade" id="lockModal<?php echo e($user->id); ?>" tabindex="-1" aria-labelledby="lockModalLabel<?php echo e($user->id); ?>" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
-            <form action="{{ route('admin.users.toggleStatus', $user->id) }}" method="POST">
-              @csrf
-              @method('PATCH')
-              <div class="modal-header {{ $user->is_locked ? 'bg-success' : 'bg-danger' }} text-white">
-                <h5 class="modal-title" id="lockModalLabel{{ $user->id }}">
-                  <i class="ti {{ $user->is_locked ? 'ti-lock-open' : 'ti-lock' }} me-2"></i>{{ $user->is_locked ? 'Mở khóa' : 'Khóa' }} tài khoản
+            <form action="<?php echo e(route('admin.users.toggleStatus', $user->id)); ?>" method="POST">
+              <?php echo csrf_field(); ?>
+              <?php echo method_field('PATCH'); ?>
+              <div class="modal-header <?php echo e($user->is_locked ? 'bg-success' : 'bg-danger'); ?> text-white">
+                <h5 class="modal-title" id="lockModalLabel<?php echo e($user->id); ?>">
+                  <i class="ti <?php echo e($user->is_locked ? 'ti-lock-open' : 'ti-lock'); ?> me-2"></i><?php echo e($user->is_locked ? 'Mở khóa' : 'Khóa'); ?> tài khoản
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
               </div>
@@ -106,21 +106,21 @@
                 <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
                   <i class="ti ti-info-circle me-2 fs-5"></i>
                   <div>
-                    <strong>Yêu cầu bắt buộc:</strong> Vui lòng nhập lý do {{ $user->is_locked ? 'mở khóa' : 'khóa' }} tài khoản để ghi nhận vào hệ thống audit.
+                    <strong>Yêu cầu bắt buộc:</strong> Vui lòng nhập lý do <?php echo e($user->is_locked ? 'mở khóa' : 'khóa'); ?> tài khoản để ghi nhận vào hệ thống audit.
                   </div>
                 </div>
                 <div class="mb-3">
                   <label class="form-label fw-semibold">Tài khoản</label>
-                  <input type="text" class="form-control-plaintext fw-semibold" readonly value="{{ $user->name }} ({{ $user->email }})">
+                  <input type="text" class="form-control-plaintext fw-semibold" readonly value="<?php echo e($user->name); ?> (<?php echo e($user->email); ?>)">
                 </div>
                 <div class="mb-3">
-                  <label for="lock_reason{{ $user->id }}" class="form-label fw-semibold">Lý do {{ $user->is_locked ? 'mở khóa' : 'khóa' }} <span class="text-danger">*</span></label>
+                  <label for="lock_reason<?php echo e($user->id); ?>" class="form-label fw-semibold">Lý do <?php echo e($user->is_locked ? 'mở khóa' : 'khóa'); ?> <span class="text-danger">*</span></label>
                   <textarea 
                     class="form-control" 
-                    id="lock_reason{{ $user->id }}" 
+                    id="lock_reason<?php echo e($user->id); ?>" 
                     name="lock_reason" 
                     rows="4" 
-                    placeholder="Nhập lý do {{ $user->is_locked ? 'mở khóa' : 'khóa' }} tài khoản..." 
+                    placeholder="Nhập lý do <?php echo e($user->is_locked ? 'mở khóa' : 'khóa'); ?> tài khoản..." 
                     required 
                     minlength="10" 
                     maxlength="1000"
@@ -132,16 +132,17 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                   <i class="ti ti-x me-1"></i>Hủy bỏ
                 </button>
-                <button type="submit" class="btn {{ $user->is_locked ? 'btn-success' : 'btn-danger' }}">
-                  <i class="ti {{ $user->is_locked ? 'ti-lock-open' : 'ti-lock' }} me-1"></i>Xác nhận {{ $user->is_locked ? 'mở khóa' : 'khóa' }}
+                <button type="submit" class="btn <?php echo e($user->is_locked ? 'btn-success' : 'btn-danger'); ?>">
+                  <i class="ti <?php echo e($user->is_locked ? 'ti-lock-open' : 'ti-lock'); ?> me-1"></i>Xác nhận <?php echo e($user->is_locked ? 'mở khóa' : 'khóa'); ?>
+
                 </button>
               </div>
             </form>
           </div>
         </div>
       </div>
-      @endif
-      @endforeach
+      <?php endif; ?>
+      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
       <div class="row">
         <div class="col-12">
@@ -152,27 +153,29 @@
       </div>
     </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     // ── Hiển thị Session flash message bằng SweetAlert2 ──────────────────────
-    @if(session('success'))
+    <?php if(session('success')): ?>
         Swal.fire({
             icon: 'success',
             title: 'Thành công!',
-            text: '{{ session('success') }}',
+            text: '<?php echo e(session('success')); ?>',
             timer: 2500,
             showConfirmButton: false,
         });
-    @endif
+    <?php endif; ?>
 
-    @if(session('error'))
+    <?php if(session('error')): ?>
         Swal.fire({
             icon: 'error',
             title: 'Lỗi!',
-            text: '{{ session('error') }}',
+            text: '<?php echo e(session('error')); ?>',
         });
-    @endif
+    <?php endif; ?>
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('admin.layouts.admin_master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\CODEPHP\resources\views/admin/users/index.blade.php ENDPATH**/ ?>

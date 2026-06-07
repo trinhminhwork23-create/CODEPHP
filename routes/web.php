@@ -10,6 +10,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // ── Static pages ─────────────────────────────────────────────────────────────
 Route::get('/about',   fn() => view('about'))->name('about');
 Route::get('/contact', fn() => view('contact'))->name('contact');
+Route::post('/contact', [App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
 
 // ── Blog (static views — no DB model required) ───────────────────────────────
 Route::get('/blog',        fn() => view('blog.index'))->name('blog.index');

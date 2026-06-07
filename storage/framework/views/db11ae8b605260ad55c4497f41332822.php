@@ -29,6 +29,9 @@
     <link rel="stylesheet" href="<?php echo e(asset('css/magnific-popup.css')); ?>" type="text/css">
     <link rel="stylesheet" href="<?php echo e(asset('css/slicknav.min.css')); ?>" type="text/css">
     <link rel="stylesheet" href="<?php echo e(asset('css/style.css')); ?>" type="text/css">
+    <link rel="stylesheet" href="<?php echo e(asset('css/search.css')); ?>" type="text/css">
+    
+    <?php echo $__env->yieldPushContent('styles'); ?>
 </head>
 
 <body>
@@ -45,9 +48,6 @@
     <div class="offcanvas-menu-wrapper">
         <div class="canvas-close">
             <i class="icon_close"></i>
-        </div>
-        <div class="search-icon  search-switch">
-            <i class="icon_search"></i>
         </div>
         <div class="header-configure-area">
             <div class="language-option">
@@ -99,18 +99,6 @@
 
     <?php echo $__env->make('layouts.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-    <!-- Search model Begin -->
-    <div class="search-model">
-        <div class="h-100 d-flex align-items-center justify-content-center">
-            <div class="search-close-switch"><i class="icon_close"></i></div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Tìm kiếm tại đây.....">
-            </form>
-        </div>
-    </div>
-    <!-- Search model end -->
-
-    <!-- Js Plugins -->
     <script src="<?php echo e(asset('js/jquery-3.3.1.min.js')); ?>"></script>
     <script src="<?php echo e(asset('js/bootstrap.min.js')); ?>"></script>
     <script src="<?php echo e(asset('js/jquery.magnific-popup.min.js')); ?>"></script>
@@ -119,6 +107,9 @@
     <script src="<?php echo e(asset('js/jquery.slicknav.js')); ?>"></script>
     <script src="<?php echo e(asset('js/owl.carousel.min.js')); ?>"></script>
     <script src="<?php echo e(asset('js/main.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/search.js')); ?>"></script>
+
+    <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 
 </html>

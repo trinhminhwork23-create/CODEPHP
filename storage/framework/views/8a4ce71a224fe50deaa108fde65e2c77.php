@@ -137,7 +137,7 @@
                                             <?php $__empty_1 = true; $__currentLoopData = $bookings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $booking): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                                 <?php
                                                     $checkInCarbon = \Carbon\Carbon::parse($booking->check_in);
-                                                    $isUpcoming = in_array($booking->status, [\App\Models\Booking::STATUS_APPROVED, \App\Models\Booking::STATUS_PAID]) && $checkInCarbon->isFuture();
+                                                    $isUpcoming = in_array($booking->status, [\App\Models\Booking::STATUS_DEPOSIT_PAID, \App\Models\Booking::STATUS_PAID]) && $checkInCarbon->isFuture();
                                                 ?>
                                                 <tr>
                                                     <td class="align-middle" style="color: #19191a; font-weight: 600; font-size: 14px;">
@@ -163,40 +163,158 @@
                                                         <?php else: ?>
                                                             <?php switch($booking->status):
                                                                 case (\App\Models\Booking::STATUS_PENDING): ?>
-                                                                    <span class="badge" style="background-color: #ffc107; color: #212529; padding: 8px 12px; font-weight: 600; border-radius: 2px;">Chờ duyệt</span> 
+                                                                    <span class="badge" style="background-color: #dc3545; color: #ffffff; padding: 8px 12px; font-weight: 600; border-radius: 2px;">
+                                                                        <i class="fa fa-exclamation-circle mr-1"></i> Chờ thanh toán
+                                                                    </span>
                                                                     <?php break; ?>
-                                                                <?php case (\App\Models\Booking::STATUS_APPROVED): ?>
-                                                                    <span class="badge" style="background-color: #17a2b8; color: #ffffff; padding: 8px 12px; font-weight: 600; border-radius: 2px;">Đã cọc 50%</span> 
+                                                                <?php case (\App\Models\Booking::STATUS_DEPOSIT_PAID): ?>
+                                                                    <span class="badge" style="background-color: #f39c12; color: #ffffff; padding: 8px 12px; font-weight: 600; border-radius: 2px;">
+                                                                        <i class="fa fa-check-circle mr-1"></i> Đã cọc 50%
+                                                                    </span>
                                                                     <?php break; ?>
                                                                 <?php case (\App\Models\Booking::STATUS_PAID): ?>
-                                                                    <span class="badge" style="background-color: #6c757d; color: #ffffff; padding: 8px 12px; font-weight: 600; border-radius: 2px;">Đã hoàn thành</span> 
+                                                                    <span class="badge" style="background-color: #28a745; color: #ffffff; padding: 8px 12px; font-weight: 600; border-radius: 2px;">
+                                                                        <i class="fa fa-check-circle-o mr-1"></i> Đã thanh toán 100%
+                                                                    </span>
+                                                                    <?php break; ?>
+                                                                <?php case (\App\Models\Booking::STATUS_CHECKED_IN): ?>
+                                                                    <span class="badge" style="background-color: #17a2b8; color: #ffffff; padding: 8px 12px; font-weight: 600; border-radius: 2px;">
+                                                                        <i class="fa fa-door-open mr-1"></i> Đã nhận phòng
+                                                                    </span>
+                                                                    <?php break; ?>
+                                                                <?php case (\App\Models\Booking::STATUS_COMPLETED): ?>
+                                                                    <span class="badge" style="background-color: #6c757d; color: #ffffff; padding: 8px 12px; font-weight: 600; border-radius: 2px;">
+                                                                        <i class="fa fa-check-square mr-1"></i> Hoàn thành
+                                                                    </span>
                                                                     <?php break; ?>
                                                                 <?php case (\App\Models\Booking::STATUS_CANCELLED): ?>
-                                                                    <span class="badge" style="background-color: #dc3545; color: #ffffff; padding: 8px 12px; font-weight: 600; border-radius: 2px;">Đã hủy</span> 
+                                                                    <span class="badge" style="background-color: #6c757d; color: #ffffff; padding: 8px 12px; font-weight: 600; border-radius: 2px;">
+                                                                        <i class="fa fa-ban mr-1"></i> Đã hủy
+                                                                    </span>
                                                                     <?php break; ?>
                                                             <?php endswitch; ?>
                                                         <?php endif; ?>
                                                     </td>
 
-                                                    <td class="align-middle">
-                                                        <?php if($booking->status == \App\Models\Booking::STATUS_PAID): ?>
-                                                            <a href="<?php echo e(route('rooms.show', $booking->room_id)); ?>#reviews" class="primary-btn" style="padding: 8px 18px; font-size: 13px; border-radius: 2px;">Đánh giá</a>
-                                                        <?php elseif($booking->status == \App\Models\Booking::STATUS_APPROVED): ?>
-                                                            <div class="d-flex flex-column gap-1 align-items-center">
-                                                                <a href="<?php echo e(route('payment.initiate', ['booking' => $booking->id, 'option' => 'deposit'])); ?>" class="btn btn-sm btn-primary text-white fw-semibold mb-1" style="padding: 8px 12px; font-size: 12px; border-radius: 2px; background-color: #005a9c; border-color: #005a9c;">Thanh toán 50% còn lại</a>
-                                                                <form action="<?php echo e(route('bookings.cancel', $booking->id)); ?>" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn hủy đơn đặt phòng này?')">
-                                                                    <?php echo csrf_field(); ?>
-                                                                    <button type="submit" class="btn btn-sm btn-outline-danger" style="padding: 6px 12px; font-size: 12px; border-radius: 2px;">Hủy đơn</button>
-                                                                </form>
-                                                            </div>
-                                                        <?php elseif($booking->status == \App\Models\Booking::STATUS_PENDING): ?>
-                                                            <form action="<?php echo e(route('bookings.cancel', $booking->id)); ?>" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn hủy đơn đặt phòng này?')">
-                                                                <?php echo csrf_field(); ?>
-                                                                <button type="submit" class="btn btn-sm btn-outline-danger" style="padding: 8px 15px; font-size: 12px; border-radius: 2px;">Hủy đơn</button>
-                                                            </form>
-                                                        <?php else: ?>
-                                                            <span class="text-muted">-</span>
-                                                        <?php endif; ?>
+                                                    <td class="align-middle" style="padding: 15px 10px; vertical-align: middle;">
+                                                        <div style="display: flex; flex-direction: column; gap: 10px; align-items: stretch; min-width: 200px; max-width: 220px;">
+                                                            
+                                                            
+                                                            <a href="<?php echo e(route('bookings.show', $booking->id)); ?>" 
+                                                               style="color: #555; font-weight: 600; font-size: 13px; text-decoration: none; text-align: center; padding: 6px 0; border-bottom: 2px solid #dfa974; transition: color 0.3s;" 
+                                                               onmouseover="this.style.color='#dfa974'" 
+                                                               onmouseout="this.style.color='#555'">
+                                                                <i class="fa fa-file-text-o" style="margin-right: 5px;"></i> Xem chi tiết
+                                                            </a>
+
+                                                            
+                                                            <?php if($booking->status == \App\Models\Booking::STATUS_PENDING): ?>
+                                                                
+                                                                
+                                                                <a href="<?php echo e(route('payment.initiate', ['booking' => $booking->id, 'option' => 'full'])); ?>" 
+                                                                   style="display: block; padding: 10px 16px; font-size: 13px; font-weight: 700; text-align: center; background-color: #28a745; border: none; border-radius: 3px; color: #ffffff; text-decoration: none; transition: opacity 0.3s;" 
+                                                                   onmouseover="this.style.opacity='0.85'" 
+                                                                   onmouseout="this.style.opacity='1'">
+                                                                    <i class="fa fa-credit-card" style="margin-right: 6px;"></i> THANH TOÁN NGAY
+                                                                </a>
+                                                                
+                                                                
+                                                                <a href="<?php echo e(route('payment.initiate', ['booking' => $booking->id, 'option' => 'deposit'])); ?>" 
+                                                                   style="display: block; padding: 10px 16px; font-size: 13px; font-weight: 700; text-align: center; background-color: #ff9800; border: none; border-radius: 3px; color: #ffffff; text-decoration: none; transition: opacity 0.3s;" 
+                                                                   onmouseover="this.style.opacity='0.85'" 
+                                                                   onmouseout="this.style.opacity='1'">
+                                                                    <i class="fa fa-credit-card-alt" style="margin-right: 6px;"></i> Cọc 50%
+                                                                </a>
+                                                                
+                                                                
+                                                                <?php
+                                                                    $daysUntilCheckIn = \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($booking->check_in), false);
+                                                                ?>
+
+                                                                <?php if($daysUntilCheckIn >= 10): ?>
+                                                                    
+                                                                    <form action="<?php echo e(route('bookings.cancel', $booking->id)); ?>" method="POST" style="margin: 0;" onsubmit="return confirm('Bạn có chắc muốn hủy đơn đặt phòng này?')">
+                                                                        <?php echo csrf_field(); ?>
+                                                                        <button type="submit" 
+                                                                                style="width: 100%; padding: 10px 16px; font-size: 13px; font-weight: 700; text-align: center; background-color: #dc3545; border: none; border-radius: 3px; color: #ffffff; cursor: pointer; transition: opacity 0.3s;" 
+                                                                                onmouseover="this.style.opacity='0.85'" 
+                                                                                onmouseout="this.style.opacity='1'">
+                                                                            <i class="fa fa-times-circle" style="margin-right: 6px;"></i> Hủy đơn
+                                                                        </button>
+                                                                    </form>
+                                                                <?php else: ?>
+                                                                    
+                                                                    <div style="padding: 10px 12px; font-size: 12px; font-weight: 600; text-align: center; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 3px; color: #856404;">
+                                                                        <i class="fa fa-ban" style="margin-right: 6px;"></i> Không thể hủy (Sát ngày nhận phòng dưới 10 ngày)
+                                                                    </div>
+                                                                <?php endif; ?>
+
+                                                            
+                                                            <?php elseif($booking->status == \App\Models\Booking::STATUS_DEPOSIT_PAID): ?>
+                                                                
+                                                                <a href="<?php echo e(route('payment.initiate', ['booking' => $booking->id, 'option' => 'deposit'])); ?>" 
+                                                                   style="display: block; padding: 10px 16px; font-size: 13px; font-weight: 700; text-align: center; background-color: #007bff; border: none; border-radius: 3px; color: #ffffff; text-decoration: none; transition: opacity 0.3s;" 
+                                                                   onmouseover="this.style.opacity='0.85'" 
+                                                                   onmouseout="this.style.opacity='1'">
+                                                                    <i class="fa fa-credit-card" style="margin-right: 6px;"></i> Thanh toán 50% còn lại
+                                                                </a>
+                                                                
+                                                                
+                                                                <?php
+                                                                    $daysUntilCheckIn = \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($booking->check_in), false);
+                                                                ?>
+
+                                                                <?php if($daysUntilCheckIn >= 10): ?>
+                                                                    
+                                                                    <form action="<?php echo e(route('bookings.cancel', $booking->id)); ?>" method="POST" style="margin: 0;" onsubmit="return confirm('Bạn có chắc muốn hủy đơn đặt phòng này?')">
+                                                                        <?php echo csrf_field(); ?>
+                                                                        <button type="submit" 
+                                                                                style="width: 100%; padding: 10px 16px; font-size: 13px; font-weight: 700; text-align: center; background-color: #dc3545; border: none; border-radius: 3px; color: #ffffff; cursor: pointer; transition: opacity 0.3s;" 
+                                                                                onmouseover="this.style.opacity='0.85'" 
+                                                                                onmouseout="this.style.opacity='1'">
+                                                                            <i class="fa fa-times-circle" style="margin-right: 6px;"></i> Hủy đơn
+                                                                        </button>
+                                                                    </form>
+                                                                <?php else: ?>
+                                                                    
+                                                                    <div style="padding: 10px 12px; font-size: 12px; font-weight: 600; text-align: center; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 3px; color: #856404;">
+                                                                        <i class="fa fa-ban" style="margin-right: 6px;"></i> Không thể hủy (Sát ngày nhận phòng dưới 10 ngày)
+                                                                    </div>
+                                                                <?php endif; ?>
+
+                                                            
+                                                            <?php elseif($booking->status == \App\Models\Booking::STATUS_PAID): ?>
+                                                                
+                                                                <span style="display: block; padding: 10px; font-size: 12px; color: #28a745; text-align: center; font-weight: 600; font-style: italic;">
+                                                                    <i class="fa fa-clock-o mr-1"></i> Chờ nhận phòng
+                                                                </span>
+
+                                                            
+                                                            <?php elseif($booking->status == \App\Models\Booking::STATUS_CHECKED_IN): ?>
+                                                                
+                                                                <span style="display: block; padding: 10px; font-size: 12px; color: #17a2b8; text-align: center; font-weight: 600; font-style: italic;">
+                                                                    <i class="fa fa-bed mr-1"></i> Đang lưu trú
+                                                                </span>
+
+                                                            
+                                                            <?php elseif($booking->status == \App\Models\Booking::STATUS_COMPLETED): ?>
+                                                                
+                                                                <a href="<?php echo e(route('rooms.show', $booking->room_id)); ?>#reviews" 
+                                                                   style="display: block; padding: 9px 16px; font-size: 13px; font-weight: 600; text-align: center; background-color: transparent; border: 2px solid #dfa974; border-radius: 3px; color: #dfa974; text-decoration: none; transition: all 0.3s;" 
+                                                                   onmouseover="this.style.backgroundColor='#dfa974'; this.style.color='#ffffff'" 
+                                                                   onmouseout="this.style.backgroundColor='transparent'; this.style.color='#dfa974'">
+                                                                    <i class="fa fa-star-o" style="margin-right: 6px;"></i> Viết đánh giá
+                                                                </a>
+
+                                                            
+                                                            <?php elseif($booking->status == \App\Models\Booking::STATUS_CANCELLED): ?>
+                                                                
+                                                                <span style="display: block; padding: 10px; font-size: 12px; color: #999; text-align: center; font-style: italic;">
+                                                                    Không có thao tác
+                                                                </span>
+
+                                                            <?php endif; ?>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

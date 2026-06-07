@@ -17,6 +17,7 @@ class Booking extends Model
         'children',
         'total_money',
         'status',
+        'cancel_reason',
     ];
 
     protected $casts = [
@@ -29,10 +30,12 @@ class Booking extends Model
     ];
 
     // Booking status constants
-    const STATUS_PENDING  = 0;
-    const STATUS_APPROVED = 1;
-    const STATUS_PAID     = 2;
-    const STATUS_CANCELLED = 3;
+    const STATUS_PENDING       = 0; // Chờ thanh toán
+    const STATUS_DEPOSIT_PAID  = 1; // Đã đặt cọc 50%
+    const STATUS_PAID          = 2; // Đã thanh toán 100%
+    const STATUS_CANCELLED     = 3; // Đã hủy
+    const STATUS_CHECKED_IN    = 4; // Đã nhận phòng
+    const STATUS_COMPLETED     = 5; // Đã trả phòng / Hoàn thành
 
     // ── Relationships ─────────────────────────────────────────────────────────
 

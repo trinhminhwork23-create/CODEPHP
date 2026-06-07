@@ -28,7 +28,20 @@
                         <form action="{{ route('rooms.search') }}" method="GET">
                             <div class="check-date">
                                 <label for="date-in">Ngày nhận phòng:</label>
-                                <input type="text" class="date-input" id="date-in" name="check_in" value="{{ request('check_in') ?? old('check_in') }}">
+                                <input type="text" class="date-input" id="date-in" name="check_in" value="@php
+                                    $checkInValue = old('check_in') ?: request('check_in');
+                                    if ($checkInValue) {
+                                        try {
+                                            if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $checkInValue)) {
+                                                echo \Carbon\Carbon::createFromFormat('d/m/Y', $checkInValue)->format('Y-m-d');
+                                            } else {
+                                                echo \Carbon\Carbon::parse($checkInValue)->format('Y-m-d');
+                                            }
+                                        } catch (\Exception $e) {
+                                            echo $checkInValue;
+                                        }
+                                    }
+                                @endphp">
                                 <i class="icon_calendar"></i>
                                 @error('check_in')
                                     <span class="text-danger small" style="display: block; margin-top: 5px;">{{ $message }}</span>
@@ -36,7 +49,20 @@
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Ngày trả phòng:</label>
-                                <input type="text" class="date-input" id="date-out" name="check_out" value="{{ request('check_out') ?? old('check_out') }}">
+                                <input type="text" class="date-input" id="date-out" name="check_out" value="@php
+                                    $checkOutValue = old('check_out') ?: request('check_out');
+                                    if ($checkOutValue) {
+                                        try {
+                                            if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $checkOutValue)) {
+                                                echo \Carbon\Carbon::createFromFormat('d/m/Y', $checkOutValue)->format('Y-m-d');
+                                            } else {
+                                                echo \Carbon\Carbon::parse($checkOutValue)->format('Y-m-d');
+                                            }
+                                        } catch (\Exception $e) {
+                                            echo $checkOutValue;
+                                        }
+                                    }
+                                @endphp">
                                 <i class="icon_calendar"></i>
                                 @error('check_out')
                                     <span class="text-danger small" style="display: block; margin-top: 5px;">{{ $message }}</span>
@@ -45,10 +71,11 @@
                             <div class="select-option">
                                 <label for="guest">Người lớn:</label>
                                 <select id="guest" name="adults">
-                                    <option value="1" {{ (request('adults') ?? old('adults')) == 1 ? 'selected' : '' }}>1 Người lớn</option>
-                                    <option value="2" {{ (request('adults') ?? old('adults')) == 2 ? 'selected' : '' }}>2 Người lớn</option>
-                                    <option value="3" {{ (request('adults') ?? old('adults')) == 3 ? 'selected' : '' }}>3 Người lớn</option>
-                                    <option value="4" {{ (request('adults') ?? old('adults')) == 4 ? 'selected' : '' }}>4 Người lớn</option>
+                                    @for($i = 1; $i <= 10; $i++)
+                                        <option value="{{ $i }}" {{ (request('adults') ?? old('adults', 1)) == $i ? 'selected' : '' }}>
+                                            {{ $i }} Người lớn
+                                        </option>
+                                    @endfor
                                 </select>
                                 @error('adults')
                                     <span class="text-danger small" style="display: block; margin-top: 5px;">{{ $message }}</span>
@@ -57,9 +84,11 @@
                             <div class="select-option">
                                 <label for="room">Trẻ em:</label>
                                 <select id="room" name="children">
-                                    <option value="0" {{ (request('children') ?? old('children')) == 0 ? 'selected' : '' }}>0 Trẻ em</option>
-                                    <option value="1" {{ (request('children') ?? old('children')) == 1 ? 'selected' : '' }}>1 Trẻ em</option>
-                                    <option value="2" {{ (request('children') ?? old('children')) == 2 ? 'selected' : '' }}>2 Trẻ em</option>
+                                    @for($i = 0; $i <= 10; $i++)
+                                        <option value="{{ $i }}" {{ (request('children') ?? old('children', 0)) == $i ? 'selected' : '' }}>
+                                            {{ $i }} Trẻ em
+                                        </option>
+                                    @endfor
                                 </select>
                                 @error('children')
                                     <span class="text-danger small" style="display: block; margin-top: 5px;">{{ $message }}</span>
