@@ -64,4 +64,4 @@
     </div>
 </footer>
 <!-- Footer Section End -->
-<?php /**PATH C:\xampp\htdocs\CODEPHP\resources\views/layouts/footer.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Php\htdocs\CODEPHP(merge)\resources\views/layouts/footer.blade.php ENDPATH**/ ?>

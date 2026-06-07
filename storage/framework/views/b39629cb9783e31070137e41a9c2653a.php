@@ -122,4 +122,4 @@
 </body>
 
 </html>
-<?php /**PATH C:\xampp\htdocs\CODEPHP\resources\views/layouts/master.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Php\htdocs\CODEPHP(merge)\resources\views/layouts/master.blade.php ENDPATH**/ ?>
