@@ -2,7 +2,6 @@
 
 @section('content')
 
-    <!-- Contact Section Begin -->
     <section class="contact-section spad">
         <div class="container">
             <div class="row">
@@ -34,17 +33,35 @@
                     </div>
                 </div>
                 <div class="col-lg-7 offset-lg-1">
-                    <form action="#" class="contact-form">
+                    
+                    @if(session('success'))
+                        <div class="alert alert-success" style="color: #155724; background-color: #d4edda; border-color: #c3e6cb; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if($errors->any())
+                        <div class="alert alert-danger" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+                            <ul style="margin: 0; padding-left: 20px;">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('contact.submit') }}" method="POST" class="contact-form">
+                        @csrf
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Your Name">
+                                <input type="text" name="name" value="{{ old('name') }}" placeholder="Họ và tên">
                             </div>
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Your Email">
+                                <input type="text" name="email" value="{{ old('email') }}" placeholder="Địa chỉ Email">
                             </div>
                             <div class="col-lg-12">
-                                <textarea placeholder="Your Message"></textarea>
-                                <button type="submit">Submit Now</button>
+                                <textarea name="message" placeholder="Lời nhắn của bạn">{{ old('message') }}</textarea>
+                                <button type="submit">Gửi thông tin</button>
                             </div>
                         </div>
                     </form>
@@ -57,6 +74,4 @@
             </div>
         </div>
     </section>
-    <!-- Contact Section End -->
-
-@endsection
+    @endsection

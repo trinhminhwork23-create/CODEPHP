@@ -8,20 +8,22 @@ use App\Http\Controllers\Admin\DashboardController;
 // ── LUỒNG KHÁCH HÀNG KHÔNG CẦN ĐĂNG NHẬP (Để FE làm trang chủ/tìm kiếm)
 Route::get('/rooms/search', [BookingController::class, 'searchRooms'])->name('rooms.search');
 
-// ── LUỒNG KHÁCH HÀNG BẮT BUỘC ĐĂNG NHẬP (Xử lý thông qua Middleware)
-Route::middleware(['auth'])->group(function () {
-    // Đặt phòng nâng cao
-    Route::post('/booking/checkout-preview', [BookingController::class, 'checkoutPreview'])->name('booking.checkout.preview');
-    Route::post('/booking/confirm', [BookingController::class, 'confirmBooking'])->name('booking.confirm');
+// ── Static pages ─────────────────────────────────────────────────────────────
+Route::get('/about',   fn() => view('about'))->name('about');
 
-    // Cổng VNPAY (Khách trả tiền)
-    Route::get('/payment/vnpay-redirect/{booking_id}', [PaymentController::class, 'createVnpayPayment'])->name('payment.vnpay.redirect');
-    Route::get('/payment/vnpay-return', [PaymentController::class, 'vnpayReturn'])->name('payment.vnpay.return');
+// 1. Tuyến đường GET: Dùng để hiển thị giao diện form cho khách xem
+Route::get('/contact', fn() => view('contact'))->name('contact');
+
+// 2. Tuyến đường POST (MỚI THÊM): Dùng để hứng dữ liệu khi khách bấm nút Submit ở form
+Route::post('/contact-submit', [App\Http\Controllers\ContactController::class, 'submit'])->name('contact.submit');
+
+// ── Blog (static views — no DB model required) ───────────────────────────────
+Route::get('/blog',        fn() => view('blog.index'))->name('blog.index');
+Route::get('/blog/{id}',   fn() => view('blog.show'))->name('blog.show');
 
     // Lịch sử hành trình & Đánh giá cá nhân
     Route::get('/profile/history', [ReviewController::class, 'bookingHistory'])->name('profile.history');
     Route::post('/review/store', [ReviewController::class, 'storeReview'])->name('review.store');
-});
 
 // CỔNG NGẦM IPN VNPAY: Không chặn auth vì máy chủ VNPAY tự động gọi ngầm tới cổng này
 Route::get('/payment/vnpay-ipn', [PaymentController::class, 'vnpayIpn'])->name('payment.vnpay.ipn');

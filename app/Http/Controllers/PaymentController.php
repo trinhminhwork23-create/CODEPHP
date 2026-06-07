@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
@@ -31,23 +32,69 @@ class PaymentController extends Controller
         $vnp_BankCode = '';
         $vnp_IpAddr = $request->ip();
 
-        $inputData = array(
+        $vnp_Data = array(
             "vnp_Version" => "2.1.0",
             "vnp_TmnCode" => $vnp_TmnCode,
             "vnp_Amount" => $vnp_Amount,
             "vnp_Command" => "pay",
             "vnp_CreateDate" => date('YmdHis'),
-            "vnp_CurrCode" => "VND",
-            "vnp_IpAddr" => $vnp_IpAddr,
-            "vnp_Locale" => $vnp_Locale,
-            "vnp_OrderInfo" => $vnp_OrderInfo,
-            "vnp_OrderType" => $vnp_OrderType,
-            "vnp_ReturnUrl" => $vnp_Returnurl,
-            "vnp_TxnRef" => $vnp_TxnRef
+            "vnp_CurrCode"   => "VND",
+            "vnp_IpAddr"     => $vnp_IpAddr,
+            "vnp_Locale"     => "vn",
+            "vnp_OrderInfo"  => "Thanh-toan-don-hang-" . $booking->id,
+            "vnp_OrderType"  => "other",
+            "vnp_ReturnUrl"  => $vnp_Returnurl,
+            "vnp_TxnRef"     => $vnp_TxnRef,
+            "vnp_ExpireDate" => date('YmdHis', strtotime('+10 minutes')), //Thay đổi thời gian hết hạn đơn hàng từ 15 phút thành 10 phút cho đồng bộ FE
         );
 
+        // ksort before the loop so both $hashdata and $query are built from identically ordered keys
+        ksort($vnp_Data);
+
+        // Official VNPay PHP SDK encoding pattern: use rawurlencode()
+        $query    = "";
+        $i        = 0;
+        $hashdata = "";
+        foreach ($vnp_Data as $key => $value) {
+            if ($i == 1) {
+                $hashdata .= '&' . rawurlencode($key) . "=" . rawurlencode($value);
+            } else {
+                $hashdata .= rawurlencode($key) . "=" . rawurlencode($value);
+                $i = 1;
+            }
+            $query .= rawurlencode($key) . "=" . rawurlencode($value) . '&';
+        }
+
+        // Cắt bỏ ký tự '&' thừa ở cuối chuỗi $query bằng hàm rtrim trước khi nối với vnp_SecureHash
+        $vnp_Url        = $vnp_Url . "?" . rtrim($query, '&');
+        $vnpSecureHash  = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
+        $vnp_Url       .= '&vnp_SecureHash=' . $vnpSecureHash; // Thêm dấu & chuẩn vào đây
+
+        Log::info('VNPay URL Generated', [
+            'booking_id' => $booking->id,
+            'tmn_code'   => $vnp_TmnCode,
+            'amount'     => (int) round($amount * 100),
+            'url'        => $vnp_Url,
+        ]);
+
+        return redirect($vnp_Url);
+    }
+
+    // 2. Cổng trả về cho khách hàng sau khi thanh toán tại ngân hàng
+    public function callback(Request $request)
+    {
+        $vnp_HashSecret = config('services.vnpay.hash_secret');
+
+        $inputData     = [];
+        $vnpSecureHash = $request->input('vnp_SecureHash', '');
+
+        foreach ($request->all() as $key => $value) {
+            if (str_starts_with($key, 'vnp_') && $key !== 'vnp_SecureHash') {
+                $inputData[$key] = $value;
+            }
+        }
+
         ksort($inputData);
-        $query = "";
         $i = 0;
         $hashdata = "";
         foreach ($inputData as $key => $value) {
@@ -57,17 +104,14 @@ class PaymentController extends Controller
                 $hashdata .= urlencode($key) . "=" . urlencode($value);
                 $i = 1;
             }
-            $query .= urlencode($key) . "=" . urlencode($value) . '&';
         }
 
-        $vnp_Url = $vnp_Url . "?" . $query;
-        if (isset($vnp_HashSecret)) {
-            $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
-            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+        $secureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
+        if ($secureHash !== $vnpSecureHash) {
+            return redirect()->route('payment.vnpay.return', array_merge($request->query(), ['vnp_ResponseCode' => '97']));
         }
 
-        // Chuyển hướng người dùng sang VNPAY quẹt thẻ ngân hàng
-        return redirect()->away($vnp_Url);
+        return redirect()->route('payment.vnpay.return', $request->query());
     }
 
     // 2. CỔNG TRẢ VỀ CHO GIAO DIỆN KHÁCH HÀNG (Hiển thị thông báo đẹp đẽ cho FE)

@@ -1,6 +1,6 @@
-@extends('admin.layouts.admin_master')
 
-@section('admin_content')
+
+<?php $__env->startSection('admin_content'); ?>
 
     <div class="container-fluid">
       <div class="row">
@@ -12,36 +12,37 @@
         </div>
       </div>
 
-      {{-- 1. HIỂN THỊ THÔNG BÁO THÀNH CÔNG --}}
-      @if(session('success'))
+      
+      <?php if(session('success')): ?>
       <div class="row">
         <div class="col-12">
           <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
+            <?php echo e(session('success')); ?>
+
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
           </div>
         </div>
       </div>
-      @endif
+      <?php endif; ?>
 
-      {{-- 2. HIỂN THỊ THÔNG BÁO LỖI (Ví dụ: Lỗi quên nhập lý do hủy) --}}
-      @if($errors->any() || session('error'))
+      
+      <?php if($errors->any() || session('error')): ?>
       <div class="row">
         <div class="col-12">
           <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <ul class="mb-0" style="padding-left: 20px;">
-                @if(session('error'))
-                    <li>{{ session('error') }}</li>
-                @endif
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
+                <?php if(session('error')): ?>
+                    <li><?php echo e(session('error')); ?></li>
+                <?php endif; ?>
+                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li><?php echo e($error); ?></li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </ul>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
           </div>
         </div>
       </div>
-      @endif
+      <?php endif; ?>
 
       <div class="row">
         <div class="col-12">
@@ -60,59 +61,59 @@
                 </tr>
               </thead>
               <tbody>
-                @forelse ($bookings ?? [] as $booking)
+                <?php $__empty_1 = true; $__currentLoopData = $bookings ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $booking): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr class="align-middle">
-                  <td class="fw-semibold">#{{ $booking->id }}</td>
-                  <td>{{ $booking->user->name ?? 'Khách' }}</td>
-                  <td>{{ $booking->room->name ?? '—' }}</td>
-                  <td>{{ \Carbon\Carbon::parse($booking->check_in)->format('d/m/Y') }}</td>
-                  <td>{{ \Carbon\Carbon::parse($booking->check_out)->format('d/m/Y') }}</td>
-                  <td class="fw-semibold">{{ number_format($booking->total_money, 0, ',', '.') }}₫</td>
+                  <td class="fw-semibold">#<?php echo e($booking->id); ?></td>
+                  <td><?php echo e($booking->user->name ?? 'Khách'); ?></td>
+                  <td><?php echo e($booking->room->name ?? '—'); ?></td>
+                  <td><?php echo e(\Carbon\Carbon::parse($booking->check_in)->format('d/m/Y')); ?></td>
+                  <td><?php echo e(\Carbon\Carbon::parse($booking->check_out)->format('d/m/Y')); ?></td>
+                  <td class="fw-semibold"><?php echo e(number_format($booking->total_money, 0, ',', '.')); ?>₫</td>
                   
-                  {{-- Sử dụng hằng số Model thay vì số cứng 0,1,2 để code bền vững --}}
+                  
                   <td>
-                    @if($booking->status == \App\Models\Booking::STATUS_PENDING)
+                    <?php if($booking->status == \App\Models\Booking::STATUS_PENDING): ?>
                       <span class="badge bg-warning-subtle text-warning">Chờ duyệt</span>
-                    @elseif($booking->status == \App\Models\Booking::STATUS_APPROVED)
+                    <?php elseif($booking->status == \App\Models\Booking::STATUS_APPROVED): ?>
                       <span class="badge bg-primary-subtle text-primary">Đã duyệt</span>
-                    @elseif($booking->status == \App\Models\Booking::STATUS_PAID)
+                    <?php elseif($booking->status == \App\Models\Booking::STATUS_PAID): ?>
                       <span class="badge bg-success-subtle text-success">Đã thanh toán</span>
-                    @else
+                    <?php else: ?>
                       <span class="badge bg-danger-subtle text-danger">Đã hủy</span>
-                    @endif
+                    <?php endif; ?>
                   </td>
                   
                   <td>
-                    {{-- Nút Duyệt: Chỉ hiện khi ở trạng thái PENDING --}}
-                    @if($booking->status == \App\Models\Booking::STATUS_PENDING)
-                      <form action="{{ route('admin.bookings.approve', $booking->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Duyệt đơn đặt phòng này?')">
-                        @csrf
-                        @method('PATCH')
+                    
+                    <?php if($booking->status == \App\Models\Booking::STATUS_PENDING): ?>
+                      <form action="<?php echo e(route('admin.bookings.approve', $booking->id)); ?>" method="POST" class="d-inline" onsubmit="return confirm('Duyệt đơn đặt phòng này?')">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('PATCH'); ?>
                         <button type="submit" class="btn btn-sm btn-outline-success" title="Duyệt đơn"><i class="ti ti-check"></i> Duyệt Booking</button>
                       </form>
-                    @endif
+                    <?php endif; ?>
 
-                    {{-- Nút Hủy Cưỡng Chế: Hiện ở cả PENDING và APPROVED --}}
-                    @if(in_array($booking->status, [\App\Models\Booking::STATUS_PENDING, \App\Models\Booking::STATUS_APPROVED]))
-                      <form action="{{ route('admin.bookings.cancel', $booking->id) }}" method="POST" class="d-inline" onsubmit="return handleForceCancel(event, this)">
-                        @csrf
-                        @method('PATCH')
+                    
+                    <?php if(in_array($booking->status, [\App\Models\Booking::STATUS_PENDING, \App\Models\Booking::STATUS_APPROVED])): ?>
+                      <form action="<?php echo e(route('admin.bookings.cancel', $booking->id)); ?>" method="POST" class="d-inline" onsubmit="return handleForceCancel(event, this)">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('PATCH'); ?>
                         <input type="hidden" name="cancel_reason" class="cancel-reason-input">
                         <button type="submit" class="btn btn-sm btn-outline-danger" title="Hủy đơn"><i class="ti ti-x"></i> Hủy Booking</button>
                       </form>
-                    @endif
+                    <?php endif; ?>
 
-                    {{-- Không có thao tác đối với đơn Đã thanh toán hoặc Đã hủy --}}
-                    @if(in_array($booking->status, [\App\Models\Booking::STATUS_PAID, \App\Models\Booking::STATUS_CANCELLED]))
+                    
+                    <?php if(in_array($booking->status, [\App\Models\Booking::STATUS_PAID, \App\Models\Booking::STATUS_CANCELLED])): ?>
                       <span class="text-muted small">—</span>
-                    @endif
+                    <?php endif; ?>
                   </td>
                 </tr>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                   <td colspan="8" class="text-center py-4 text-muted">Chưa có đơn đặt phòng nào</td>
                 </tr>
-                @endforelse
+                <?php endif; ?>
               </tbody>
             </table>
           </div>
@@ -128,7 +129,7 @@
       </div>
     </div>
 
-    {{-- SCRIPT BẮT SỰ KIỆN HỦY ĐƠN --}}
+    
     <script>
       function handleForceCancel(event, form) {
           event.preventDefault(); // Ngăn chặn form submit ngay lập tức
@@ -153,4 +154,5 @@
       }
     </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layouts.admin_master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\xampp\htdocs\CODEPHP\resources\views/admin/bookings/index.blade.php ENDPATH**/ ?>
