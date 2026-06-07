@@ -3,11 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Sona Resort – Khu nghỉ dưỡng cao cấp, đặt phòng trực tuyến nhanh chóng và tiện lợi.">
-    <meta name="keywords" content="Sona, khu nghỉ dưỡng, đặt phòng, khách sạn, resort, nghỉ dưỡng">
+    <meta name="description" content="Sapa Jade Hill Resort & Spa – Bản giao hưởng giữa mây trời Sa Pa. Đặt phòng nghỉ dưỡng eco-luxury trực tuyến nhanh chóng và tiện lợi.">
+    <meta name="keywords" content="Sapa Jade Hill, resort Sapa, đặt phòng Sapa, biệt thự đá, nghỉ dưỡng sinh thái, Mường Hoa">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sona Resort – Nghỉ dưỡng sang trọng</title>
+    <title>Sapa Jade Hill Resort & Spa – Nghỉ dưỡng sinh thái cao cấp</title>
 
     <!-- Google Fonts: Inter (Vietnamese subset) – must load FIRST to override fallback fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="{{ asset('css/magnific-popup.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('css/slicknav.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('css/search.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/search.css') }}?v={{ time() }}" type="text/css">
     
     @stack('styles')
 </head>
@@ -107,7 +107,10 @@
     <script src="{{ asset('js/jquery.slicknav.js') }}"></script>
     <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
-    <script src="{{ asset('js/search.js') }}"></script>
+    <script>
+        window.roomsSuggestionsUrl = "{{ route('rooms.suggestions') }}";
+    </script>
+    <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
 
     @stack('scripts')
 </body>

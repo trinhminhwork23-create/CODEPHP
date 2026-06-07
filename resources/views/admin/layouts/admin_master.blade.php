@@ -23,6 +23,7 @@
     </style>
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }}">
+    @stack('styles')
 </head>
 
 <body>

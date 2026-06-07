@@ -158,7 +158,7 @@
                                 <a href="#">Cắm trại</a>
                                 <a href="#">Sự kiện</a>
                                 <a href="#">Lều trại</a>
-                                <a href="#">Khách sạn Sona</a>
+                                <a href="#">Resort Sapa Jade Hill</a>
                                 <a href="#">Nhà hàng</a>
                             </div>
                         </div>

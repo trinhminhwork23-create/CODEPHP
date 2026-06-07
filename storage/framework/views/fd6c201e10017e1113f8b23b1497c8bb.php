@@ -1,6 +1,4 @@
-@extends('layouts.master')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
     <!-- Contact Section Begin -->
     <section class="contact-section spad">
@@ -33,31 +31,32 @@
                     </div>
                 </div>
                 <div class="col-lg-7 offset-lg-1">
-                    @if(session('success'))
+                    <?php if(session('success')): ?>
                         <div class="alert alert-success sapa-contact-alert-success">
-                            {{ session('success') }}
+                            <?php echo e(session('success')); ?>
+
                         </div>
-                    @endif
-                    @if($errors->any())
+                    <?php endif; ?>
+                    <?php if($errors->any()): ?>
                         <div class="alert alert-danger sapa-contact-alert-danger">
                             <ul class="sapa-contact-error-list">
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
+                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li><?php echo e($error); ?></li>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
-                    @endif
-                    <form action="{{ route('contact.store') }}" method="POST" class="contact-form">
-                        @csrf
+                    <?php endif; ?>
+                    <form action="<?php echo e(route('contact.store')); ?>" method="POST" class="contact-form">
+                        <?php echo csrf_field(); ?>
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="text" name="name" placeholder="Họ và tên" value="{{ old('name') }}" required>
+                                <input type="text" name="name" placeholder="Họ và tên" value="<?php echo e(old('name')); ?>" required>
                             </div>
                             <div class="col-lg-6">
-                                <input type="email" name="email" placeholder="Địa chỉ Email" value="{{ old('email') }}" required>
+                                <input type="email" name="email" placeholder="Địa chỉ Email" value="<?php echo e(old('email')); ?>" required>
                             </div>
                             <div class="col-lg-12">
-                                <textarea name="message" placeholder="Lời nhắn của bạn" required>{{ old('message') }}</textarea>
+                                <textarea name="message" placeholder="Lời nhắn của bạn" required><?php echo e(old('message')); ?></textarea>
                                 <button type="submit">Gửi thông tin</button>
                             </div>
                         </div>
@@ -73,9 +72,9 @@
     </section>
     <!-- Contact Section End -->
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('styles')
+<?php $__env->startPush('styles'); ?>
 <style>
     .sapa-contact-alert-success {
         padding: 15px;
@@ -98,4 +97,6 @@
         padding-left: 20px;
     }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\CODEPHP\resources\views/contact.blade.php ENDPATH**/ ?>

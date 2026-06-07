@@ -69,9 +69,9 @@
                       <form action="{{ route('admin.bookings.approve', $booking->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Duyệt đơn đặt phòng này?')">
                         @csrf
                         @method('PATCH')
-                        <button type="submit" class="btn btn-sm btn-outline-success" title="Duyệt đơn"><i class="ti ti-check"></i> Duyệt Booking</button>
+                        <button type="submit" class="sapa-admin-btn sapa-admin-btn-approve" title="Duyệt đơn"><i class="ti ti-check"></i> Duyệt Booking</button>
                       </form>
-                      <button type="button" class="btn btn-sm btn-outline-danger" 
+                      <button type="button" class="sapa-admin-btn sapa-admin-btn-cancel" 
                               data-bs-toggle="modal" 
                               data-bs-target="#cancelModal{{ $booking->id }}" 
                               title="Hủy đơn">
@@ -81,11 +81,11 @@
                       <form action="{{ route('admin.bookings.checkin', $booking->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Xác nhận khách đã nhận phòng?')">
                         @csrf
                         @method('PATCH')
-                        <button type="submit" class="btn btn-sm btn-primary" title="Nhận phòng">
+                        <button type="submit" class="sapa-admin-btn sapa-admin-btn-checkin" title="Nhận phòng">
                           <i class="ti ti-door-enter"></i> Xác nhận Nhận phòng
                         </button>
                       </form>
-                      <button type="button" class="btn btn-sm btn-outline-danger" 
+                      <button type="button" class="sapa-admin-btn sapa-admin-btn-cancel" 
                               data-bs-toggle="modal" 
                               data-bs-target="#cancelModal{{ $booking->id }}" 
                               title="Hủy đơn cưỡng chế">
@@ -95,7 +95,7 @@
                       <form action="{{ route('admin.bookings.checkout', $booking->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Xác nhận khách đã trả phòng?')">
                         @csrf
                         @method('PATCH')
-                        <button type="submit" class="btn btn-sm btn-info" title="Trả phòng">
+                        <button type="submit" class="sapa-admin-btn sapa-admin-btn-checkout" title="Trả phòng">
                           <i class="ti ti-door-exit"></i> Xác nhận Trả phòng
                         </button>
                       </form>
@@ -168,10 +168,91 @@
       <div class="row">
         <div class="col-12">
           <footer class="text-center py-2 mt-6 text-secondary">
-            <p class="mb-0">Bản quyền © 2026 Sapa Jade Hill Homestay. Phát triển bởi <a href="#" class="text-primary">SapaJadeHill Team</a></p>
+            <p class="mb-0">Copyright © 2026 Bản quyền thuộc về Nhóm lập trình web 11.</p>
           </footer>
         </div>
       </div>
     </div>
+
+@push('styles')
+<style>
+    .sapa-admin-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: 6px;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid transparent;
+        text-transform: none;
+        letter-spacing: normal;
+        cursor: pointer;
+    }
+    .sapa-admin-btn-approve {
+        color: #2e7d32;
+        background-color: #e8f5e9;
+        border-color: #c8e6c9;
+    }
+    .sapa-admin-btn-approve:hover {
+        color: #ffffff;
+        background-color: #2e7d32;
+        border-color: #2e7d32;
+    }
+    .sapa-admin-btn-cancel {
+        color: #d32f2f;
+        background-color: #ffebee;
+        border-color: #ffcdd2;
+    }
+    .sapa-admin-btn-cancel:hover {
+        color: #ffffff;
+        background-color: #d32f2f;
+        border-color: #d32f2f;
+    }
+    .sapa-admin-btn-checkin {
+        color: #ffffff;
+        background-color: #dfa974;
+        border-color: #dfa974;
+    }
+    .sapa-admin-btn-checkin:hover {
+        background-color: #c99560;
+        border-color: #c99560;
+    }
+    .sapa-admin-btn-checkout {
+        color: #ffffff;
+        background-color: #0288d1;
+        border-color: #0288d1;
+    }
+    .sapa-admin-btn-checkout:hover {
+        background-color: #01579b;
+        border-color: #01579b;
+    }
+    
+    /* Audit Modal Styles */
+    .modal-content {
+        border-radius: 12px;
+        border: none;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    .modal-header.bg-danger {
+        background: linear-gradient(135deg, #d32f2f, #ef5350) !important;
+        padding: 20px 24px;
+    }
+    .modal-body {
+        padding: 24px;
+    }
+    .modal-footer {
+        padding: 16px 24px;
+        background-color: #f8f9fa;
+        border-top: 1px solid #eee;
+    }
+    .form-control:focus {
+        border-color: #dfa974;
+        box-shadow: 0 0 0 0.25rem rgba(223, 169, 116, 0.25);
+    }
+</style>
+@endpush
 
 @endsection

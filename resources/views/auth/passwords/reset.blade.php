@@ -1,25 +1,22 @@
 @extends('layouts.master')
 
 @section('content')
-    <!-- Breadcrumb Section Begin -->
     <div class="breadcrumb-section">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <h2>Khôi phục mật khẩu</h2>
+                        <h2>Đặt lại mật khẩu</h2>
                         <div class="bt-option">
                             <a href="{{ route('home') }}">Trang chủ</a>
-                            <span>Quên mật khẩu</span>
+                            <span>Đặt lại mật khẩu</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Breadcrumb Section End -->
 
-    <!-- Password Recovery Section Begin -->
     <section class="login-section spad">
         <style>
             .login-form {
@@ -34,7 +31,7 @@
                 margin-bottom: 20px;
                 text-align: center;
             }
-            .login-form input[type="email"] {
+            .login-form input[type="password"] {
                 width: 100%;
                 height: 50px;
                 border: 1px solid #ebebeb;
@@ -66,9 +63,7 @@
                 transition: all 0.3s;
                 margin-top: 15px;
             }
-            .login-btn:hover {
-                background: #c69463;
-            }
+            .login-btn:hover { background: #c69463; }
             .login-form p {
                 text-align: center;
                 margin-top: 25px;
@@ -76,40 +71,45 @@
                 color: #707079;
                 margin-bottom: 0;
             }
-            .login-form p a {
-                color: #dfa974;
-                font-weight: 500;
-            }
+            .login-form p a { color: #dfa974; font-weight: 500; }
         </style>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-6">
                     <div class="login-form">
-                        <h3>Quên mật khẩu?</h3>
-                        <p class="text-center mb-4" style="font-size: 14px;">Vui lòng điền địa chỉ email đăng ký tài khoản của bạn để nhận mã OTP.</p>
-                        
-                        @if (session('status'))
-                            <div class="alert alert-success mb-4 text-center">
-                                {{ session('status') }}
+                        <h3>Đặt mật khẩu mới</h3>
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger mb-4">
+                                <ul style="margin:0;padding-left:20px;">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
                         @endif
 
-                        <form action="{{ route('password.email') }}" method="POST">
+                        <form method="POST" action="{{ route('password.update') }}">
                             @csrf
                             <div>
-                                <label for="email">Địa chỉ Email <span>*</span></label>
-                                <input type="email" id="email" name="email" placeholder="Nhập địa chỉ email đăng ký" required value="{{ old('email') }}">
-                                @error('email')
-                                    <span class="text-danger small" style="display: block; margin-top: 5px;">{{ $message }}</span>
+                                <label for="password">Mật khẩu mới <span>*</span></label>
+                                <input type="password" id="password" name="password"
+                                    placeholder="Tối thiểu 8 ký tự" required>
+                                @error('password')
+                                    <span class="text-danger small" style="display:block;margin-top:5px;">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <button type="submit" class="login-btn">Gửi mã OTP</button>
+                            <div style="margin-top:20px;">
+                                <label for="password_confirmation">Xác nhận mật khẩu <span>*</span></label>
+                                <input type="password" id="password_confirmation" name="password_confirmation"
+                                    placeholder="Nhập lại mật khẩu mới" required>
+                            </div>
+                            <button type="submit" class="login-btn">Đổi mật khẩu</button>
                         </form>
-                        <p><a href="{{ route('login') }}">Quay lại trang Đăng nhập</a></p>
+                        <p><a href="{{ route('login') }}">Quay lại Đăng nhập</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Password Recovery Section End -->
 @endsection

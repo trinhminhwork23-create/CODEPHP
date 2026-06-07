@@ -23,6 +23,7 @@
     </style>
     <!-- Custom Styles -->
     <link rel="stylesheet" href="<?php echo e(asset('admin/assets/css/style.css')); ?>">
+    <?php echo $__env->yieldPushContent('styles'); ?>
 </head>
 
 <body>

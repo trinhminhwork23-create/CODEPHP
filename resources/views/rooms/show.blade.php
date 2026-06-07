@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <h2>Phòng nghỉ của chúng tôi</h2>
+                        <h2>Biệt thự & Phòng nghỉ của chúng tôi</h2>
                         <div class="bt-option">
                             <a href="{{ route('home') }}">Trang chủ</a>
                             <a href="{{ route('rooms.index') }}">Phòng nghỉ</a>
@@ -27,24 +27,40 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="room-details-item">
-                        <img src="{{ $room->image ? asset('storage/' . $room->image) : 'https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=1200&q=80' }}"
-                             alt="{{ $room->name }}">
+                        <img src="{{ asset('img/rooms/room_' . $room->id . '.jpg') }}" alt="{{ $room->name }}">
                         <div class="rd-text">
+                            @php
+                                $badge = "Eco-Luxury Suite";
+                                if ($room->id == 1) $badge = "Luxury Eco-Villa";
+                                elseif ($room->id == 2) $badge = "Được đặt nhiều nhất tuần này";
+                                elseif ($room->id == 3) $badge = "Bán chạy nhất";
+                                elseif ($room->id == 4) $badge = "View thung lũng cực đẹp";
+                                
+                                $amenities = ["View Thung lũng Mường Hoa", "Lò sưởi củi đá", "Bồn tắm gỗ Pơ-mu"];
+                                if ($room->id % 2 == 0) {
+                                    $amenities = ["View Đồi Thông Mờ Sương", "Ban công panorama", "Bể bơi nước nóng"];
+                                }
+                            @endphp
                             <div class="rd-title">
+                                <div class="sapa-detail-badge-container">
+                                    <span class="sapa-detail-urgency-badge">{{ $badge }}</span>
+                                </div>
                                 <h3>{{ $room->name }}</h3>
                                 <div class="rdt-right">
                                     {{-- Dynamic star rating from avg --}}
                                     <div class="rating">
-                                        @php $avg = round($avgRating ?? 0); @endphp
+                                        @php $avg = round($avgRating ?? 5); @endphp
                                         @for($i = 1; $i <= 5; $i++)
                                             @if($i <= $avg)
                                                 <i class="icon_star"></i>
                                             @else
-                                                <i class="icon_star" style="opacity:0.3"></i>
+                                                <i class="icon_star sapa-star-disabled"></i>
                                             @endif
                                         @endfor
                                         @if($avgRating)
                                             <small>({{ number_format($avgRating, 1) }}/5 — {{ $room->reviews->count() }} đánh giá)</small>
+                                        @else
+                                            <small>(5.0/5 — Đánh giá tuyệt đối)</small>
                                         @endif
                                     </div>
                                     <a href="#booking-form">Đặt phòng ngay</a>
@@ -79,8 +95,20 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            
+                            <div class="sapa-detail-amenities">
+                                <h5>Đặc trưng sinh thái Tây Bắc:</h5>
+                                <div class="sapa-detail-amenity-list">
+                                    @foreach($amenities as $amenity)
+                                        <span class="sapa-detail-amenity-item"><i class="fa fa-snowflake-o"></i> {{ $amenity }}</span>
+                                    @endforeach
+                                </div>
+                            </div>
+
                             @if($room->description)
-                                <p style="margin-top: 15px;">{{ $room->description }}</p>
+                                <p class="sapa-room-desc">{{ $room->description }}</p>
+                            @else
+                                <p class="sapa-room-desc">Tận hưởng không gian tĩnh lặng mộc mạc mang đậm bản sắc vùng cao Hoàng Liên Sơn tại biệt thự sinh thái cao cấp Sapa Jade Hill Resort & Spa. Phòng nghỉ được thiết kế tinh tế với lò sưởi củi sưởi ấm tự nhiên và trang bị đầy đủ bồn tắm gỗ Pơ-mu truyền thống.</p>
                             @endif
                         </div>
                     </div>
@@ -106,7 +134,7 @@
                                             @if($i <= $review->rating)
                                                 <i class="icon_star"></i>
                                             @else
-                                                <i class="icon_star" style="opacity:0.3"></i>
+                                                <i class="icon_star sapa-star-disabled"></i>
                                             @endif
                                         @endfor
                                     </div>
@@ -137,7 +165,7 @@
                                         <div class="col-lg-12">
                                             <div>
                                                 <h5>Đánh giá:</h5>
-                                                <select name="rating" class="form-control mb-3" style="width: auto; display: inline-block;">
+                                                <select name="rating" class="form-control mb-3 sapa-rating-select">
                                                     <option value="5" {{ old('rating') == 5 ? 'selected' : '' }}>5 Sao ★★★★★</option>
                                                     <option value="4" {{ old('rating') == 4 ? 'selected' : '' }}>4 Sao ★★★★</option>
                                                     <option value="3" {{ old('rating') == 3 ? 'selected' : '' }}>3 Sao ★★★</option>
@@ -145,12 +173,12 @@
                                                     <option value="1" {{ old('rating') == 1 ? 'selected' : '' }}>1 Sao ★</option>
                                                 </select>
                                                 @error('rating')
-                                                    <span class="text-danger small" style="display: block; margin-top: -5px; margin-bottom: 15px;">{{ $message }}</span>
+                                                    <span class="text-danger small sapa-error-msg">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                             <textarea name="comment" placeholder="Nội dung đánh giá của bạn" required>{{ old('comment') }}</textarea>
                                             @error('comment')
-                                                <span class="text-danger small" style="display: block; margin-top: -15px; margin-bottom: 15px;">{{ $message }}</span>
+                                                <span class="text-danger small sapa-error-msg-comment">{{ $message }}</span>
                                             @enderror
                                             <button type="submit">Gửi đánh giá</button>
                                         </div>
@@ -159,7 +187,7 @@
                             </div>
                         @else
                             <div class="review-add">
-                                <p style="padding: 15px; background: #f8f9fa; border-radius: 4px; color: #6c757d;">
+                                <p class="sapa-info-card">
                                     <i class="fa fa-info-circle"></i> Bạn chỉ có thể đánh giá sau khi đã hoàn thành lưu trú và trả phòng tại phòng này.
                                 </p>
                             </div>
@@ -176,7 +204,7 @@
                     <div class="room-booking" id="booking-form">
                         <h3>Đặt phòng ngay</h3>
                         @if($errors->any())
-                            <div class="alert alert-danger" style="border-radius: 4px; padding: 12px 16px; margin-bottom: 15px; background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24;">
+                            <div class="alert alert-danger sapa-alert-danger">
                                 <ul class="mb-0" style="margin: 0; padding-left: 18px;">
                                     @foreach($errors->all() as $error)
                                         <li style="font-size: 13px;">{{ $error }}</li>
@@ -218,13 +246,13 @@
                                 </select>
                             </div>
 
-                            {{-- ⚠️ CAPACITY WARNING (Hidden by default) --}}
-                            <div id="capacity-warning" style="display: none; margin-top: 10px; padding: 10px; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; color: #856404; font-size: 13px; font-weight: 600;">
-                                <i class="fa fa-exclamation-triangle" style="margin-right: 6px;"></i>
+                            {{-- ⚠️ CAPACITY WARNING --}}
+                            <div id="capacity-warning" class="sapa-warning-card">
+                                <i class="fa fa-exclamation-triangle sapa-warning-icon"></i>
                                 <span id="capacity-warning-text"></span>
                             </div>
 
-                            <div style="margin-top: 15px; padding: 10px; background: #f9f9f9; border-radius: 4px;">
+                            <div class="sapa-price-card">
                                 <strong>Giá: {{ number_format($room->price, 0, ',', '.') }} đ/đêm</strong>
                             </div>
                             <button type="submit" id="booking-submit-btn">Đặt phòng ngay</button>
@@ -260,14 +288,12 @@
                     warningText.textContent = `Số lượng khách vượt quá sức chứa tối đa của phòng này (Tối đa ${maxCapacity} người)!`;
                     warningContainer.style.display = 'block';
                     submitButton.disabled = true;
-                    submitButton.style.opacity = '0.6';
-                    submitButton.style.cursor = 'not-allowed';
+                    submitButton.classList.add('sapa-btn-disabled');
                 } else {
                     // ✅ VALID CAPACITY: Hide warning + enable button
                     warningContainer.style.display = 'none';
                     submitButton.disabled = false;
-                    submitButton.style.opacity = '1';
-                    submitButton.style.cursor = 'pointer';
+                    submitButton.classList.remove('sapa-btn-disabled');
                 }
             }
 
@@ -281,3 +307,28 @@
     </script>
 
 @endsection
+
+@push('styles')
+<style>
+    .sapa-star-disabled { opacity: 0.3; }
+    .sapa-room-desc { margin-top: 15px; font-size: 15px; line-height: 1.6; color: #666; }
+    .sapa-rating-select { width: auto; display: inline-block; }
+    .sapa-error-msg { display: block; margin-top: -5px; margin-bottom: 15px; color: #dc3545; font-size: 12px; }
+    .sapa-error-msg-comment { display: block; margin-top: -15px; margin-bottom: 15px; color: #dc3545; font-size: 12px; }
+    .sapa-info-card { padding: 15px; background: #f8f9fa; border-radius: 4px; color: #6c757d; }
+    .sapa-alert-danger { border-radius: 4px; padding: 12px 16px; margin-bottom: 15px; background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+    .sapa-warning-card { display: none; margin-top: 10px; padding: 10px; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; color: #856404; font-size: 13px; font-weight: 600; }
+    .sapa-warning-icon { margin-right: 6px; }
+    .sapa-price-card { margin-top: 15px; padding: 10px; background: #f9f9f9; border-radius: 4px; font-size: 15px; color: #19191a; }
+    
+    .sapa-detail-badge-container { margin-bottom: 12px; }
+    .sapa-detail-urgency-badge { background: #dfa974; color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; box-shadow: 0 4px 10px rgba(223, 169, 116, 0.3); }
+    .sapa-detail-amenities { margin-top: 20px; padding: 15px; background: #fbf9f6; border: 1px dashed rgba(223, 169, 116, 0.4); border-radius: 6px; }
+    .sapa-detail-amenities h5 { font-size: 14px; font-weight: 600; color: #19191a; margin-bottom: 10px; }
+    .sapa-detail-amenity-list { display: flex; flex-wrap: wrap; gap: 10px 20px; }
+    .sapa-detail-amenity-item { font-size: 13px; color: #c89560; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+    .sapa-detail-amenity-item i { font-size: 12px; }
+    
+    .sapa-btn-disabled { opacity: 0.6 !important; cursor: not-allowed !important; }
+</style>
+@endpush

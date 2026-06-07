@@ -6,11 +6,11 @@
                 <div class="col-lg-4">
                     <div class="ft-about">
                         <div class="logo">
-                            <a href="#">
-                                <img src="<?php echo e(asset('img/footer-logo.png')); ?>" alt="">
+                            <a href="<?php echo e(route('home')); ?>">
+                                <img src="<?php echo e(asset('img/logojadehill.png')); ?>" alt="Sapa Jade Hill Resort & Spa" class="sapa-footer-logo">
                             </a>
                         </div>
-                        <p>Chúng tôi truyền cảm hứng và tiếp cận hàng triệu du khách<br /> trên khắp các nền tảng trực tuyến.</p>
+                        <p>Sapa Jade Hill Resort & Spa - Nơi đồi thông mờ sương hòa quyện bản giao hưởng mây trời. Thung lũng Mường Hoa mở ra khung cảnh núi rừng hùng vĩ, nơi tâm hồn tìm về sự bình yên tuyệt đối.</p>
                         <div class="fa-social">
                             <a href="#"><i class="fa fa-facebook"></i></a>
                             <a href="#"><i class="fa fa-twitter"></i></a>
@@ -20,17 +20,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 offset-lg-1">
+                <div class="col-lg-4 offset-lg-1">
                     <div class="ft-contact">
                         <h6>Liên hệ với chúng tôi</h6>
                         <ul>
-                            <li>(12) 345 67890</li>
-                            <li>info.colorlib@gmail.com</li>
-                            <li>856 Cordia Extension Apt. 356, Lake, United State</li>
+                            <li><i class="fa fa-phone sapa-footer-icon"></i>0214.371.9999</li>
+                            <li><i class="fa fa-envelope sapa-footer-icon"></i>booking@sapajadehill.vn</li>
+                            <li><i class="fa fa-map-marker sapa-footer-icon"></i>Thung lũng Mường Hoa, Ngõ Cầu Mây, Tổ 3, Phường Cầu Mây, Thị xã Sa Pa, Tỉnh Lào Cai, Việt Nam.</li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-3 offset-lg-1">
+                <div class="col-lg-3">
                     <div class="ft-newslatter">
                         <h6>Tin tức mới nhất</h6>
                         <p>Nhận thông tin cập nhật và ưu đãi mới nhất.</p>
@@ -55,13 +55,20 @@
                     </ul>
                 </div>
                 <div class="col-lg-5">
-                    <div class="co-text"><p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Bản quyền &copy;<script>document.write(new Date().getFullYear());</script> Đã được bảo hộ | Mẫu giao diện được thiết kế với <i class="fa fa-heart" aria-hidden="true"></i> bởi <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></div>
+                    <div class="co-text">
+                        <p>Copyright © 2026 Bản quyền thuộc về Nhóm lập trình web 11.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </footer>
 <!-- Footer Section End -->
+
+<?php $__env->startPush('styles'); ?>
+<style>
+.sapa-footer-logo { max-height: 60px; width: auto; object-fit: contain; display: block; margin-bottom: 20px; }
+.sapa-footer-icon { color: #dfa974; margin-right: 8px; }
+</style>
+<?php $__env->stopPush(); ?>
 <?php /**PATH C:\xampp\htdocs\CODEPHP\resources\views/layouts/footer.blade.php ENDPATH**/ ?>

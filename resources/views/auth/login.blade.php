@@ -129,7 +129,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6">
                     <div class="login-form">
-                        <h3>Đăng Nhập</h3>
+                        <h3>Đăng Nhập - Sapa Jade Hill Resort & Spa</h3>
 
                         {{-- ── Late Login: thông báo giữ phòng tạm thời ── --}}
                         @if(session('info'))
@@ -195,6 +195,7 @@
                             <button type="submit" class="login-btn">Đăng Nhập</button>
                         </form>
                         <p>Chưa có tài khoản? <a href="{{ route('register') }}">Đăng ký thành viên ngay</a></p>
+                        <p style="text-align:center;margin-top:35px;font-size:13px;color:#999;border-top:1px solid #ebebeb;padding-top:25px;">Copyright © 2026 Bản quyền thuộc về Nhóm lập trình web 11.</p>
                     </div>
                 </div>
             </div>

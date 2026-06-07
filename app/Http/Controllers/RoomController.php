@@ -33,6 +33,12 @@ class RoomController extends Controller
         // 🎯 UNIFIED QUERY: Handle both direct access AND homepage search redirect
         $query = Room::with('category');
 
+        // ── Name-Based Search Filtering ──────────────────────────
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where('name', 'LIKE', '%' . $search . '%');
+        }
+
         // ── Capacity-Based Filtering ──────────────────────────────
         $adults = (int) $request->get('adults', 0);
         $children = (int) $request->get('children', 0);
@@ -59,7 +65,7 @@ class RoomController extends Controller
 
         $rooms = $query->orderBy('created_at', 'desc')
             ->paginate(6)
-            ->appends($request->only(['adults', 'children', 'check_in', 'check_out']));
+            ->appends($request->only(['adults', 'children', 'check_in', 'check_out', 'search']));
 
         $categories = Category::where('status', 1)->orderBy('name')->get();
 
@@ -127,10 +133,25 @@ class RoomController extends Controller
             return response()->json([]);
         }
 
-        $rooms = Room::where('name', 'LIKE', '%' . $query . '%')
+        $rooms = Room::with('category')
+            ->where('name', 'LIKE', '%' . $query . '%')
             ->limit(5)
-            ->get(['id', 'name']);
+            ->get();
 
-        return response()->json($rooms);
+        $results = $rooms->map(function ($room) {
+            $imagePath = ($room->image && file_exists(public_path('storage/' . $room->image)))
+                ? asset('storage/' . $room->image)
+                : 'https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=300&q=80';
+            return [
+                'id' => $room->id,
+                'name' => $room->name,
+                'price' => number_format($room->price, 0, ',', '.') . '₫',
+                'category' => $room->category ? $room->category->name : '',
+                'image' => $imagePath,
+                'url' => route('rooms.show', $room->id)
+            ];
+        });
+
+        return response()->json($results);
     }
 }
