@@ -1,0 +1,61 @@
+════════════════════════════════════════════════════════════════════════════════
+PRE-COMMIT SANITY CHECKLIST - Sapa Jade Hill Resort & Spa
+════════════════════════════════════════════════════════════════════════════════
+
+EXECUTE CACHE CLEARING:
+────────────────────────────────────────────────────────────────────────────────
+cd C:\xampp\htdocs\CODEPHP
+clear-cache.bat
+
+OR MANUAL COMMANDS:
+────────────────────────────────────────────────────────────────────────────────
+C:\xampp\php\php artisan config:clear
+C:\xampp\php\php artisan route:clear
+C:\xampp\php\php artisan view:clear
+C:\xampp\php\php artisan cache:clear
+C:\xampp\php\php artisan optimize:clear
+
+MANDATORY FILE INSPECTION:
+────────────────────────────────────────────────────────────────────────────────
+[✓] 1. VERIFY .env BLOCKED
+    File: .env
+    Action: Ensure .env is NOT staged (git status should show it as untracked)
+    Command: git status | findstr ".env"
+    Expected: ".env" should NOT appear in "Changes to be committed"
+
+[✓] 2. INSPECT ENVIRONMENT VARIABLES
+    File: .env
+    Critical Keys:
+    - APP_DEBUG=false (for production)
+    - APP_URL=https://your-production-domain.com
+    - DB_PASSWORD=******** (never commit real passwords)
+    - VNP_TMN_CODE / VNP_HASH_SECRET (payment gateway secrets)
+    - APP_KEY=base64:... (must exist, auto-generated)
+
+[✓] 3. REMOVE LARGE MEDIA FILES FROM /public
+    Paths: 
+    - C:\xampp\htdocs\CODEPHP\public\rooms\*.jpg
+    - C:\xampp\htdocs\CODEPHP\public\uploads\*.png
+    Action: 
+    - Move all user-uploaded media to /storage/app/public/
+    - Verify symlink: php artisan storage:link
+    - Only keep placeholder/demo images in /public/assets/
+
+VERIFY GITIGNORE COVERAGE:
+────────────────────────────────────────────────────────────────────────────────
+git status --ignored
+
+Expected output should show:
+!! vendor/
+!! node_modules/
+!! .env
+!! storage/*.key
+!! bootstrap/cache/*.php
+!! .idea/
+
+FINAL SAFETY CHECK:
+────────────────────────────────────────────────────────────────────────────────
+git add --dry-run .
+(Review list before actual commit - should NOT see vendor/, .env, node_modules/)
+
+════════════════════════════════════════════════════════════════════════════════

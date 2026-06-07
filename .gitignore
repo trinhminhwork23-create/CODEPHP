@@ -1,0 +1,85 @@
+# ── Dependencies ─────────────────────────────────────────────────────────────
+/vendor/
+/node_modules/
+npm-debug.log
+yarn-error.log
+
+# ── Environment & Credentials ────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+.env.backup
+.env.production
+.env.staging
+.env.local
+
+# ── Storage & Uploads ────────────────────────────────────────────────────────
+/storage/*.key
+/storage/framework/cache/data/*
+!/storage/framework/cache/data/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+/public/storage
+/public/hot
+
+# ── Bootstrap Cache ──────────────────────────────────────────────────────────
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+# ── IDE & Editor Configurations ──────────────────────────────────────────────
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.phpstorm.meta.php
+_ide_helper.php
+_ide_helper_models.php
+.phpunit.result.cache
+.php_cs.cache
+.php-cs-fixer.cache
+
+# ── Operating System Files ───────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Composer & PHP ───────────────────────────────────────────────────────────
+composer.phar
+auth.json
+
+# ── NPM & Build Tools ────────────────────────────────────────────────────────
+package-lock.json
+yarn.lock
+mix-manifest.json
+/public/mix-manifest.json
+/public/build/
+
+# ── Testing & Coverage ───────────────────────────────────────────────────────
+.phpunit.result.cache
+coverage/
+.coverage
+*.coveragexml
+
+# ── Laravel Specific ─────────────────────────────────────────────────────────
+*.log
+.rnd
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+.vagrant/
+
+# ── Deployment & CI/CD ───────────────────────────────────────────────────────
+.deployer/
+deployment-config.php
+
+# ── Scratch & Temporary Files ────────────────────────────────────────────────
+/scratch/
+*.tmp
+*.swp
+*.swo
+*~
