@@ -1,8 +1,6 @@
-@extends('layouts.master')
 
-@use('Illuminate\Support\Facades\Storage')
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
     <!-- Breadcrumb Section Begin -->
     <div class="breadcrumb-section">
@@ -12,9 +10,9 @@
                     <div class="breadcrumb-text">
                         <h2>Biệt thự & Phòng nghỉ của chúng tôi</h2>
                         <div class="bt-option">
-                            <a href="{{ route('home') }}">Trang chủ</a>
-                            <a href="{{ route('rooms.index') }}">Phòng nghỉ</a>
-                            <span>{{ $room->name }}</span>
+                            <a href="<?php echo e(route('home')); ?>">Trang chủ</a>
+                            <a href="<?php echo e(route('rooms.index')); ?>">Phòng nghỉ</a>
+                            <span><?php echo e($room->name); ?></span>
                         </div>
                     </div>
                 </div>
@@ -29,9 +27,9 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="room-details-item">
-                        <img src="{{ $room->image ? asset($room->image) : asset('img/rooms/room_' . (($room->id - 1) % 17 + 1) . '.jpg') }}" alt="{{ $room->name }}">
+                        <img src="<?php echo e(asset('img/rooms/room_' . $room->id . '.jpg')); ?>" alt="<?php echo e($room->name); ?>">
                         <div class="rd-text">
-                            @php
+                            <?php
                                 $badge = "Eco-Luxury Suite";
                                 if ($room->id == 1) $badge = "Luxury Eco-Villa";
                                 elseif ($room->id == 2) $badge = "Được đặt nhiều nhất tuần này";
@@ -42,58 +40,58 @@
                                 if ($room->id % 2 == 0) {
                                     $amenities = ["View Đồi Thông Mờ Sương", "Ban công panorama", "Bể bơi nước nóng"];
                                 }
-                            @endphp
+                            ?>
                             <div class="rd-title">
                                 <div class="sapa-detail-badge-container">
-                                    <span class="sapa-detail-urgency-badge">{{ $badge }}</span>
+                                    <span class="sapa-detail-urgency-badge"><?php echo e($badge); ?></span>
                                 </div>
-                                <h3>{{ $room->name }}</h3>
+                                <h3><?php echo e($room->name); ?></h3>
                                 <div class="rdt-right">
-                                    {{-- Dynamic star rating from avg --}}
+                                    
                                     <div class="rating">
-                                        @php $avg = round($avgRating ?? 5); @endphp
-                                        @for($i = 1; $i <= 5; $i++)
-                                            @if($i <= $avg)
+                                        <?php $avg = round($avgRating ?? 5); ?>
+                                        <?php for($i = 1; $i <= 5; $i++): ?>
+                                            <?php if($i <= $avg): ?>
                                                 <i class="icon_star"></i>
-                                            @else
+                                            <?php else: ?>
                                                 <i class="icon_star sapa-star-disabled"></i>
-                                            @endif
-                                        @endfor
-                                        @if($avgRating)
-                                            <small>({{ number_format($avgRating, 1) }}/5 — {{ $room->reviews->count() }} đánh giá)</small>
-                                        @else
+                                            <?php endif; ?>
+                                        <?php endfor; ?>
+                                        <?php if($avgRating): ?>
+                                            <small>(<?php echo e(number_format($avgRating, 1)); ?>/5 — <?php echo e($room->reviews->count()); ?> đánh giá)</small>
+                                        <?php else: ?>
                                             <small>(5.0/5 — Đánh giá tuyệt đối)</small>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                     <a href="#booking-form">Đặt phòng ngay</a>
                                 </div>
                             </div>
-                            <h2>{{ number_format($room->price, 0, ',', '.') }}<span> đ/Đêm</span></h2>
+                            <h2><?php echo e(number_format($room->price, 0, ',', '.')); ?><span> đ/Đêm</span></h2>
                             <table>
                                 <tbody>
                                     <tr>
                                         <td class="r-o">Mã phòng:</td>
-                                        <td>{{ $room->room_code }}</td>
+                                        <td><?php echo e($room->room_code); ?></td>
                                     </tr>
                                     <tr>
                                         <td class="r-o">Diện tích:</td>
-                                        <td>{{ $room->size ? $room->size . ' m²' : 'N/A' }}</td>
+                                        <td><?php echo e($room->size ? $room->size . ' m²' : 'N/A'); ?></td>
                                     </tr>
                                     <tr>
                                         <td class="r-o">Sức chứa:</td>
-                                        <td>Tối đa {{ $room->capacity }} người</td>
+                                        <td>Tối đa <?php echo e($room->capacity); ?> người</td>
                                     </tr>
                                     <tr>
                                         <td class="r-o">Giường:</td>
-                                        <td>{{ $room->bed_type ?? 'Tiêu chuẩn' }}</td>
+                                        <td><?php echo e($room->bed_type ?? 'Tiêu chuẩn'); ?></td>
                                     </tr>
                                     <tr>
                                         <td class="r-o">Vị trí:</td>
-                                        <td>{{ $room->location ?? 'N/A' }}</td>
+                                        <td><?php echo e($room->location ?? 'N/A'); ?></td>
                                     </tr>
                                     <tr>
                                         <td class="r-o">Loại phòng:</td>
-                                        <td>{{ $room->category->name ?? 'N/A' }}</td>
+                                        <td><?php echo e($room->category->name ?? 'N/A'); ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -101,161 +99,175 @@
                             <div class="sapa-detail-amenities">
                                 <h5>Đặc trưng sinh thái Tây Bắc:</h5>
                                 <div class="sapa-detail-amenity-list">
-                                    @foreach($amenities as $amenity)
-                                        <span class="sapa-detail-amenity-item"><i class="fa fa-snowflake-o"></i> {{ $amenity }}</span>
-                                    @endforeach
+                                    <?php $__currentLoopData = $amenities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $amenity): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <span class="sapa-detail-amenity-item"><i class="fa fa-snowflake-o"></i> <?php echo e($amenity); ?></span>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
                             </div>
 
-                            @if($room->description)
-                                <p class="sapa-room-desc">{{ $room->description }}</p>
-                            @else
+                            <?php if($room->description): ?>
+                                <p class="sapa-room-desc"><?php echo e($room->description); ?></p>
+                            <?php else: ?>
                                 <p class="sapa-room-desc">Tận hưởng không gian tĩnh lặng mộc mạc mang đậm bản sắc vùng cao Hoàng Liên Sơn tại biệt thự sinh thái cao cấp Sapa Jade Hill Resort & Spa. Phòng nghỉ được thiết kế tinh tế với lò sưởi củi sưởi ấm tự nhiên và trang bị đầy đủ bồn tắm gỗ Pơ-mu truyền thống.</p>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
 
                     <!-- Reviews List -->
                     <div class="rd-reviews" id="reviews">
                         <h4>Đánh giá từ khách hàng
-                            @if($room->reviews->count() > 0)
-                                <small>({{ $room->reviews->count() }} đánh giá)</small>
-                            @endif
+                            <?php if($room->reviews->count() > 0): ?>
+                                <small>(<?php echo e($room->reviews->count()); ?> đánh giá)</small>
+                            <?php endif; ?>
                         </h4>
 
-                        @forelse($room->reviews as $review)
+                        <?php $__empty_1 = true; $__currentLoopData = $room->reviews; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $review): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <div class="review-item">
                                 <div class="ri-pic">
-                                    <img src="{{ asset('img/room/avatar/avatar-1.jpg') }}"
-                                         alt="{{ $review->user->name ?? 'Khách' }}">
+                                    <img src="<?php echo e(asset('img/room/avatar/avatar-1.jpg')); ?>"
+                                         alt="<?php echo e($review->user->name ?? 'Khách'); ?>">
                                 </div>
                                 <div class="ri-text">
-                                    <span>{{ $review->created_at->format('d \T\h\á\n\g n, Y') }}</span>
+                                    <span><?php echo e($review->created_at->format('d \T\h\á\n\g n, Y')); ?></span>
                                     <div class="rating">
-                                        @for($i = 1; $i <= 5; $i++)
-                                            @if($i <= $review->rating)
+                                        <?php for($i = 1; $i <= 5; $i++): ?>
+                                            <?php if($i <= $review->rating): ?>
                                                 <i class="icon_star"></i>
-                                            @else
+                                            <?php else: ?>
                                                 <i class="icon_star sapa-star-disabled"></i>
-                                            @endif
-                                        @endfor
+                                            <?php endif; ?>
+                                        <?php endfor; ?>
                                     </div>
-                                    <h5>{{ $review->user->name ?? 'Khách ẩn danh' }}</h5>
-                                    <p>{{ $review->comment }}</p>
+                                    <h5><?php echo e($review->user->name ?? 'Khách ẩn danh'); ?></h5>
+                                    <p><?php echo e($review->comment); ?></p>
                                 </div>
                             </div>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <p>Chưa có đánh giá nào cho phòng này.</p>
-                        @endforelse
+                        <?php endif; ?>
                     </div>
 
                     <!-- Review Form -->
-                    @auth
-                        @if($hasCompletedStay)
+                    <?php if(auth()->guard()->check()): ?>
+                        <?php if($hasCompletedStay): ?>
                             <div class="review-add">
                                 <h4>Để lại đánh giá</h4>
-                                @if(session('success'))
-                                    <div class="alert alert-success">{{ session('success') }}</div>
-                                @endif
-                                @if(session('error'))
-                                    <div class="alert alert-danger">{{ session('error') }}</div>
-                                @endif
-                                 <form action="{{ route('reviews.store') }}" method="POST" class="ra-form">
-                                    @csrf
-                                    <input type="hidden" name="room_id" value="{{ $room->id }}">
+                                <?php if(session('success')): ?>
+                                    <div class="alert alert-success"><?php echo e(session('success')); ?></div>
+                                <?php endif; ?>
+                                <?php if(session('error')): ?>
+                                    <div class="alert alert-danger"><?php echo e(session('error')); ?></div>
+                                <?php endif; ?>
+                                 <form action="<?php echo e(route('reviews.store')); ?>" method="POST" class="ra-form">
+                                    <?php echo csrf_field(); ?>
+                                    <input type="hidden" name="room_id" value="<?php echo e($room->id); ?>">
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div>
                                                 <h5>Đánh giá:</h5>
                                                 <select name="rating" class="form-control mb-3 sapa-rating-select">
-                                                    <option value="5" {{ old('rating') == 5 ? 'selected' : '' }}>5 Sao ★★★★★</option>
-                                                    <option value="4" {{ old('rating') == 4 ? 'selected' : '' }}>4 Sao ★★★★</option>
-                                                    <option value="3" {{ old('rating') == 3 ? 'selected' : '' }}>3 Sao ★★★</option>
-                                                    <option value="2" {{ old('rating') == 2 ? 'selected' : '' }}>2 Sao ★★</option>
-                                                    <option value="1" {{ old('rating') == 1 ? 'selected' : '' }}>1 Sao ★</option>
+                                                    <option value="5" <?php echo e(old('rating') == 5 ? 'selected' : ''); ?>>5 Sao ★★★★★</option>
+                                                    <option value="4" <?php echo e(old('rating') == 4 ? 'selected' : ''); ?>>4 Sao ★★★★</option>
+                                                    <option value="3" <?php echo e(old('rating') == 3 ? 'selected' : ''); ?>>3 Sao ★★★</option>
+                                                    <option value="2" <?php echo e(old('rating') == 2 ? 'selected' : ''); ?>>2 Sao ★★</option>
+                                                    <option value="1" <?php echo e(old('rating') == 1 ? 'selected' : ''); ?>>1 Sao ★</option>
                                                 </select>
-                                                @error('rating')
-                                                    <span class="text-danger small sapa-error-msg">{{ $message }}</span>
-                                                @enderror
+                                                <?php $__errorArgs = ['rating'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger small sapa-error-msg"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                             </div>
-                                            <textarea name="comment" placeholder="Nội dung đánh giá của bạn" required>{{ old('comment') }}</textarea>
-                                            @error('comment')
-                                                <span class="text-danger small sapa-error-msg-comment">{{ $message }}</span>
-                                            @enderror
+                                            <textarea name="comment" placeholder="Nội dung đánh giá của bạn" required><?php echo e(old('comment')); ?></textarea>
+                                            <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                <span class="text-danger small sapa-error-msg-comment"><?php echo e($message); ?></span>
+                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                             <button type="submit">Gửi đánh giá</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
-                        @else
+                        <?php else: ?>
                             <div class="review-add">
                                 <p class="sapa-info-card">
                                     <i class="fa fa-info-circle"></i> Bạn chỉ có thể đánh giá sau khi đã hoàn thành lưu trú và trả phòng tại phòng này.
                                 </p>
                             </div>
-                        @endif
-                    @else
+                        <?php endif; ?>
+                    <?php else: ?>
                         <div class="review-add">
-                            <p><a href="{{ route('login') }}">Đăng nhập</a> để gửi đánh giá của bạn.</p>
+                            <p><a href="<?php echo e(route('login')); ?>">Đăng nhập</a> để gửi đánh giá của bạn.</p>
                         </div>
-                    @endauth
+                    <?php endif; ?>
                 </div>
 
                 <!-- Booking Sidebar -->
                 <div class="col-lg-4">
                     <div class="room-booking" id="booking-form">
                         <h3>Đặt phòng ngay</h3>
-                        @if($errors->any())
+                        <?php if($errors->any()): ?>
                             <div class="alert alert-danger sapa-alert-danger">
                                 <ul class="mb-0" style="margin: 0; padding-left: 18px;">
-                                    @foreach($errors->all() as $error)
-                                        <li style="font-size: 13px;">{{ $error }}</li>
-                                    @endforeach
+                                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <li style="font-size: 13px;"><?php echo e($error); ?></li>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </ul>
                             </div>
-                        @endif
-                        <form action="{{ route('bookings.checkout', $room->id) }}" method="GET" id="booking-widget-form">
+                        <?php endif; ?>
+                        <form action="<?php echo e(route('bookings.checkout', $room->id)); ?>" method="GET" id="booking-widget-form">
                             <div class="check-date">
                                 <label for="date-in">Ngày nhận phòng:</label>
                                 <input type="text" class="date-input" id="date-in" name="check_in"
-                                       value="{{ request('check_in') ?? old('check_in') }}" placeholder="Chọn ngày nhận phòng">
+                                       value="<?php echo e(request('check_in') ?? old('check_in')); ?>" placeholder="Chọn ngày nhận phòng">
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Ngày trả phòng:</label>
                                 <input type="text" class="date-input" id="date-out" name="check_out"
-                                       value="{{ request('check_out') ?? old('check_out') }}" placeholder="Chọn ngày trả phòng">
+                                       value="<?php echo e(request('check_out') ?? old('check_out')); ?>" placeholder="Chọn ngày trả phòng">
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="select-option">
                                 <label for="guest">Người lớn:</label>
                                 <select id="guest" name="adults">
-                                    @for($i = 1; $i <= 10; $i++)
-                                        <option value="{{ $i }}" {{ (request('adults') ?? old('adults', 1)) == $i ? 'selected' : '' }}>
-                                            {{ $i }} Người lớn
+                                    <?php for($i = 1; $i <= 10; $i++): ?>
+                                        <option value="<?php echo e($i); ?>" <?php echo e((request('adults') ?? old('adults', 1)) == $i ? 'selected' : ''); ?>>
+                                            <?php echo e($i); ?> Người lớn
                                         </option>
-                                    @endfor
+                                    <?php endfor; ?>
                                 </select>
                             </div>
                             <div class="select-option">
                                 <label for="children">Trẻ em:</label>
                                 <select id="children" name="children">
-                                    @for($i = 0; $i <= 10; $i++)
-                                        <option value="{{ $i }}" {{ (request('children') ?? old('children', 0)) == $i ? 'selected' : '' }}>
-                                            {{ $i }} Trẻ em
+                                    <?php for($i = 0; $i <= 10; $i++): ?>
+                                        <option value="<?php echo e($i); ?>" <?php echo e((request('children') ?? old('children', 0)) == $i ? 'selected' : ''); ?>>
+                                            <?php echo e($i); ?> Trẻ em
                                         </option>
-                                    @endfor
+                                    <?php endfor; ?>
                                 </select>
                             </div>
 
-                            {{-- ⚠️ CAPACITY WARNING --}}
+                            
                             <div id="capacity-warning" class="sapa-warning-card">
                                 <i class="fa fa-exclamation-triangle sapa-warning-icon"></i>
                                 <span id="capacity-warning-text"></span>
                             </div>
 
                             <div class="sapa-price-card">
-                                <strong>Giá: {{ number_format($room->price, 0, ',', '.') }} đ/đêm</strong>
+                                <strong>Giá: <?php echo e(number_format($room->price, 0, ',', '.')); ?> đ/đêm</strong>
                             </div>
                             <button type="submit" id="booking-submit-btn">Đặt phòng ngay</button>
                         </form>
@@ -266,11 +278,11 @@
     </section>
     <!-- Room Details Section End -->
 
-    {{-- ⚡ REAL-TIME CAPACITY CONSTRAINT JAVASCRIPT --}}
+    
     <script>
         (function() {
             // ── Extract Room Capacity from Backend ──────────────────────────
-            const maxCapacity = {{ (int)$room->capacity }};
+            const maxCapacity = <?php echo e((int)$room->capacity); ?>;
 
             // ── DOM Elements ─────────────────────────────────────────
             const adultsSelect = document.getElementById('guest');
@@ -308,9 +320,9 @@
         })();
     </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('styles')
+<?php $__env->startPush('styles'); ?>
 <style>
     .sapa-star-disabled { opacity: 0.3; }
     .sapa-room-desc { margin-top: 15px; font-size: 15px; line-height: 1.6; color: #666; }
@@ -333,4 +345,6 @@
     
     .sapa-btn-disabled { opacity: 0.6 !important; cursor: not-allowed !important; }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Php\htdocs\CODEPHP\resources\views/rooms/show.blade.php ENDPATH**/ ?>

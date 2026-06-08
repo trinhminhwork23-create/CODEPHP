@@ -1,6 +1,6 @@
-@extends('admin.layouts.admin_master')
 
-@section('admin_content')
+
+<?php $__env->startSection('admin_content'); ?>
 
     <div class="container-fluid">
       <div class="row">
@@ -11,30 +11,30 @@
               <p class="mb-0">Danh sách toàn bộ phòng nghỉ tại Sapa Jade Hill</p>
             </div>
             <div>
-              <a href="{{ route('admin.rooms.create') }}" class="btn btn-primary">Thêm phòng mới</a>
+              <a href="<?php echo e(route('admin.rooms.create')); ?>" class="btn btn-primary">Thêm phòng mới</a>
             </div>
           </div>
         </div>
       </div>
 
-      {{-- Thông báo session được xử lý bằng SweetAlert2 ở script bên dưới --}}
+      
 
       <div class="row">
         <div class="col-12">
           <div>
-            <form method="GET" action="{{ route('admin.rooms.index') }}" class="d-flex gap-2 mb-3 flex-wrap align-items-center justify-content-between">
+            <form method="GET" action="<?php echo e(route('admin.rooms.index')); ?>" class="d-flex gap-2 mb-3 flex-wrap align-items-center justify-content-between">
               <div class="d-flex gap-2 flex-wrap">
-                <input type="text" class="form-control" name="search" placeholder="Tìm tên hoặc mã phòng..." value="{{ request('search') }}" style="max-width: 220px;">
+                <input type="text" class="form-control" name="search" placeholder="Tìm tên hoặc mã phòng..." value="<?php echo e(request('search')); ?>" style="max-width: 220px;">
                 <select class="form-select" name="category_id" style="max-width: 200px;">
                   <option value="">Tất cả loại phòng</option>
-                  @foreach($categories as $cat)
-                    <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
-                  @endforeach
+                  <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($cat->id); ?>" <?php echo e(request('category_id') == $cat->id ? 'selected' : ''); ?>><?php echo e($cat->name); ?></option>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
                 <button type="submit" class="btn btn-primary">
                   <i class="ti ti-search me-1"></i> Lọc
                 </button>
-                <a href="{{ route('admin.rooms.index') }}" class="btn btn-outline-secondary">
+                <a href="<?php echo e(route('admin.rooms.index')); ?>" class="btn btn-outline-secondary">
                   <i class="ti ti-refresh me-1"></i> Reset
                 </a>
               </div>
@@ -56,48 +56,49 @@
                 </tr>
               </thead>
               <tbody>
-                @forelse ($rooms ?? [] as $room)
+                <?php $__empty_1 = true; $__currentLoopData = $rooms ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr class="align-middle">
                   <td>
-                    @if($room->image)
-                      @php $imgUrl = str_starts_with($room->image, 'img/') ? asset($room->image) : Storage::url($room->image); @endphp
-                      <img src="{{ $imgUrl }}" alt="{{ $room->name }}" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
-                    @else
-                      <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=120&q=60" alt="{{ $room->name }}" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover; opacity:.6;">
-                    @endif
+                    <?php if($room->image): ?>
+                      <?php $imgUrl = str_starts_with($room->image, 'img/') ? asset($room->image) : Storage::url($room->image); ?>
+                      <img src="<?php echo e($imgUrl); ?>" alt="<?php echo e($room->name); ?>" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+                    <?php else: ?>
+                      <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=120&q=60" alt="<?php echo e($room->name); ?>" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover; opacity:.6;">
+                    <?php endif; ?>
                   </td>
-                  <td class="fw-semibold">{{ $room->room_code }}</td>
+                  <td class="fw-semibold"><?php echo e($room->room_code); ?></td>
                   <td>
-                    <a href="{{ route('admin.rooms.edit', $room->id) }}" class="text-dark text-decoration-none fw-semibold">
-                      {{ $room->name }}
+                    <a href="<?php echo e(route('admin.rooms.edit', $room->id)); ?>" class="text-dark text-decoration-none fw-semibold">
+                      <?php echo e($room->name); ?>
+
                     </a>
                   </td>
-                  <td>{{ $room->category->name ?? '—' }}</td>
-                  <td>{{ $room->location ?? '—' }}</td>
-                  <td>{{ number_format($room->price, 0, ',', '.') }}₫</td>
-                  <td>{{ $room->capacity }} người</td>
-                  <td>{{ $room->size ? $room->size . ' m²' : '—' }}</td>
+                  <td><?php echo e($room->category->name ?? '—'); ?></td>
+                  <td><?php echo e($room->location ?? '—'); ?></td>
+                  <td><?php echo e(number_format($room->price, 0, ',', '.')); ?>₫</td>
+                  <td><?php echo e($room->capacity); ?> người</td>
+                  <td><?php echo e($room->size ? $room->size . ' m²' : '—'); ?></td>
                   <td class="">
-                    <a href="{{ route('admin.rooms.edit', $room->id) }}" class=""><i class="ti ti-edit "></i></a>
-                    <form action="{{ route('admin.rooms.destroy', $room->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa phòng {{ $room->name }}?')">
-                      @csrf
-                      @method('DELETE')
+                    <a href="<?php echo e(route('admin.rooms.edit', $room->id)); ?>" class=""><i class="ti ti-edit "></i></a>
+                    <form action="<?php echo e(route('admin.rooms.destroy', $room->id)); ?>" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa phòng <?php echo e($room->name); ?>?')">
+                      <?php echo csrf_field(); ?>
+                      <?php echo method_field('DELETE'); ?>
                       <button type="submit" class="btn btn-link link-danger p-0" title="Xóa phòng">
                         <i class="ti ti-trash ms-2"></i>
                       </button>
                     </form>
                   </td>
                 </tr>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                   <td colspan="9" class="text-center py-4 text-muted">Chưa có phòng nào được thêm</td>
                 </tr>
-                @endforelse
+                <?php endif; ?>
               </tbody>
               <tfoot class="">
                 <tr>
-                  <td class="border-bottom-0">Hiển thị {{ $rooms->firstItem() ?? 0 }}-{{ $rooms->lastItem() ?? 0 }} / tổng {{ $rooms->total() }} phòng</td>
-                  <td colspan="9" class="border-bottom-0">{{ $rooms->links() }}</td>
+                  <td class="border-bottom-0">Hiển thị <?php echo e($rooms->firstItem() ?? 0); ?>-<?php echo e($rooms->lastItem() ?? 0); ?> / tổng <?php echo e($rooms->total()); ?> phòng</td>
+                  <td colspan="9" class="border-bottom-0"><?php echo e($rooms->links()); ?></td>
                 </tr>
               </tfoot>
             </table>
@@ -116,9 +117,9 @@
 
     </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     // ── Xử lý nút xóa phòng bằng SweetAlert2 ───────────────────────────────
     document.querySelectorAll('.btn-delete-room').forEach(function (btn) {
@@ -144,22 +145,24 @@
     });
 
     // ── Hiển thị Session flash message bằng SweetAlert2 ──────────────────────
-    @if(session('success'))
+    <?php if(session('success')): ?>
         Swal.fire({
             icon: 'success',
             title: 'Thành công!',
-            text: '{{ session('success') }}',
+            text: '<?php echo e(session('success')); ?>',
             timer: 2500,
             showConfirmButton: false,
         });
-    @endif
+    <?php endif; ?>
 
-    @if(session('error'))
+    <?php if(session('error')): ?>
         Swal.fire({
             icon: 'error',
             title: 'Lỗi!',
-            text: '{{ session('error') }}',
+            text: '<?php echo e(session('error')); ?>',
         });
-    @endif
+    <?php endif; ?>
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('admin.layouts.admin_master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Php\htdocs\CODEPHP\resources\views/admin/rooms/index.blade.php ENDPATH**/ ?>

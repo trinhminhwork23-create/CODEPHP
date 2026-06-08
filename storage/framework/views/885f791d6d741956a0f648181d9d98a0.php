@@ -1,6 +1,6 @@
-@extends('admin.layouts.admin_master')
 
-@section('admin_content')
+
+<?php $__env->startSection('admin_content'); ?>
 
     <div class="container-fluid">
       <div class="row">
@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      {{-- Thông báo session được xử lý bằng SweetAlert2 ở script bên dưới --}}
+      
 
       <div class="row">
         <div class="col-12">
@@ -36,34 +36,34 @@
                 </tr>
               </thead>
               <tbody>
-                @forelse ($categories ?? [] as $index => $category)
+                <?php $__empty_1 = true; $__currentLoopData = $categories ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr class="align-middle">
-                  <td>{{ $index + 1 }}</td>
+                  <td><?php echo e($index + 1); ?></td>
                   <td>
-                    @if($category->image)
-                      <img src="{{ Storage::url($category->image) }}" alt="{{ $category->name }}" style="width: 60px; height: 45px; object-fit: cover; border-radius: 4px;">
-                    @else
+                    <?php if($category->image): ?>
+                      <img src="<?php echo e(Storage::url($category->image)); ?>" alt="<?php echo e($category->name); ?>" style="width: 60px; height: 45px; object-fit: cover; border-radius: 4px;">
+                    <?php else: ?>
                       <span class="text-muted small">—</span>
-                    @endif
+                    <?php endif; ?>
                   </td>
-                  <td class="fw-semibold">{{ $category->name }}</td>
-                  <td>{{ number_format($category->price, 0, ',', '.') }} đ</td>
-                  <td>{{ $category->capacity }} người</td>
+                  <td class="fw-semibold"><?php echo e($category->name); ?></td>
+                  <td><?php echo e(number_format($category->price, 0, ',', '.')); ?> đ</td>
+                  <td><?php echo e($category->capacity); ?> người</td>
                   <td>
-                    @if($category->status)
+                    <?php if($category->status): ?>
                       <span class="badge bg-success-subtle text-success">Hoạt động</span>
-                    @else
+                    <?php else: ?>
                       <span class="badge bg-danger-subtle text-danger">Ẩn</span>
-                    @endif
+                    <?php endif; ?>
                   </td>
-                  <td>{{ $category->created_at->format('d/m/Y') }}</td>
+                  <td><?php echo e($category->created_at->format('d/m/Y')); ?></td>
                   <td>
-                    <button class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#editCategoryModal{{ $category->id }}">
+                    <button class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#editCategoryModal<?php echo e($category->id); ?>">
                       <i class="ti ti-edit"></i>
                     </button>
-                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa loại phòng {{ $category->name }}?')">
-                      @csrf
-                      @method('DELETE')
+                    <form action="<?php echo e(route('admin.categories.destroy', $category->id)); ?>" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa loại phòng <?php echo e($category->name); ?>?')">
+                      <?php echo csrf_field(); ?>
+                      <?php echo method_field('DELETE'); ?>
                       <button type="submit" class="btn btn-link link-danger p-0" title="Xóa loại phòng">
                         <i class="ti ti-trash ms-2"></i>
                       </button>
@@ -71,14 +71,14 @@
                   </td>
                 </tr>
 
-                {{-- Modal Sửa loại phòng --}}
-                <div class="modal fade" id="editCategoryModal{{ $category->id }}" tabindex="-1" aria-hidden="true">
+                
+                <div class="modal fade" id="editCategoryModal<?php echo e($category->id); ?>" tabindex="-1" aria-hidden="true">
                   <div class="modal-dialog">
                     <div class="modal-content">
-                      <form action="{{ route('admin.categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="_edit_id" value="{{ $category->id }}">
+                      <form action="<?php echo e(route('admin.categories.update', $category->id)); ?>" method="POST" enctype="multipart/form-data">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('PUT'); ?>
+                        <input type="hidden" name="_edit_id" value="<?php echo e($category->id); ?>">
                         <div class="modal-header">
                           <h5 class="modal-title">Sửa loại phòng</h5>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
@@ -86,37 +86,37 @@
                         <div class="modal-body">
                           <div class="mb-3">
                             <label class="form-label">Tên loại phòng <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" name="name" value="{{ $category->name }}" required>
+                            <input type="text" class="form-control" name="name" value="<?php echo e($category->name); ?>" required>
                           </div>
                           <div class="mb-3">
                             <label class="form-label">Mô tả</label>
-                            <textarea class="form-control" name="description" rows="3">{{ $category->description }}</textarea>
+                            <textarea class="form-control" name="description" rows="3"><?php echo e($category->description); ?></textarea>
                           </div>
                           <div class="row">
                             <div class="col-6 mb-3">
                               <label class="form-label">Giá (VNĐ) <span class="text-danger">*</span></label>
-                              <input type="number" class="form-control" name="price" value="{{ $category->price }}" min="1" required>
+                              <input type="number" class="form-control" name="price" value="<?php echo e($category->price); ?>" min="1" required>
                             </div>
                             <div class="col-6 mb-3">
                               <label class="form-label">Sức chứa <span class="text-danger">*</span></label>
-                              <input type="number" class="form-control" name="capacity" value="{{ $category->capacity }}" min="1" required>
+                              <input type="number" class="form-control" name="capacity" value="<?php echo e($category->capacity); ?>" min="1" required>
                             </div>
                           </div>
                           <div class="mb-3">
                             <label class="form-label">Ảnh đại diện</label>
-                            @if($category->image)
+                            <?php if($category->image): ?>
                               <div class="mb-2">
-                                <img src="{{ Storage::url($category->image) }}" style="height: 80px; border-radius: 4px;">
+                                <img src="<?php echo e(Storage::url($category->image)); ?>" style="height: 80px; border-radius: 4px;">
                               </div>
-                            @endif
+                            <?php endif; ?>
                             <input type="file" class="form-control" name="image" accept="image/jpeg,image/png,image/jpg">
                             <small class="text-muted">Để trống nếu không muốn thay đổi ảnh.</small>
                           </div>
                           <div class="mb-3">
                             <label class="form-label">Trạng thái</label>
                             <select class="form-select" name="status">
-                              <option value="1" {{ $category->status ? 'selected' : '' }}>Hoạt động</option>
-                              <option value="0" {{ !$category->status ? 'selected' : '' }}>Ẩn</option>
+                              <option value="1" <?php echo e($category->status ? 'selected' : ''); ?>>Hoạt động</option>
+                              <option value="0" <?php echo e(!$category->status ? 'selected' : ''); ?>>Ẩn</option>
                             </select>
                           </div>
                         </div>
@@ -129,11 +129,11 @@
                   </div>
                 </div>
 
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                   <td colspan="8" class="text-center py-4 text-muted">Chưa có loại phòng nào</td>
                 </tr>
-                @endforelse
+                <?php endif; ?>
               </tbody>
             </table>
           </div>
@@ -149,12 +149,12 @@
       </div>
     </div>
 
-    {{-- Modal Thêm loại phòng --}}
+    
     <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
-          <form action="{{ route('admin.categories.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
+          <form action="<?php echo e(route('admin.categories.store')); ?>" method="POST" enctype="multipart/form-data">
+            <?php echo csrf_field(); ?>
             <div class="modal-header">
               <h5 class="modal-title">Thêm loại phòng mới</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
@@ -180,8 +180,22 @@
               </div>
               <div class="mb-3">
                 <label class="form-label">Ảnh đại diện <span class="text-danger">*</span></label>
-                <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" accept="image/jpeg,image/png,image/jpg" required>
-                @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                <input type="file" class="form-control <?php $__errorArgs = ['image'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" name="image" accept="image/jpeg,image/png,image/jpg" required>
+                <?php $__errorArgs = ['image'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback"><?php echo e($message); ?></div> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
               </div>
               <div class="mb-3">
                 <label class="form-label">Trạng thái</label>
@@ -200,9 +214,9 @@
       </div>
     </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     // ── Xử lý nút xóa bằng SweetAlert2 ──────────────────────────────────────
     document.querySelectorAll('.btn-delete').forEach(function (btn) {
@@ -228,34 +242,36 @@
     });
 
     // ── Hiển thị Session flash message bằng SweetAlert2 ──────────────────────
-    @if(session('success'))
+    <?php if(session('success')): ?>
         Swal.fire({
             icon: 'success',
             title: 'Thành công!',
-            text: '{{ session('success') }}',
+            text: '<?php echo e(session('success')); ?>',
             timer: 2500,
             showConfirmButton: false,
         });
-    @endif
+    <?php endif; ?>
 
-    @if(session('error'))
+    <?php if(session('error')): ?>
         Swal.fire({
             icon: 'error',
             title: 'Lỗi!',
-            text: '{{ session('error') }}',
+            text: '<?php echo e(session('error')); ?>',
         });
-    @endif
+    <?php endif; ?>
 
-    {{-- Tự động mở lại modal thêm nếu có lỗi validation --}}
-    @if($errors->any() && !old('_edit_id'))
+    
+    <?php if($errors->any() && !old('_edit_id')): ?>
         var addModal = new bootstrap.Modal(document.getElementById('addCategoryModal'));
         addModal.show();
-    @endif
+    <?php endif; ?>
 
-    {{-- Tự động mở lại modal sửa nếu có lỗi validation --}}
-    @if($errors->any() && old('_edit_id'))
-        var editModal = new bootstrap.Modal(document.getElementById('editCategoryModal{{ old('_edit_id') }}'));
+    
+    <?php if($errors->any() && old('_edit_id')): ?>
+        var editModal = new bootstrap.Modal(document.getElementById('editCategoryModal<?php echo e(old('_edit_id')); ?>'));
         editModal.show();
-    @endif
+    <?php endif; ?>
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('admin.layouts.admin_master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Php\htdocs\CODEPHP\resources\views/admin/categories/index.blade.php ENDPATH**/ ?>
